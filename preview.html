@@ -378,10 +378,14 @@ tailwind.config = {
     transition: transform 0.1s ease-out;
   }
 
-  /* Mobile: scale characters to fit smaller viewport */
+  /* Hide scrollbar for horizontal swipe container */
+  .hide-scrollbar::-webkit-scrollbar { display: none; }
+  .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* Mobile: scale characters to fit smaller viewport + snap scrolling */
   @media (max-width: 1023px) {
     #characters-container {
-      transform: scale(0.65);
+      transform: scale(0.75);
       transform-origin: bottom center;
     }
     #characters-stage {
@@ -410,9 +414,9 @@ tailwind.config = {
      Auth Overlay — Two-Column Layout + Animated Characters
      ============================================================ -->
 <div id="auth-overlay" class="fixed inset-0 z-[100] transition-opacity duration-500 bg-white">
-  <div class="h-full grid grid-rows-[310px_1fr] lg:grid-rows-1 lg:grid-cols-2">
+  <div class="h-full flex overflow-x-auto lg:grid lg:grid-cols-2 snap-x snap-mandatory scroll-smooth hide-scrollbar">
     <!-- Left: Brand + Animated Characters -->
-    <div class="flex flex-col justify-between relative lg:overflow-hidden" style="background:linear-gradient(160deg,#C86A4B 0%,#A0523A 30%,#8A4530 60%,#6E3726 100%)">
+    <div class="flex-shrink-0 w-full lg:w-auto snap-start flex flex-col justify-between relative overflow-hidden" style="background:linear-gradient(160deg,#C86A4B 0%,#A0523A 30%,#8A4530 60%,#6E3726 100%)">
       <!-- Decorative bg elements -->
       <div class="absolute inset-0 opacity-10" style="background-image:radial-gradient(circle,rgba(255,255,255,0.3) 1px,transparent 1px);background-size:24px 24px"></div>
       <div class="absolute top-1/4 right-1/4 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
@@ -477,7 +481,7 @@ tailwind.config = {
     </div>
 
     <!-- Right: Login / Register Form -->
-    <div class="flex items-center justify-center p-6 sm:p-10 bg-white overflow-y-auto">
+    <div class="flex-shrink-0 w-full lg:w-auto snap-start flex items-center justify-center p-6 sm:p-10 bg-white overflow-y-auto">
       <div class="w-full max-w-[400px]">
         <!-- Mobile Logo -->
         <div class="lg:hidden flex items-center justify-center gap-2 text-lg font-semibold mb-10">
