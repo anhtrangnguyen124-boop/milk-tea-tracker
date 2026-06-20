@@ -377,6 +377,18 @@ tailwind.config = {
   .char-pupil, .char-pupil-alone {
     transition: transform 0.1s ease-out;
   }
+
+  /* Mobile: scale characters to fit smaller viewport */
+  @media (max-width: 1023px) {
+    #characters-container {
+      transform: scale(0.65);
+      transform-origin: bottom center;
+    }
+    #characters-stage {
+      padding-bottom: 0;
+    }
+  }
+
   /* Auth loading spinner */
   @keyframes authSpin {
     to { transform: rotate(360deg); }
@@ -398,16 +410,16 @@ tailwind.config = {
      Auth Overlay — Two-Column Layout + Animated Characters
      ============================================================ -->
 <div id="auth-overlay" class="fixed inset-0 z-[100] transition-opacity duration-500 bg-white">
-  <div class="h-full grid lg:grid-cols-2">
-    <!-- Left: Brand + Animated Characters (hidden on mobile) -->
-    <div class="hidden lg:flex flex-col justify-between relative overflow-hidden" style="background:linear-gradient(160deg,#C86A4B 0%,#A0523A 30%,#8A4530 60%,#6E3726 100%)">
+  <div class="h-full grid grid-rows-[310px_1fr] lg:grid-rows-1 lg:grid-cols-2">
+    <!-- Left: Brand + Animated Characters -->
+    <div class="flex flex-col justify-between relative lg:overflow-hidden" style="background:linear-gradient(160deg,#C86A4B 0%,#A0523A 30%,#8A4530 60%,#6E3726 100%)">
       <!-- Decorative bg elements -->
       <div class="absolute inset-0 opacity-10" style="background-image:radial-gradient(circle,rgba(255,255,255,0.3) 1px,transparent 1px);background-size:24px 24px"></div>
       <div class="absolute top-1/4 right-1/4 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
       <div class="absolute bottom-1/4 left-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
 
       <!-- Brand -->
-      <div class="relative z-20 p-10">
+      <div class="relative z-30 p-4 lg:p-10">
         <div class="flex items-center gap-2 text-lg font-semibold text-white/90">
           <span class="text-2xl">🧋</span>
           <span class="font-boba">wxh的记录册</span>
@@ -458,14 +470,14 @@ tailwind.config = {
       </div>
 
       <!-- Footer links -->
-      <div class="relative z-20 p-10 flex items-center gap-6 text-xs text-white/40">
+      <div class="hidden lg:flex relative z-20 p-4 lg:p-10 items-center gap-6 text-xs text-white/40">
         <a href="#" class="hover:text-white/70 transition-colors">Privacy</a>
         <a href="#" class="hover:text-white/70 transition-colors">Terms</a>
       </div>
     </div>
 
     <!-- Right: Login / Register Form -->
-    <div class="flex items-center justify-center p-6 sm:p-10 bg-white">
+    <div class="flex items-center justify-center p-6 sm:p-10 bg-white overflow-y-auto">
       <div class="w-full max-w-[400px]">
         <!-- Mobile Logo -->
         <div class="lg:hidden flex items-center justify-center gap-2 text-lg font-semibold mb-10">
