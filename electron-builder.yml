@@ -1,0 +1,33 @@
+appId: com.milktea.tracker
+productName: "奶茶记录册"
+copyright: "Copyright © 2026"
+directories:
+  output: release
+  buildResources: build
+files:
+  - dist
+  - dist-electron
+mac:
+  category: public.app-category.food-and-drink
+  target:
+    - dmg
+  artifactName: "奶茶记录册-${version}.${ext}"
+  icon: build/icon.png
+dmg:
+  title: "🧋 奶茶记录册"
+  contents:
+    - x: 130
+      y: 220
+    - x: 410
+      y: 220
+      type: link
+      path: /Applications
+win:
+  target:
+    - nsis
+nsis:
+  artifactName: "奶茶记录册-Setup-${version}.${ext}"
+linux:
+  target:
+    - AppImage
+  artifactName: "奶茶记录册-${version}.${ext}"

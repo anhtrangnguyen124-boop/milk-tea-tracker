@@ -1,0 +1,90 @@
+@import "tailwindcss";
+@import "@heroui/react/styles";
+@import "./design-tokens.css";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  font-family: 'SF Pro Rounded', 'PingFang SC', 'Helvetica Rounded', 'Arial Rounded MT Bold',
+    'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  color: var(--color-milk-text);
+  /* Warm radial gradient blobs for glassmorphism backdrop */
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 15%, var(--color-milk-accent-50) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 20%, var(--color-milk-primary-50) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 55% at 50% 80%, var(--color-milk-accent-50) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 40% at 90% 70%, var(--color-milk-primary-50) 0%, transparent 45%),
+    linear-gradient(160deg, var(--color-milk-bg) 0%, #F8F2EA 40%, #F5EFE6 100%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Make headings extra cute */
+h1, h2, h3, h4 {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* Rounded appearance for numbers and dates */
+.calendar-day, .date-text, .rating-text {
+  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-milk-border); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-milk-primary-light); }
+
+.drag-region { -webkit-app-region: drag; }
+.no-drag { -webkit-app-region: no-drag; }
+
+@keyframes pin-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+.pin-pulse { animation: pin-pulse 2s ease-in-out infinite; }
+
+@keyframes bounce-in {
+  0% { transform: scale(0.8); opacity: 0; }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.bounce-in { animation: bounce-in 0.4s ease-out; }
+
+@keyframes sparkle {
+  0% { transform: scale(0) rotate(0deg); opacity: 1; }
+  100% { transform: scale(1.5) rotate(180deg); opacity: 0; }
+}
+.sparkle { animation: sparkle 0.6s ease-out forwards; }
+
+@keyframes slide-up {
+  0% { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+.slide-up { animation: slide-up 0.3s ease-out; }
+
+@keyframes star-glow {
+  0%, 100% { filter: drop-shadow(0 0 2px var(--color-milk-accent-200)); }
+  50% { filter: drop-shadow(0 0 6px var(--color-milk-accent-200)); }
+}
+.star-glow { animation: star-glow 1.5s ease-in-out infinite; }
+
+/* Calendar sticker icon hover effect */
+.calendar-icon {
+  transition: transform 0.2s ease, filter 0.2s ease;
+  filter: drop-shadow(0 2px 4px rgba(51, 34, 27, 0.10));
+}
+.calendar-icon:hover {
+  transform: scale(1.15);
+  filter: drop-shadow(0 3px 8px var(--color-milk-primary-200));
+}

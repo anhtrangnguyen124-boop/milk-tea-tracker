@@ -1,0 +1,353 @@
+/* ============================================================
+   Design Tokens — 统一设计令牌系统
+
+   本文件是项目中所有视觉属性的唯一权威来源。
+   组件中禁止硬编码颜色、间距、圆角、阴影、字号、Z 值。
+   全部通过 Tailwind 类 或 var(--token) 引用本文件的定义。
+
+   分层说明:
+   Layer 1: Brand Colors       — 品牌色板 (milk 暖棕 + accent 金)
+   Layer 2: Neutral Colors     — 中性灰阶
+   Layer 3: Semantic Colors    — 语义别名 (bg / text / border / danger)
+   Layer 4: Typography         — 字体族 / 字号 / 字重 / 行高
+   Layer 5: Spacing            — 间距阶梯
+   Layer 6: Radii              — 圆角阶梯
+   Layer 7: Shadows            — 阴影阶梯
+   Layer 8: Z-Index            — 层级体系
+   Layer 9: Breakpoints        — 响应式断点
+   Layer 10: Animation         — 时长 / 缓动
+
+   使用方式:
+   - Tailwind 类: bg-milk-primary, text-milk-text, rounded-milk-md, shadow-milk-md, p-milk-4
+   - CSS var():   var(--font-display), var(--z-modal), var(--easing-bounce)
+   - JS (TS):     从 constants/theme.ts 导入映射 (该文件同步本 Token)
+   ============================================================ */
+
+/* ============================================================
+   Tailwind v4 @theme 注册
+   以下 Token 生成对应的 Tailwind 工具类
+   例如 --color-milk-primary → bg-milk-primary / text-milk-primary
+   ============================================================ */
+@theme {
+
+  /* ==========================================================
+     Layer 1: Brand Colors — milk 暖棕色系
+     ----------------------------------------------------------
+     角色:
+       primary      主操作按钮、选中态、强调文字
+       primary-light 浅底色、hover 态、tag 背景
+       primary-dark  按下的按钮态、深色强调
+       accent        金色点缀、星级评分、徽章
+       pin           置顶标识色
+       danger        删除操作、错误提示
+     ----------------------------------------------------------
+     用法:
+       Tailwind: bg-milk-primary / text-milk-accent / border-milk-danger
+       CSS:      var(--color-milk-primary)
+       TS:       theme.colors.primary  (从 constants/theme.ts 导入)
+     ========================================================== */
+  --color-milk-primary:       #C86A4B;
+  --color-milk-primary-light: #E8B8A2;
+  --color-milk-primary-dark:  #A0523A;
+  --color-milk-accent:        #E8A838;
+  --color-milk-pin:           #D4894A;
+  --color-milk-danger:        #D35B4B;
+
+  /* 品牌色派生 — focus ring / 半透明遮罩 */
+  --color-milk-primary-50:  rgba(200, 106, 75, 0.05);
+  --color-milk-primary-100: rgba(200, 106, 75, 0.10);
+  --color-milk-primary-200: rgba(200, 106, 75, 0.20);
+  --color-milk-primary-300: rgba(200, 106, 75, 0.30);
+  --color-milk-accent-50:   rgba(232, 168, 56, 0.05);
+  --color-milk-accent-100:  rgba(232, 168, 56, 0.10);
+  --color-milk-accent-200:  rgba(232, 168, 56, 0.20);
+  --color-milk-danger-50:   rgba(211, 91, 75, 0.05);
+  --color-milk-danger-100:  rgba(211, 91, 75, 0.10);
+
+  /* ==========================================================
+     Layer 2: Neutral Colors — 灰度
+     ========================================================== */
+  --color-milk-gray-50:  #FAFAF9;
+  --color-milk-gray-100: #F5F2EF;
+  --color-milk-gray-200: #EDE8E3;
+  --color-milk-gray-300: #D4CEC7;
+  --color-milk-gray-400: #A6998F;
+  --color-milk-gray-500: #7A7068;
+  --color-milk-gray-600: #5C544E;
+  --color-milk-gray-700: #3D3732;
+  --color-milk-gray-800: #261F1A;
+  --color-milk-gray-900: #1A1511;
+
+  /* ==========================================================
+     Layer 3: Semantic Colors — 语义别名
+     ----------------------------------------------------------
+     组件应引用语义别名而非直接引用品牌色，
+     便于后续换肤时仅修改别名的映射即可。
+     ========================================================== */
+  --color-milk-bg:             #FDFBF7;
+  --color-milk-card:           #FFFFFF;
+  --color-milk-sidebar:        #FFFBF5;
+  --color-milk-text:           #33221B;
+  --color-milk-text-secondary: #7A6B62;
+  --color-milk-text-muted:     #B5A59A;
+  --color-milk-border:         #EDE4DB;
+  --color-milk-divider:        var(--color-milk-gray-200);
+
+  /* 表单 */
+  --color-milk-input-bg:       #FFFFFF;
+  --color-milk-input-border:   var(--color-milk-border);
+  --color-milk-input-focus:    var(--color-milk-primary);
+  --color-milk-placeholder:    var(--color-milk-text-muted);
+
+  /* 交互态 */
+  --color-milk-hover:          rgba(0, 0, 0, 0.03);
+  --color-milk-active:         rgba(0, 0, 0, 0.06);
+  --color-milk-disabled:       var(--color-milk-text-muted);
+
+  /* ==========================================================
+     Layer 4: Typography
+     ----------------------------------------------------------
+     用法:
+       Tailwind: font-milk-display, text-milk-2xl, font-milk-semibold
+       CSS:      font-family: var(--font-display)
+     ========================================================== */
+
+  /* Font Family */
+  --font-milk-display:  'SF Pro Rounded', 'PingFang SC', 'Helvetica Rounded',
+                        'Arial Rounded MT Bold', 'Noto Sans SC',
+                        -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-milk-body:     'PingFang SC', 'Noto Sans SC', -apple-system,
+                        BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-milk-mono:     'SF Mono', 'Cascadia Code', 'Fira Code', 'Menlo',
+                        'Consolas', monospace;
+
+  /* Font Size 阶梯 (基于 16px 根字号) */
+  --text-milk-xs:   0.6875rem;   /* 11px — 极小标签 */
+  --text-milk-sm:   0.8125rem;   /* 13px — 辅助文字 */
+  --text-milk-base: 0.9375rem;   /* 15px — 正文 */
+  --text-milk-md:   1rem;        /* 16px — 按钮 / 输入框 */
+  --text-milk-lg:   1.125rem;    /* 18px — 卡片标题 */
+  --text-milk-xl:   1.375rem;    /* 22px — 模块标题 */
+  --text-milk-2xl:  1.75rem;     /* 28px — 页面标题 */
+  --text-milk-3xl:  2.25rem;     /* 36px — Hero 大标题 */
+  --text-milk-4xl:  3rem;        /* 48px — 超大数字 */
+  --text-milk-5xl:  4rem;        /* 64px — 统计数字 */
+
+  /* Font Weight */
+  --font-weight-milk-normal:  400;
+  --font-weight-milk-medium:  500;
+  --font-weight-milk-semibold: 600;
+  --font-weight-milk-bold:    700;
+
+  /* Line Height */
+  --leading-milk-tight:   1.2;    /* 紧凑 — 标题 */
+  --leading-milk-snug:    1.375;  /* 较紧 — 列表项 */
+  --leading-milk-normal:  1.5;    /* 正常 — 正文 */
+  --leading-milk-relaxed: 1.625;  /* 宽松 — 长篇内容 */
+  --leading-milk-loose:   1.75;   /* 最松 — 散文/说明 */
+
+  /* Letter Spacing */
+  --tracking-milk-tight:  -0.01em;
+  --tracking-milk-normal:  0.01em;
+  --tracking-milk-wide:    0.03em;
+  --tracking-milk-display: 0.02em;  /* 标题专用 */
+
+  /* ==========================================================
+     Layer 5: Spacing — 间距阶梯
+     ----------------------------------------------------------
+     基于 4px 基数。Tailwind v4 --spacing-* 注册后，
+     可用 p-milk-1, gap-milk-4, m-milk-8 等
+     ========================================================== */
+  --spacing-milk-0:   0rem;      /* 0px   */
+  --spacing-milk-1:   0.25rem;   /* 4px   */
+  --spacing-milk-2:   0.5rem;    /* 8px   */
+  --spacing-milk-3:   0.75rem;   /* 12px  */
+  --spacing-milk-4:   1rem;      /* 16px  */
+  --spacing-milk-5:   1.25rem;   /* 20px  */
+  --spacing-milk-6:   1.5rem;    /* 24px  */
+  --spacing-milk-8:   2rem;      /* 32px  */
+  --spacing-milk-10:  2.5rem;    /* 40px  */
+  --spacing-milk-12:  3rem;      /* 48px  */
+  --spacing-milk-16:  4rem;      /* 64px  */
+  --spacing-milk-20:  5rem;      /* 80px  */
+
+  /* 组件内聚间距 */
+  --spacing-milk-card-padding:   1.25rem;  /* 20px — 卡片内边距 */
+  --spacing-milk-card-gap:       1rem;      /* 16px — 卡片内部元素间距 */
+  --spacing-milk-section-gap:    1.5rem;   /* 24px — 模块之间 */
+  --spacing-milk-page-padding:   1rem;      /* 16px — 页面水平内边距 */
+  --spacing-milk-modal-padding:  2rem;      /* 32px — Modal 内边距 */
+
+  /* ==========================================================
+     Layer 6: Radii — 圆角阶梯
+     ----------------------------------------------------------
+     对应关系 (approx):
+       sm  ≈ 10px — 小标签/徽章
+       md  ≈ 16px — 卡片/输入框/按钮
+       lg  ≈ 24px — Modal/大面板
+       xl  ≈ 32px — 特大圆角
+       full = 9999px — 药丸/圆形
+     ========================================================== */
+  --radius-milk-xs:   0.375rem;   /* 6px  — 极小圆角 */
+  --radius-milk-sm:   0.625rem;   /* 10px — 标签/徽章 */
+  --radius-milk-md:   1rem;       /* 16px — 卡片/按钮/输入框 */
+  --radius-milk-lg:   1.5rem;     /* 24px — Modal/大面板 */
+  --radius-milk-xl:   2rem;       /* 32px — 特大圆角 */
+  --radius-milk-full: 9999px;     /* 9999px — 药丸/圆形 */
+
+  /* 语义别名 (向后兼容现有 theme.ts) */
+  --radius-milk-button:   var(--radius-milk-md);
+  --radius-milk-card:     var(--radius-milk-md);
+  --radius-milk-modal:    var(--radius-milk-lg);
+  --radius-milk-input:    var(--radius-milk-md);
+  --radius-milk-tag:      var(--radius-milk-sm);
+  --radius-milk-badge:    var(--radius-milk-full);
+
+  /* ==========================================================
+     Layer 7: Shadows — 阴影阶梯
+     ========================================================== */
+  --shadow-milk-xs:  0 2px 8px rgba(51, 34, 27, 0.03);
+  --shadow-milk-sm:  0 4px 16px rgba(51, 34, 27, 0.04);
+  --shadow-milk-md:  0 10px 30px rgba(51, 34, 27, 0.04);
+  --shadow-milk-lg:  0 16px 40px rgba(51, 34, 27, 0.06);
+  --shadow-milk-xl:  0 25px 50px -12px rgba(51, 34, 27, 0.12);
+
+  /* 语义别名 */
+  --shadow-milk-card:        var(--shadow-milk-sm);
+  --shadow-milk-card-hover:  var(--shadow-milk-md);
+  --shadow-milk-button:      0 2px 10px rgba(200, 106, 75, 0.25);
+  --shadow-milk-button-hover: 0 4px 16px rgba(200, 106, 75, 0.35);
+  --shadow-milk-modal:       var(--shadow-milk-xl);
+  --shadow-milk-toast:       0 8px 24px rgba(51, 34, 27, 0.10);
+  --shadow-milk-float:       0 8px 32px rgba(51, 34, 27, 0.08);  /* FAB / 浮动元素 */
+  --shadow-milk-draw:        inset 0 1px 3px rgba(51, 34, 27, 0.04); /* 内阴影/凹陷 */
+}
+
+/* ============================================================
+   以下 Token 注册在 :root 上 (非 @theme)
+   不生成 Tailwind 工具类，但在所有组件中可通过 var() 引用
+   ============================================================ */
+:root {
+  /* ==========================================================
+     Layer 8: Z-Index — 层级体系
+     ----------------------------------------------------------
+     从小到大,间距足够容纳中间插值:
+       0      — 默认文档流
+       100    — 悬浮卡片 / dropdown
+       200    — sticky 导航
+       300    — 遮罩层 (Sheet/Modal backdrop)
+       400    — Modal / Sheet 面板
+       500    — Popover / Tooltip / 选择弹层
+       600    — Toast / 通知
+       700    — 全局 loading / 最高优先级
+
+     用法: z-index: var(--z-modal);
+     ========================================================== */
+  --z-base:        0;
+  --z-elevated:    100;   /* 悬浮卡片、日期单元格悬浮预览 */
+  --z-dropdown:    150;   /* 下拉菜单 */
+  --z-sticky:      200;   /* 头部导航 */
+  --z-backdrop:    300;   /* Modal/Sheet 遮罩背景 */
+  --z-modal:       400;   /* Modal / Sheet / Dialog 面板 */
+  --z-popover:     500;   /* Popover / Tooltip / 选择器浮层 */
+  --z-toast:       600;   /* Toast / Notification */
+  --z-spinner:     700;   /* 全局 Loading Spinner */
+
+  /* ==========================================================
+     Layer 9: Breakpoints — 响应式断点
+     ----------------------------------------------------------
+     移动优先。与 Tailwind 默认断点对齐:
+       sm  >= 640px
+       md  >= 768px
+       lg  >= 1024px
+       xl  >= 1280px
+       2xl >= 1536px
+
+     注意: CSS 自定义属性不能直接用于 @media 查询。
+     但可以用 JavaScript 读取进行条件渲染，
+     或间接使用 — 如有需要，constraint 宽度用 max-width 变量。
+
+     用法:
+       CSS: @media (min-width: 768px) { ... }
+       JS:  const bp = getComputedStyle(docEl).getPropertyValue('--bp-md');
+     ========================================================== */
+  --bp-sm:  640px;
+  --bp-md:  768px;
+  --bp-lg:  1024px;
+  --bp-xl:  1280px;
+  --bp-2xl: 1536px;
+
+  /* 容器最大宽度 */
+  --container-max: 72rem;  /* 1152px — 对应 max-w-6xl */
+
+  /* ==========================================================
+     Layer 10: Animation — 时长 / 缓动
+     ----------------------------------------------------------
+     用法:
+       CSS: transition: opacity var(--duration-fast) var(--easing-smooth);
+       JS:  frame-motion 配置中引用
+     ========================================================== */
+
+  /* Durations */
+  --duration-instant: 100ms;   /* 按钮按下 / toggle  */
+  --duration-fast:    150ms;   /* hover 过渡 */
+  --duration-normal:  250ms;   /* 打开/关闭动画 / 展开 */
+  --duration-slow:    400ms;   /* Modal 入场 */
+  --duration-glacial: 600ms;   /* 大幅面动画 */
+
+  /* Easing Curves */
+  --easing-smooth:    cubic-bezier(0.4, 0, 0.2, 1);     /* 标准缓出 */
+  --easing-bounce:    cubic-bezier(0.34, 1.56, 0.64, 1); /* 弹跳入场 (Modal) */
+  --easing-decelerate: cubic-bezier(0, 0, 0.2, 1);       /* 纯减速 */
+  --easing-accelerate: cubic-bezier(0.4, 0, 1, 1);       /* 纯加速 (退出) */
+
+  /* ==========================================================
+     Layer 11: 全局视觉微调
+     ========================================================== */
+
+  /* 最小可点击区域 */
+  --touch-target: 44px;
+
+  /* 图标尺寸 */
+  --icon-sm: 1rem;      /* 16px — 行内图标 */
+  --icon-md: 1.25rem;   /* 20px — 卡片内图标 */
+  --icon-lg: 1.5rem;    /* 24px — 导航图标 */
+  --icon-xl: 2rem;      /* 32px — 饮品 SVG 容器 */
+
+  /* 毛玻璃效果 */
+  --blur-glass: 12px;
+
+  /* 日历单元格最小高度 */
+  --calendar-cell-min-height: 3.5rem;
+}
+
+/* ============================================================
+   Layer 12: 全局 Focus / Accessibility
+   ============================================================ */
+:root {
+  /* Focus Ring — 在所有可聚焦元素上使用 */
+  --focus-ring-color:  var(--color-milk-primary);
+  --focus-ring-width:  3px;
+  --focus-ring-offset: 2px;
+}
+
+/* ============================================================
+   导出说明
+   ============================================================
+
+   本文件的 Token 在以下位置同步:
+
+   1. src/styles/design-tokens.css   ← 本文件 (CSS 权威来源)
+   2. src/styles/globals.css         ← @import 'design-tokens.css' (Tailwind 入口)
+   3. src/constants/theme.ts         ← JS/TS 侧 Token 映射 (保持同步)
+
+   修改 Token 时:
+   - 改本文件 → 全部 CSS / Tailwind 类即时生效
+   - 同步修改 constants/theme.ts → JS 侧即时生效
+
+   禁止:
+   - 在组件 CSS 中直接写颜色值 ( #xxx )  → 请用 var(--color-milk-*)
+   - 在组件 className 中硬编码 pixel 间距  → 请用 p-milk-* / gap-milk-*
+   - 自定义 z-index 数字                    → 请用 var(--z-*)
+   - 复制粘贴 borderRadius 字符串          → 请用 rounded-milk-* 或 var(--radius-milk-*)
+   ============================================================ */

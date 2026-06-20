@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧋 wxh的记录册</title>
+<link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        boba: ['"ZCOOL KuaiLe"', '"PingFang SC"', 'cursive'],
+        ma: ['"Ma Shan Zheng"', 'cursive'],
+      },
+      colors: {
+        accent: {
+          50: '#fef6f0',
+          100: '#fde8db',
+          200: '#f9c9a5',
+          300: '#f5aa6f',
+          400: '#f09a5a',
+          500: '#C86A4B',
+          600: '#A0523A',
+          700: '#8A4530',
+          800: '#6E3726',
+          900: '#52291C',
+        }
+      },
+      borderRadius: {
+        '2xl': '1rem',
+        '3xl': '1.5rem',
+      },
+      boxShadow: {
+        'card': '0 8px 32px rgba(200,106,75,0.06)',
+        'card-hover': '0 12px 40px rgba(200,106,75,0.12)',
+        'btn': '0 4px 14px rgba(200,106,75,0.28)',
+        'btn-hover': '0 6px 20px rgba(200,106,75,0.38)',
+      }
+    }
+  }
+}
+</script>
+<style>
+  /* ============================================================
+     Animations
+     ============================================================ */
+  @keyframes breathe { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+  @keyframes boba-bounce { 0%,100%{transform:translateY(0)} 30%{transform:translateY(-5px)} 60%{transform:translateY(1px)} }
+  @keyframes sip { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-2px)} }
+  @keyframes blush-pulse { 0%,100%{opacity:0.3} 50%{opacity:0.55} }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+  @keyframes modalIn { from{transform:translateY(30px) scale(0.95);opacity:0} to{transform:translateY(0) scale(1);opacity:1} }
+  /* Memo character animations */
+  @keyframes pen-write { 0%,100%{transform:rotate(-3deg)} 50%{transform:rotate(8deg)} }
+  @keyframes paper-flip { 0%,100%{transform:rotate(0deg)} 30%{transform:rotate(-4deg)} 70%{transform:rotate(3deg)} }
+
+  .animate-breathe { animation: breathe 3s ease-in-out infinite; }
+  .animate-boba-bounce { animation: boba-bounce 0.75s ease-in-out infinite; }
+  .animate-sip { animation: sip 0.75s ease-in-out infinite; }
+  .animate-blush-pulse { animation: blush-pulse 3s ease-in-out infinite; }
+  .animate-float { animation: float 3s ease-in-out infinite; }
+  .animate-fade-in { animation: fadeIn 0.2s ease-out; }
+  .animate-modal-in { animation: modalIn 0.35s cubic-bezier(0.34,1.56,0.64,1); }
+  .animate-pen-write { animation: pen-write 1.5s ease-in-out infinite; transform-origin: 50% 70%; }
+  .animate-paper-flip { animation: paper-flip 4s ease-in-out infinite; transform-origin: 100% 0%; }
+
+  /* Star styling */
+  .star-filled { fill: #C86A4B; color: #C86A4B; }
+  .star-empty { fill: none; color: #d1d5db; }
+
+  /* Custom thin scrollbar */
+  .thin-scroll::-webkit-scrollbar { width: 5px; }
+  .thin-scroll::-webkit-scrollbar-track { background: transparent; }
+  .thin-scroll::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.08); border-radius: 10px; }
+  .thin-scroll::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.14); }
+
+  /* Toast transition */
+  .toast-in { opacity: 1; transform: translateX(-50%) translateY(-6px); }
+  .toast-out { opacity: 0; transform: translateX(-50%) translateY(0); }
+
+  /* Focus ring override */
+  *:focus-visible { outline: 2px solid #C86A4B; outline-offset: 2px; }
+
+  /* Glass card base — subtle floating effect */
+  .glass-card {
+    background: rgba(255,255,255,0.4);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.6);
+    box-shadow: 0 8px 32px rgba(200,106,75,0.06);
+  }
+
+  /* ============================================================
+     Paper Textures for Journal Cards
+     ============================================================ */
+  .paper-grid {
+    background-color: #FFFDFA;
+    background-image: linear-gradient(#EDE4DB 1px, transparent 1px), linear-gradient(90deg, #EDE4DB 1px, transparent 1px);
+    background-size: 24px 24px;
+    background-position: -1px -1px;
+  }
+  .paper-lined {
+    background-color: #FFFDFA;
+    background-image: repeating-linear-gradient(transparent, transparent 29px, #EDE4DB 29px, #EDE4DB 30px);
+  }
+  .paper-dot {
+    background-color: #FFFDFA;
+    background-image: radial-gradient(#D4CEC7 1.2px, transparent 1.2px);
+    background-size: 20px 20px;
+    background-position: -2px -2px;
+  }
+  .paper-blank {
+    background-color: #faf8f5;
+    background-image: radial-gradient(ellipse at 20% 50%, rgba(200,106,75,0.04) 0%, transparent 50%),
+                      radial-gradient(ellipse at 80% 50%, rgba(200,106,75,0.03) 0%, transparent 50%);
+    box-shadow: inset 0 0 60px rgba(200,106,75,0.05);
+  }
+</style>
+</head>
+<body class="min-h-screen font-boba text-gray-800 antialiased leading-relaxed"
+      style="background: linear-gradient(160deg, #FDF6F0 0%, #FEF9F4 30%, #FDF3F0 60%, #FFF8F4 100%); background-attachment: fixed;">
+
+<!-- ============================================================
+     Top Navigation Bar
+     ============================================================ -->
+<header class="sticky top-0 z-30 bg-white/60 backdrop-blur-xl border-b border-white/50 shadow-sm">
+  <div class="w-full px-6 sm:px-10 py-3 flex items-center gap-3">
+    <!-- Animated Boba Tea SVG -->
+    <svg class="w-10 h-10 flex-shrink-0" viewBox="0 0 100 100" fill="none">
+      <g class="animate-boba-bounce" style="transform-origin:center center;">
+        <!-- Cup body -->
+        <path d="M22 32 L28 85 C28 89 31 91 35 91 L65 91 C69 91 72 89 72 85 L78 32 Z" fill="#FFF8F0" stroke="#C86A4B" stroke-width="2.8" stroke-linejoin="round"/>
+        <!-- Cup rim -->
+        <path d="M20 32 Q50 22 80 32" fill="#FFFDF8" stroke="#C86A4B" stroke-width="2.8"/>
+        <ellipse cx="50" cy="32" rx="30" ry="5" fill="#FFFDF8" stroke="#C86A4B" stroke-width="2.8"/>
+        <!-- Tea liquid -->
+        <ellipse cx="50" cy="52" rx="24" ry="14" fill="#F5D5B8" opacity="0.7"/>
+        <!-- Boba pearls -->
+        <circle cx="38" cy="58" r="5" fill="#3D2B1F" opacity="0.85"/>
+        <circle cx="52" cy="62" r="5" fill="#3D2B1F" opacity="0.85"/>
+        <circle cx="62" cy="54" r="4.5" fill="#3D2B1F" opacity="0.75"/>
+        <circle cx="46" cy="52" r="4" fill="#3D2B1F" opacity="0.7"/>
+        <circle cx="56" cy="70" r="4.5" fill="#3D2B1F" opacity="0.8"/>
+        <circle cx="44" cy="68" r="5" fill="#3D2B1F" opacity="0.85"/>
+        <circle cx="38" cy="72" r="3.5" fill="#3D2B1F" opacity="0.65"/>
+        <circle cx="60" cy="76" r="4" fill="#3D2B1F" opacity="0.75"/>
+        <!-- Straw -->
+        <line x1="60" y1="10" x2="60" y2="70" stroke="#C86A4B" stroke-width="3.5" stroke-linecap="round"/>
+        <line x1="60" y1="12" x2="68" y2="22" stroke="#C86A4B" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Condensation drops -->
+        <circle cx="30" cy="50" r="1.8" fill="#C86A4B" opacity="0.25"/>
+        <circle cx="74" cy="55" r="1.5" fill="#C86A4B" opacity="0.2"/>
+      </g>
+    </svg>
+    <h1 class="text-xl sm:text-2xl font-boba font-bold text-gray-800 tracking-wide whitespace-nowrap">wxh的记录册</h1>
+    <!-- Tab Switcher — text only -->
+    <nav class="ml-auto flex items-center gap-4">
+      <button data-tab="tracker" class="tab-btn text-sm font-bold transition-all duration-200 cursor-pointer border-none bg-transparent px-1 py-1 border-b-2 rounded-none tracking-wide" style="color:#C86A4B;border-color:#C86A4B;" onclick="switchTab('tracker')">奶茶记录</button>
+      <button data-tab="journal" class="tab-btn text-sm font-bold transition-all duration-200 cursor-pointer border-none bg-transparent px-1 py-1 border-b-2 rounded-none tracking-wide" style="color:#B5A59A;border-color:transparent;" onclick="switchTab('journal')">随想记录</button>
+    </nav>
+  </div>
+</header>
+
+<!-- ============================================================
+     Main Content Area
+     ============================================================ -->
+<main id="app" class="w-full px-6 sm:px-10 py-6">
+  <div id="panel-zone" class="space-y-6">
+
+    <!-- ============================================================
+         PAGE: 奶茶记录 (Tracker)
+         ============================================================ -->
+    <div id="page-tracker" class="page space-y-6">
+
+      <!-- Stats Bar (full width) — glass floating -->
+      <div id="stats-bar" class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-5 sm:p-6">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2.5">
+            <svg class="w-8 h-8" viewBox="0 0 80 30" fill="none">
+              <path d="M3 5 L5 27 C5 28.5 5.5 29.5 7 29.5 L15 29.5 C16.5 29.5 17 28.5 17 27 L19 5 Z" fill="rgba(200,106,75,0.15)" stroke="#C86A4B" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M2 5 Q11 1 20 5" fill="rgba(200,106,75,0.08)" stroke="#C86A4B" stroke-width="1.5"/>
+              <ellipse cx="11" cy="5" rx="9" ry="1.8" fill="rgba(200,106,75,0.1)" stroke="#C86A4B" stroke-width="1.2"/>
+              <path d="M29 5 L31 27 C31 28.5 31.5 29.5 33 29.5 L41 29.5 C42.5 29.5 43 28.5 43 27 L45 5 Z" fill="rgba(200,106,75,0.15)" stroke="#C86A4B" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M28 5 Q37 1 46 5" fill="rgba(200,106,75,0.08)" stroke="#C86A4B" stroke-width="1.5"/>
+              <ellipse cx="37" cy="5" rx="9" ry="1.8" fill="rgba(200,106,75,0.1)" stroke="#C86A4B" stroke-width="1.2"/>
+              <path d="M55 5 L57 27 C57 28.5 57.5 29.5 59 29.5 L67 29.5 C68.5 29.5 69 28.5 69 27 L71 5 Z" fill="rgba(200,106,75,0.15)" stroke="#C86A4B" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M54 5 Q63 1 72 5" fill="rgba(200,106,75,0.08)" stroke="#C86A4B" stroke-width="1.5"/>
+              <ellipse cx="63" cy="5" rx="9" ry="1.8" fill="rgba(200,106,75,0.1)" stroke="#C86A4B" stroke-width="1.2"/>
+            </svg>
+            <span class="text-lg font-bold text-gray-800">本月统计</span>
+          </div>
+          <button onclick="goToday()" class="px-5 py-2 rounded-full bg-[#C86A4B] text-white text-sm font-bold shadow-[0_4px_14px_rgba(200,106,75,0.28)] hover:bg-[#A0523A] hover:shadow-[0_6px_20px_rgba(200,106,75,0.38)] active:scale-95 transition-all duration-200">
+            今天
+          </button>
+        </div>
+        <div class="grid grid-cols-3 gap-3">
+          <div class="text-center p-3 sm:p-4">
+            <div class="text-4xl sm:text-5xl font-bold text-[#C86A4B] leading-tight" id="month-total">0</div>
+            <div class="text-xs sm:text-sm text-gray-400 mt-1.5">杯数</div>
+          </div>
+          <div class="text-center p-3 sm:p-4">
+            <div class="text-4xl sm:text-5xl font-bold text-[#C86A4B] leading-tight" id="week-avg">0</div>
+            <div class="text-xs sm:text-sm text-gray-400 mt-1.5">周均</div>
+          </div>
+          <div class="text-center p-3 sm:p-4">
+            <div class="text-4xl sm:text-5xl font-bold text-[#C86A4B] leading-tight" id="total-spend">¥0</div>
+            <div class="text-xs sm:text-sm text-gray-400 mt-1.5">消费</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content Grid: Left (Calendar+Entries) 60% / Right (Pinned+Quote+Search+Yesterday) 40% -->
+      <div id="content-grid" class="grid grid-cols-1 lg:grid-cols-[60%_40%] gap-6">
+
+        <!-- ===== LEFT COLUMN: Calendar + Entries ===== -->
+        <div id="left-col" class="space-y-6">
+
+          <!-- Calendar — glass floating -->
+          <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-5 sm:p-6">
+            <div class="calendar" id="calendar"></div>
+          </div>
+
+          <!-- Add Record + Today's Records — glass floating -->
+          <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-5 sm:p-6">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-lg font-bold text-gray-800" id="entry-date-label">今日记录</h2>
+              <div class="flex items-center gap-2">
+                <span class="text-xs text-gray-400 bg-white/60 px-3 py-1 rounded-full font-medium" id="entry-count">0 杯</span>
+                <button class="px-5 py-2 rounded-full bg-[#C86A4B] text-white text-sm font-bold shadow-[0_4px_14px_rgba(200,106,75,0.28)] hover:bg-[#A0523A] hover:shadow-[0_6px_20px_rgba(200,106,75,0.38)] active:scale-95 transition-all duration-200" onclick="openModal()">+ 记录奶茶</button>
+              </div>
+            </div>
+            <div id="entries-container" data-empty="true">
+              <div class="flex flex-col items-center text-center py-8">
+                <div class="text-5xl mb-3 animate-float">🧋</div>
+                <div class="text-lg font-bold text-gray-800 mb-1">还没有奶茶记录</div>
+                <div class="text-sm text-gray-400">记录下今天喝的第一杯奶茶吧</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== RIGHT COLUMN: Pinned + Quote + Search + Yesterday ===== -->
+        <div id="right-col" class="space-y-6">
+
+          <!-- Pinned — glass floating -->
+          <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-5 sm:p-6 flex flex-col" style="min-height:140px">
+            <div class="flex items-center gap-2 font-bold text-gray-800 text-base mb-3">📌 置顶</div>
+            <div id="pinned-list" class="flex-1"></div>
+            <div id="pinned-empty" class="flex-1 flex flex-col items-center justify-center text-center py-4">
+              <svg width="64" height="64" viewBox="0 0 100 100" fill="none" stroke="#C86A4B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.2">
+                <ellipse cx="50" cy="55" rx="24" ry="3.5"/>
+                <path d="M32 32 L35 66 C35 69 37 71 40 71 L60 71 C63 71 65 69 65 66 L68 32 Z"/>
+                <path d="M28 32 Q50 18 72 32"/>
+                <ellipse cx="50" cy="32" rx="22" ry="4.5"/>
+                <rect x="24" y="18" width="52" height="13" rx="6.5"/>
+                <circle cx="34" cy="24.5" r="1.8"/>
+                <circle cx="50" cy="24.5" r="1.8"/>
+                <circle cx="66" cy="24.5" r="1.8"/>
+              </svg>
+              <p class="text-xs text-gray-400 mt-2">快去置顶最爱 🧋</p>
+            </div>
+          </div>
+
+          <!-- Quote — glass floating -->
+          <div class="bg-white/20 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-6 sm:p-8 text-center cursor-pointer hover:shadow-[0_12px_36px_rgba(200,106,75,0.1)] transition-all duration-300 relative overflow-hidden flex flex-col items-center justify-center"
+               id="quote-w" onclick="nextQuote()" style="min-height:110px;background:linear-gradient(135deg,rgba(254,246,240,0.6),rgba(253,242,248,0.5),rgba(254,249,240,0.5))">
+            <span class="text-4xl sm:text-5xl mb-2 animate-float block" id="quote-emoji">💫</span>
+            <div class="text-xl sm:text-2xl text-gray-800 font-boba font-medium leading-relaxed relative z-10" id="quote-text">生活苦短，全糖加满</div>
+            <div class="text-sm text-gray-400 mt-2 font-boba" id="quote-author">— 每日奶茶语录</div>
+          </div>
+
+          <!-- Search — glass floating -->
+          <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-5 flex items-center">
+            <div class="w-full">
+              <div class="flex items-center border border-white/40 rounded-full overflow-hidden bg-white/50 focus-within:border-[#C86A4B] focus-within:ring-4 focus-within:ring-[rgba(200,106,75,0.1)] transition-all duration-200">
+                <div class="w-12 h-12 flex items-center justify-center flex-shrink-0 text-gray-400">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="w-5 h-5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                </div>
+                <input class="flex-1 border-none bg-transparent text-base text-gray-800 py-3 font-boba outline-none placeholder:text-gray-400" id="search-input" placeholder="搜索奶茶..." onfocus="openFilter()" oninput="doSearch()">
+                <button class="w-9 h-9 rounded-full border-none bg-gray-200/60 text-gray-400 cursor-pointer hidden items-center justify-center mr-2 text-sm hover:bg-gray-300/60 transition-all duration-200 font-boba" id="search-clear" onclick="clearSearch()">✕</button>
+              </div>
+              <div class="mt-3 hidden flex-wrap gap-2 p-3 bg-white/40 rounded-xl text-sm" id="filter-panel">
+                <div class="flex-1 min-w-[80px]">
+                  <label class="block text-xs font-semibold text-gray-400 mb-1">品牌</label>
+                  <input class="w-full px-3 py-1.5 rounded-lg border border-white/40 text-sm text-gray-800 bg-white/60 font-boba focus:border-[#C86A4B] outline-none" placeholder="品牌..." oninput="doSearch()" id="filter-brand">
+                </div>
+                <div class="flex-1 min-w-[80px]">
+                  <label class="block text-xs font-semibold text-gray-400 mb-1">开始</label>
+                  <input class="w-full px-3 py-1.5 rounded-lg border border-white/40 text-sm text-gray-800 bg-white/60 font-boba focus:border-[#C86A4B] outline-none" type="date" onchange="doSearch()" id="filter-from">
+                </div>
+                <div class="flex-1 min-w-[80px]">
+                  <label class="block text-xs font-semibold text-gray-400 mb-1">结束</label>
+                  <input class="w-full px-3 py-1.5 rounded-lg border border-white/40 text-sm text-gray-800 bg-white/60 font-boba focus:border-[#C86A4B] outline-none" type="date" onchange="doSearch()" id="filter-to">
+                </div>
+                <button class="text-xs px-3 py-1 border-none bg-transparent text-gray-400 cursor-pointer font-boba hover:text-gray-600" onclick="clearFilters()">清除</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Yesterday Mood — glass floating -->
+          <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-5 sm:p-6" style="background:linear-gradient(135deg,rgba(254,246,240,0.7),rgba(253,242,248,0.6),rgba(254,249,240,0.6))">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-lg font-bold text-gray-800">🥤 昨日好心情</h2>
+              <span class="text-xs text-gray-400 bg-white/60 px-3 py-1 rounded-full font-medium" id="yesterday-count">0 杯</span>
+            </div>
+            <div id="yesterday-container" data-empty="true">
+              <div class="text-center py-4 text-sm text-gray-400">昨日暂无记录，今天记得来一杯 ~</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /#page-tracker -->
+
+    <!-- ============================================================
+         PAGE: 随想记录 (Journal)
+         ============================================================ -->
+    <div id="page-journal" class="page hidden space-y-6">
+
+      <!-- Journal Header -->
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-2xl font-boba font-bold text-gray-800">✍️ 随想记录册</h2>
+          <p class="text-sm text-gray-400 mt-0.5">记录灵感、摘抄与即刻的想法</p>
+        </div>
+        <button onclick="openJournalModal()" class="px-6 py-3 rounded-full bg-accent-500 text-white text-base font-bold cursor-pointer font-boba shadow-btn hover:bg-accent-600 hover:shadow-btn-hover active:scale-95 transition-all duration-200">+ 写想法</button>
+      </div>
+
+      <!-- Journal Cards Grid -->
+      <div id="journal-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Empty state (shown when no entries) -->
+        <div id="journal-empty" class="col-span-full flex flex-col items-center text-center py-16">
+          <div class="text-6xl mb-4 animate-float">📝</div>
+          <div class="text-xl font-bold text-gray-800 mb-2 font-boba">还没有随想记录</div>
+          <div class="text-sm text-gray-400 mb-6">写下今天一闪而过的灵感或摘抄吧</div>
+          <button onclick="openJournalModal()" class="px-8 py-3 rounded-full bg-accent-500 text-white text-base font-bold cursor-pointer font-boba shadow-btn hover:bg-accent-600 hover:shadow-btn-hover active:scale-95 transition-all duration-200">+ 写想法</button>
+        </div>
+      </div>
+    </div><!-- /#page-journal -->
+
+  </div>
+</main>
+
+<!-- ============================================================
+     Modal — 奶茶记录
+     ============================================================ -->
+<div class="fixed inset-0 z-50 hidden items-center justify-center bg-black/20 backdrop-blur-sm" id="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div class="relative w-[92%] max-w-[540px] max-h-[85vh] overflow-y-auto p-8 rounded-3xl bg-white/95 border border-white/50 backdrop-blur-xl shadow-2xl animate-modal-in thin-scroll">
+    <button class="absolute top-4 right-4 w-9 h-9 rounded-full border-none bg-gray-100 text-gray-400 cursor-pointer flex items-center justify-center text-base hover:bg-gray-200 hover:rotate-90 transition-all duration-200" onclick="closeModal()">✕</button>
+    <h2 class="font-boba text-2xl font-bold text-gray-800 mb-5 pr-8 tracking-wide" id="modal-title">添加奶茶记录</h2>
+
+    <label class="block text-sm font-semibold text-gray-400 mb-1">奶茶名称 <span class="text-accent-500">*</span></label>
+    <input class="w-full px-4 py-3 rounded-xl border border-gray-200 text-base text-gray-800 bg-white font-boba mb-4 focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200" id="modal-name" placeholder="例如：不焦绿">
+
+    <label class="block text-sm font-semibold text-gray-400 mb-1">品牌</label>
+    <input class="w-full px-4 py-3 rounded-xl border border-gray-200 text-base text-gray-800 bg-white font-boba mb-4 focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200" id="modal-brand" placeholder="例如：一点点、喜茶">
+
+    <label class="block text-sm font-semibold text-gray-400 mb-1">日期</label>
+    <input type="date" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-base text-gray-800 bg-white font-boba mb-4 focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200" id="modal-date">
+
+    <label class="block text-sm font-semibold text-gray-400 mb-1">照片 <span class="font-normal text-xs">（可选,≤9张,单图≤5MB）</span></label>
+    <div class="border-2 border-dashed border-gray-200 rounded-xl p-5 text-center cursor-pointer mb-4 hover:border-accent-500 hover:bg-accent-50 transition-all duration-200" id="upload-zone" onclick="document.getElementById('upload-input').click()">
+      <svg class="w-9 h-9 text-gray-400 mx-auto mb-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      <p class="text-sm text-gray-400">点击/拖拽上传照片</p>
+      <p class="text-xs text-gray-400 mt-1">JPG、PNG、WebP</p>
+    </div>
+    <input type="file" id="upload-input" accept="image/jpeg,image/png,image/webp" multiple style="display:none" onchange="handleFiles(this.files)">
+    <div class="flex gap-2 flex-wrap mb-4" id="thumb-preview-list"></div>
+
+    <label class="block text-sm font-semibold text-gray-400 mb-1">主题色</label>
+    <div class="flex gap-2.5 mb-4" id="theme-selector">
+      <div class="tdot w-8 h-8 rounded-full border-[3px] border-transparent cursor-pointer hover:scale-110 active:scale-90 transition-all duration-200 selected" data-theme="orange" onclick="selectTheme('orange',this)" style="background:linear-gradient(135deg,#E8C0A0,#C86A4B);border-color:#C86A4B;box-shadow:0 0 0 5px rgba(200,106,75,0.12)"></div>
+      <div class="tdot w-8 h-8 rounded-full border-[3px] border-transparent cursor-pointer hover:scale-110 active:scale-90 transition-all duration-200" data-theme="peach" onclick="selectTheme('peach',this)" style="background:linear-gradient(135deg,#F8C0B8,#F2A8A0)"></div>
+      <div class="tdot w-8 h-8 rounded-full border-[3px] border-transparent cursor-pointer hover:scale-110 active:scale-90 transition-all duration-200" data-theme="matcha" onclick="selectTheme('matcha',this)" style="background:linear-gradient(135deg,#A8D8A8,#8FC48F)"></div>
+      <div class="tdot w-8 h-8 rounded-full border-[3px] border-transparent cursor-pointer hover:scale-110 active:scale-90 transition-all duration-200" data-theme="taro" onclick="selectTheme('taro',this)" style="background:linear-gradient(135deg,#D8C8F0,#C9B8E8)"></div>
+      <div class="tdot w-8 h-8 rounded-full border-[3px] border-transparent cursor-pointer hover:scale-110 active:scale-90 transition-all duration-200" data-theme="sea" onclick="selectTheme('sea',this)" style="background:linear-gradient(135deg,#B0D8F0,#98C8E8)"></div>
+    </div>
+
+    <label class="block text-sm font-semibold text-gray-400 mb-1">评分</label>
+    <div class="flex gap-1 mb-4" id="modal-stars"></div>
+
+    <label class="block text-sm font-semibold text-gray-400 mb-1">评论</label>
+    <textarea class="w-full px-4 py-3 rounded-xl border border-gray-200 text-base text-gray-800 bg-white font-boba mb-4 focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200 resize-none" id="modal-comment" placeholder="写写当时喝奶茶的心情..." rows="2"></textarea>
+
+    <button class="w-full py-3.5 rounded-full bg-accent-500 text-white text-lg font-bold cursor-pointer font-boba shadow-btn hover:bg-accent-600 hover:shadow-btn-hover active:scale-95 transition-all duration-200" onclick="saveEntry()">添加记录</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     Modal — 随想记录 (Journal)
+     ============================================================ -->
+<div class="fixed inset-0 z-50 hidden items-center justify-center bg-black/20 backdrop-blur-sm" id="journal-modal-overlay" onclick="if(event.target===this)closeJournalModal()">
+  <div class="relative w-[92%] max-w-[540px] max-h-[85vh] overflow-y-auto p-8 rounded-3xl bg-white/95 border border-white/50 backdrop-blur-xl shadow-2xl animate-modal-in thin-scroll">
+    <button class="absolute top-4 right-4 w-9 h-9 rounded-full border-none bg-gray-100 text-gray-400 cursor-pointer flex items-center justify-center text-base hover:bg-gray-200 hover:rotate-90 transition-all duration-200" onclick="closeJournalModal()">✕</button>
+    <h2 class="font-boba text-2xl font-bold text-gray-800 mb-5 pr-8 tracking-wide" id="journal-modal-title">写想法</h2>
+
+    <label class="block text-sm font-semibold text-gray-400 mb-1">标题 <span class="font-normal text-xs">（可选）</span></label>
+    <input class="w-full px-4 py-3 rounded-xl border border-gray-200 text-base text-gray-800 bg-white font-boba mb-4 focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200" id="journal-modal-title-input" placeholder="给想法取个名字...">
+
+    <label class="block text-sm font-semibold text-gray-400 mb-1">内容 <span class="text-accent-500">*</span></label>
+    <textarea class="w-full px-4 py-3.5 rounded-xl border border-gray-200 text-lg text-gray-800 bg-white font-boba mb-4 focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200 resize-none" id="journal-modal-content" placeholder="记录灵感、想法或摘抄..." rows="5" style="font-size:20px;line-height:2"></textarea>
+
+    <label class="block text-sm font-semibold text-gray-400 mb-1">日期</label>
+    <input type="date" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-base text-gray-800 bg-white font-boba mb-4 focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200" id="journal-modal-date">
+
+    <label class="block text-sm font-semibold text-gray-400 mb-2">心情</label>
+    <div class="grid grid-cols-4 gap-2 mb-4" id="journal-modal-moods"></div>
+
+    <label class="block text-sm font-semibold text-gray-400 mb-2">纸张纹理</label>
+    <div class="flex gap-3 mb-5" id="journal-modal-papers">
+      <div class="paper-option flex-1 h-14 rounded-xl border-2 border-gray-200 cursor-pointer hover:border-accent-400 transition-all duration-200 paper-grid flex items-center justify-center text-xs text-gray-400" data-paper="grid" onclick="selectJournalPaper('grid',this)">方格</div>
+      <div class="paper-option flex-1 h-14 rounded-xl border-2 border-gray-200 cursor-pointer hover:border-accent-400 transition-all duration-200 paper-lined flex items-center justify-center text-xs text-gray-400" data-paper="lined" onclick="selectJournalPaper('lined',this)">横线</div>
+      <div class="paper-option flex-1 h-14 rounded-xl border-2 border-gray-200 cursor-pointer hover:border-accent-400 transition-all duration-200 paper-dot flex items-center justify-center text-xs text-gray-400" data-paper="dot" onclick="selectJournalPaper('dot',this)">点阵</div>
+      <div class="paper-option flex-1 h-14 rounded-xl border-2 border-gray-200 cursor-pointer hover:border-accent-400 transition-all duration-200 paper-blank flex items-center justify-center text-xs text-gray-400" data-paper="blank" onclick="selectJournalPaper('blank',this)">做旧</div>
+    </div>
+
+    <button class="w-full py-3.5 rounded-full bg-accent-500 text-white text-lg font-bold cursor-pointer font-boba shadow-btn hover:bg-accent-600 hover:shadow-btn-hover active:scale-95 transition-all duration-200" onclick="saveJournalEntry()">保存想法</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     Toast Notification
+     ============================================================ -->
+<div class="fixed bottom-8 left-1/2 -translate-x-1/2 px-7 py-3.5 rounded-full text-sm font-medium z-[300] opacity-0 pointer-events-none text-white shadow-lg backdrop-blur-md transition-all duration-300 font-boba toast-out" id="toast"></div>
+
+<!-- ============================================================
+     JavaScript — Core Logic
+     ============================================================ -->
+<script>
+/* ============================================================
+   Tab Switching
+   ============================================================ */
+let currentTab = 'tracker';
+
+function switchTab(tab) {
+  if (tab === currentTab) return;
+  currentTab = tab;
+  // Toggle pages
+  document.getElementById('page-tracker').classList.toggle('hidden', tab !== 'tracker');
+  document.getElementById('page-journal').classList.toggle('hidden', tab !== 'journal');
+  // Toggle tab buttons — text-only underline style
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    if (b.dataset.tab === tab) {
+      b.style.color = '#C86A4B';
+      b.style.borderColor = '#C86A4B';
+    } else {
+      b.style.color = '#B5A59A';
+      b.style.borderColor = 'transparent';
+    }
+  });
+  // Render journal if switching to it
+  if (tab === 'journal') renderJournal();
+}
+
+/* ============================================================
+   Drink Icons
+   ============================================================ */
+const DRINK_ICONS = {
+  juice: `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="28" y="40" width="44" height="45" rx="6" fill="#FF8C42" stroke="#1f2937" stroke-width="3.5" stroke-linejoin="round"/><path d="M54 30 L54 18 Q54 8 46 8 L42 8" stroke="#1f2937" stroke-width="3.5" stroke-linecap="round"/></svg>`,
+  lime_tea: `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="30" y="30" width="40" height="55" rx="5" fill="#B8E6A0" stroke="#1f2937" stroke-width="3.5" stroke-linejoin="round"/><circle cx="72" cy="35" r="10" fill="#D4F5C0" stroke="#1f2937" stroke-width="3"/></svg>`,
+  coffee_cup: `<svg viewBox="0 0 100 100" class="w-full h-full"><path d="M28 30 L34 70 L66 70 L72 30 Z" fill="#1f2937" stroke="#1f2937" stroke-width="3.5" stroke-linejoin="round"/><rect x="24" y="22" width="52" height="12" rx="6" fill="#374151" stroke="#1f2937" stroke-width="3.5"/></svg>`,
+  milktea: `<svg viewBox="0 0 100 100" class="w-full h-full"><path d="M26 38 L30 78 C30 82 31 84 34 84 L66 84 C69 84 70 82 70 78 L74 38 Z" fill="#F5E6D3" stroke="#1f2937" stroke-width="3.5" stroke-linejoin="round"/><path d="M24 38 Q50 20 76 38" fill="#E8D5C0" stroke="#1f2937" stroke-width="3.5"/><ellipse cx="50" cy="38" rx="26" ry="4" fill="#EDDCC8" stroke="#1f2937" stroke-width="3"/><line x1="54" y1="10" x2="54" y2="68" stroke="#1f2937" stroke-width="3.5" stroke-linecap="round"/><circle cx="36" cy="76" r="4" fill="#1f2937"/><circle cx="52" cy="77" r="3.8" fill="#1f2937"/></svg>`,
+  americano: `<svg viewBox="0 0 100 100" class="w-full h-full"><path d="M32 30 L28 72 L72 72 L68 30 Z" fill="#FDF5E6" stroke="#1f2937" stroke-width="3.5" stroke-linejoin="round"/><ellipse cx="50" cy="30" rx="20" ry="4" fill="#FFFDF5" stroke="#1f2937" stroke-width="3"/><rect x="30" y="18" width="40" height="16" rx="4" fill="#374151" stroke="#1f2937" stroke-width="3"/><ellipse cx="50" cy="50" rx="14" ry="10" fill="#C86A4B" stroke="#1f2937" stroke-width="2.5"/></svg>`,
+  beer: `<svg viewBox="0 0 100 100" class="w-full h-full"><path d="M22 25 L26 80 L74 80 L78 25 Z" fill="#F5C842" stroke="#1f2937" stroke-width="3.5" stroke-linejoin="round"/><path d="M78 35 Q92 35 92 50 Q92 65 78 65" fill="none" stroke="#1f2937" stroke-width="4" stroke-linecap="round"/></svg>`,
+  matcha: `<svg viewBox="0 0 100 100" class="w-full h-full"><path d="M25 35 L28 75 C28 78 30 80 33 80 L67 80 C70 80 72 78 72 75 L75 35 Z" fill="#8B9E6B" stroke="#1f2937" stroke-width="3.5" stroke-linejoin="round"/><path d="M75 42 Q90 42 90 55 Q90 68 75 65" fill="none" stroke="#1f2937" stroke-width="4" stroke-linecap="round"/></svg>`,
+  sundae: `<svg viewBox="0 0 100 100" class="w-full h-full"><path d="M28 50 L30 86 L70 86 L72 50 Z" fill="#F4A3A8" stroke="#1f2937" stroke-width="3.5" stroke-linejoin="round"/><circle cx="50" cy="42" r="14" fill="#FFF8E7" stroke="#1f2937" stroke-width="3.5"/><circle cx="50" cy="28" r="11" fill="#FDE0C8" stroke="#1f2937" stroke-width="3.5"/></svg>`,
+  martini: `<svg viewBox="0 0 100 100" class="w-full h-full"><path d="M25 25 L50 58 L75 25" fill="#B8E0F0" stroke="#1f2937" stroke-width="3.5" stroke-linejoin="round"/><line x1="50" y1="58" x2="50" y2="78" stroke="#1f2937" stroke-width="3.5" stroke-linecap="round"/><ellipse cx="50" cy="82" rx="16" ry="4" fill="none" stroke="#1f2937" stroke-width="3.5"/></svg>`
+};
+const DRINK_TYPES = Object.keys(DRINK_ICONS);
+function pickIcon(n) { let h = 0; for (let i = 0; i < n.length; i++) { h = ((h << 5) - h) + n.charCodeAt(i); h |= 0; } return DRINK_TYPES[Math.abs(h) % DRINK_TYPES.length]; }
+const THEMES = ['orange', 'peach', 'matcha', 'taro', 'sea'];
+const TCOLORS = { orange: '#C86A4B', peach: '#E8A0A0', matcha: '#8FB88F', taro: '#C0B0E0', sea: '#90C0D8' };
+function randTheme() { return THEMES[Math.floor(Math.random() * THEMES.length)]; }
+
+/* ============================================================
+   Daily Quote
+   ============================================================ */
+const QUOTES = [
+  { text: '今日宜：加份波霸，快乐爆炸', emoji: '💥' },
+  { text: '生活苦短，全糖加满', emoji: '🍬' },
+  { text: '奶茶一杯，快乐起飞', emoji: '✨' },
+  { text: '喝完这杯，我就是最甜的崽', emoji: '🧋' },
+  { text: '三分糖刚好，七分甜也妙', emoji: '🌸' },
+  { text: '今天也是被奶茶治愈的一天', emoji: '💕' },
+  { text: '奶茶在手，天下我有', emoji: '👑' },
+  { text: '好喝到冒泡泡', emoji: '🫧' },
+];
+let quoteIdx = 0;
+function nextQuote() { quoteIdx = (quoteIdx + 1) % QUOTES.length; updateQuote(); }
+function updateQuote() {
+  const q = QUOTES[quoteIdx];
+  document.getElementById('quote-emoji').textContent = q.emoji;
+  document.getElementById('quote-text').textContent = q.text;
+}
+updateQuote();
+
+/* ============================================================
+   Data Layer — Milk Tea
+   ============================================================ */
+const DB = 'milktea_v10';
+function ld() { try { return JSON.parse(localStorage.getItem(DB) || '[]'); } catch (e) { return []; } }
+function sv(a) { localStorage.setItem(DB, JSON.stringify(a)); }
+let entries = ld(),
+  selDate = new Date().toISOString().split('T')[0],
+  calY = new Date().getFullYear(),
+  calM = new Date().getMonth(),
+  editId = null,
+  modalR = 0,
+  modalTheme = 'orange',
+  pendingImgs = [];
+
+/* ============================================================
+   Image Upload
+   ============================================================ */
+const upZ = document.getElementById('upload-zone'),
+  upI = document.getElementById('upload-input'),
+  tL = document.getElementById('thumb-preview-list');
+upZ.addEventListener('dragover', e => { e.preventDefault(); upZ.classList.add('border-accent-500', 'bg-accent-50'); });
+upZ.addEventListener('dragleave', () => { upZ.classList.remove('border-accent-500', 'bg-accent-50'); });
+upZ.addEventListener('drop', e => { e.preventDefault(); upZ.classList.remove('border-accent-500', 'bg-accent-50'); handleFiles(e.dataTransfer.files); });
+function handleFiles(files) {
+  if (!files || !files.length) return;
+  const ok = ['image/jpeg', 'image/png', 'image/webp'];
+  for (const f of files) {
+    if (pendingImgs.length >= 9) { toast('最多9张', 'warn'); break; }
+    if (!ok.includes(f.type)) { toast('不支持 ' + f.type, 'warn'); continue; }
+    if (f.size > 5 * 1024 * 1024) { toast('单图≤5MB', 'warn'); continue; }
+    const r = new FileReader();
+    r.onload = e => { pendingImgs.push({ dataUrl: e.target.result }); renderThumbs(); };
+    r.readAsDataURL(f);
+  }
+  upI.value = '';
+}
+function renderThumbs() {
+  tL.innerHTML = pendingImgs.map((x, i) =>
+    `<div class="relative w-[62px] h-[62px] rounded-lg overflow-hidden border border-gray-200"><img src="${x.dataUrl}" class="w-full h-full object-cover"><button class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-400 border-none text-white text-[10px] cursor-pointer flex items-center justify-center" onclick="removeImg(${i})">✕</button></div>`
+  ).join('');
+}
+function removeImg(i) { pendingImgs.splice(i, 1); renderThumbs(); }
+
+/* ============================================================
+   Modal — Milk Tea
+   ============================================================ */
+function selectTheme(t, el) {
+  modalTheme = t;
+  document.querySelectorAll('#theme-selector .tdot').forEach(d => {
+    d.classList.remove('selected');
+    d.style.borderColor = 'transparent';
+    d.style.boxShadow = 'none';
+  });
+  el.classList.add('selected');
+  el.style.borderColor = '#C86A4B';
+  el.style.boxShadow = '0 0 0 5px rgba(200,106,75,0.12)';
+}
+function renderStars(v) {
+  modalR = v;
+  document.getElementById('modal-stars').innerHTML = [1, 2, 3, 4, 5].map(s =>
+    `<button class="bg-none border-none cursor-pointer text-3xl p-0.5 transition-all duration-200 ${s <= v ? 'text-accent-500' : 'text-gray-300'} hover:text-accent-500 hover:scale-110 active:scale-90" onclick="setRating(${s})">★</button>`
+  ).join('');
+}
+function setRating(v) { modalR = v; renderStars(v); }
+function openModal() {
+  editId = null; modalTheme = 'orange'; modalR = 0; pendingImgs = [];
+  document.getElementById('modal-title').textContent = '添加奶茶记录';
+  ['modal-name', 'modal-brand', 'modal-comment'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('modal-date').value = selDate;
+  document.getElementById('modal-name').classList.remove('border-red-400', 'ring-4', 'ring-red-100');
+  document.querySelectorAll('#theme-selector .tdot').forEach(d => {
+    d.classList.remove('selected');
+    d.style.borderColor = 'transparent';
+    d.style.boxShadow = 'none';
+  });
+  const firstDot = document.querySelector('#theme-selector .tdot[data-theme="orange"]');
+  if (firstDot) { firstDot.classList.add('selected'); firstDot.style.borderColor = '#C86A4B'; firstDot.style.boxShadow = '0 0 0 5px rgba(200,106,75,0.12)'; }
+  renderStars(0); renderThumbs();
+  document.getElementById('modal-overlay').classList.add('flex');
+  document.getElementById('modal-overlay').classList.remove('hidden');
+}
+function closeModal() {
+  document.getElementById('modal-overlay').classList.add('hidden');
+  document.getElementById('modal-overlay').classList.remove('flex');
+  editId = null;
+}
+function editEntry(id) {
+  const e = entries.find(x => x.id === id);
+  if (!e) return;
+  editId = id; modalR = e.rating || 0; modalTheme = e.theme || 'orange';
+  pendingImgs = (e.images || []).map(d => ({ dataUrl: d }));
+  document.getElementById('modal-title').textContent = '编辑奶茶记录';
+  document.getElementById('modal-name').value = e.name;
+  document.getElementById('modal-brand').value = e.brand || '';
+  document.getElementById('modal-date').value = e.date;
+  document.getElementById('modal-comment').value = e.comment || '';
+  document.getElementById('modal-name').classList.remove('border-red-400', 'ring-4', 'ring-red-100');
+  document.querySelectorAll('#theme-selector .tdot').forEach(d => {
+    d.classList.remove('selected');
+    d.style.borderColor = 'transparent';
+    d.style.boxShadow = 'none';
+  });
+  const dot = document.querySelector(`#theme-selector .tdot[data-theme="${modalTheme}"]`);
+  if (dot) { dot.classList.add('selected'); dot.style.borderColor = '#C86A4B'; dot.style.boxShadow = '0 0 0 5px rgba(200,106,75,0.12)'; }
+  renderStars(modalR); renderThumbs();
+  document.getElementById('modal-overlay').classList.add('flex');
+  document.getElementById('modal-overlay').classList.remove('hidden');
+}
+function saveEntry() {
+  const nm = document.getElementById('modal-name'), name = nm.value.trim();
+  if (!name) {
+    nm.classList.add('border-red-400', 'ring-4', 'ring-red-100');
+    toast('请输入奶茶名称', 'warn');
+    return;
+  }
+  nm.classList.remove('border-red-400', 'ring-4', 'ring-red-100');
+  const brand = document.getElementById('modal-brand').value.trim() || null,
+    date = document.getElementById('modal-date').value,
+    comment = document.getElementById('modal-comment').value.trim() || null,
+    images = pendingImgs.map(i => i.dataUrl);
+  if (!THEMES.includes(modalTheme)) modalTheme = randTheme();
+  if (editId) {
+    const e = entries.find(x => x.id === editId);
+    if (!e) return;
+    e.name = name; e.brand = brand; e.date = date; e.rating = modalR || null;
+    e.comment = comment; e.theme = modalTheme; e.images = images; e.updatedAt = Date.now();
+    sv(entries); toast('记录已更新', 'info');
+  } else {
+    entries.push({
+      id: Date.now(), name, brand, date, rating: modalR || null,
+      comment, theme: modalTheme, images, isPinned: false,
+      createdAt: Date.now(), updatedAt: Date.now()
+    });
+    sv(entries); toast('🧋 新奶茶记录已添加！', 'info');
+  }
+  selDate = date; closeModal(); renderAll(); editId = null;
+}
+
+/* ============================================================
+   Render — Milk Tea
+   ============================================================ */
+function renderAll() { renderCal(); renderEntries(); renderYesterday(); renderPinned(); renderStats(); }
+
+function renderStats() {
+  const now = new Date(), m = now.getMonth(), y = now.getFullYear();
+  const me = entries.filter(e => {
+    const d = new Date(e.date);
+    return d.getMonth() === m && d.getFullYear() === y;
+  });
+  document.getElementById('month-total').textContent = me.length;
+  const dim = new Date(y, m + 1, 0).getDate();
+  document.getElementById('week-avg').textContent = Math.round(me.length / Math.ceil(dim / 7) || 0);
+  document.getElementById('total-spend').textContent = '¥' + (me.length * 18);
+}
+
+function renderCal() {
+  const c = document.getElementById('calendar'),
+    today = new Date().toISOString().split('T')[0],
+    fd = new Date(calY, calM, 1),
+    ld2 = new Date(calY, calM + 1, 0),
+    off = (fd.getDay() + 6) % 7,
+    tot = ld2.getDate();
+  const byD = {};
+  entries.forEach(e => { if (!byD[e.date]) byD[e.date] = []; byD[e.date].push(e); });
+
+  let h = `<div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
+    <h2 class="text-xl sm:text-2xl font-bold text-gray-800">${calY}年 ${calM + 1}月</h2>
+    <div class="flex items-center gap-2.5">
+      <button class="px-4 py-2 rounded-full bg-accent-500 text-white text-sm font-bold shadow-btn hover:bg-accent-600 active:scale-95 transition-all duration-200" onclick="goToday()">今天</button>
+      <button class="w-9 h-9 rounded-full border border-gray-200 bg-white text-gray-400 cursor-pointer text-lg flex items-center justify-center hover:bg-accent-50 hover:text-accent-500 hover:border-accent-500 active:scale-90 transition-all duration-200" onclick="chM(-1)">‹</button>
+      <button class="w-9 h-9 rounded-full border border-gray-200 bg-white text-gray-400 cursor-pointer text-lg flex items-center justify-center hover:bg-accent-50 hover:text-accent-500 hover:border-accent-500 active:scale-90 transition-all duration-200" onclick="chM(1)">›</button>
+    </div>
+  </div>`;
+
+  h += `<div class="grid grid-cols-7 mb-1.5">${['一', '二', '三', '四', '五', '六', '日'].map(d => `<div class="text-center text-sm font-semibold text-gray-400 py-2">${d}</div>`).join('')}</div>`;
+  h += `<div class="grid grid-cols-7 gap-1">`;
+
+  for (let i = 0; i < off; i++) h += `<div class="aspect-[1.05] flex flex-col items-center justify-center rounded-xl text-gray-300 opacity-20"></div>`;
+
+  for (let d = 1; d <= tot; d++) {
+    const ds = `${calY}-${String(calM + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`,
+      de = byD[ds];
+    let cls = 'aspect-[1.05] flex flex-col items-center justify-center rounded-xl border-2 cursor-pointer transition-all duration-200 font-medium relative';
+    if (ds === selDate) cls += ' border-accent-500 bg-accent-50 text-accent-700 shadow-[0_4px_16px_rgba(200,106,75,0.18)]';
+    else cls += ' border-transparent text-gray-700 hover:bg-accent-50 hover:border-accent-300';
+    if (ds === today) cls += ' font-bold';
+    if (ds !== selDate && dayDiff(ds) < 0) cls += ' opacity-25 pointer-events-none';
+
+    const isToday = ds === today;
+    const isSel = ds === selDate;
+
+    h += `<div class="${cls}" onclick="selDay('${ds}')">`;
+    h += `<span class="text-xl sm:text-2xl">${d}</span>`;
+    if (isToday && !isSel) h += `<span class="absolute top-1 right-1.5 text-[10px] text-accent-500 font-bold">今</span>`;
+    if (de && de.length) {
+      h += DRINK_ICONS[pickIcon(de[0].name)].replace('<svg', '<svg class="w-6 h-6 mt-0.5"');
+    }
+    h += `</div>`;
+  }
+  h += `</div>`;
+  c.innerHTML = h;
+}
+
+function dayDiff(ds) {
+  const today = new Date().toISOString().split('T')[0];
+  return new Date(ds) - new Date(today);
+}
+
+function renderEntries() {
+  const fl = entries.filter(e => e.date === selDate).sort((a, b) => b.createdAt - a.createdAt),
+    ct = document.getElementById('entries-container');
+  const [, m, d] = selDate.split('-');
+  document.getElementById('entry-date-label').textContent = `${+m}月${+d}日`;
+  document.getElementById('entry-count').textContent = `${fl.length} 杯`;
+  ct.querySelectorAll('.entry-card').forEach(el => el.remove());
+  if (!fl.length) {
+    ct.setAttribute('data-empty', 'true');
+    ct.querySelector('.flex.flex-col.items-center').style.display = '';
+    const btn = ct.querySelector('button');
+    if (btn) btn.style.display = '';
+  } else {
+    ct.setAttribute('data-empty', 'false');
+    ct.querySelector('.flex.flex-col.items-center').style.display = 'none';
+    fl.forEach(e => {
+      const el = document.createElement('div');
+      el.innerHTML = cardHTML(e);
+      ct.appendChild(el.firstElementChild);
+    });
+  }
+}
+
+function cardHTML(e) {
+  const icon = pickIcon(e.name);
+  const stars = [1, 2, 3, 4, 5].map(s =>
+    `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-3.5 h-3.5 ${s <= (e.rating || 0) ? 'star-filled' : 'star-empty'}"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`
+  ).join('');
+  const imgs = (e.images || []),
+    thumbs = imgs.length ? `<div class="flex gap-1.5 flex-wrap mb-1">${imgs.map(u => `<img class="w-[52px] aspect-[4/3] rounded-lg object-cover border border-gray-200 cursor-pointer hover:scale-110 transition-transform duration-200" src="${u}" loading="lazy" onerror="this.style.display='none'">`).join('')}</div>` : '';
+  const bh = e.brand ? `<span class="font-semibold text-accent-500">${esc(e.brand)} · </span>` : '',
+    ch = e.comment ? `<div class="text-sm text-gray-400 px-3.5 py-1.5 rounded-lg bg-gray-50 mt-1">💬 ${esc(e.comment)}</div>` : '';
+  return `<article class="entry-card grid grid-cols-[56px_1fr] gap-3.5 p-4 bg-white/60 backdrop-blur-sm border border-white/60 rounded-2xl mb-2.5 hover:-translate-y-1 hover:shadow-card-hover transition-all duration-200">
+    <div class="w-14 h-14 flex items-center justify-center rounded-xl bg-gray-50">${DRINK_ICONS[icon]}</div>
+    <div class="flex flex-col gap-1 min-w-0">
+      ${thumbs}
+      <div class="text-base font-bold text-gray-800 flex items-center gap-1.5">${bh}${esc(e.name)}</div>
+      <div class="flex gap-0.5">${stars}</div>
+      ${ch}
+      <div class="flex items-center justify-end gap-2 mt-2 pt-2 border-t border-gray-100">
+        <button class="flex items-center gap-1 px-3.5 py-1.5 rounded-lg border border-gray-200 text-sm font-medium cursor-pointer font-boba bg-white text-gray-400 hover:bg-white hover:text-gray-700 active:scale-95 transition-all duration-200 ${e.isPinned ? '!border-accent-300 !bg-accent-50 !text-accent-500' : ''}" onclick="togPin(${e.id})">📌 ${e.isPinned ? '已置顶' : '置顶'}</button>
+        <button class="flex items-center gap-1 px-3.5 py-1.5 rounded-lg border border-gray-200 text-sm font-medium cursor-pointer font-boba bg-white text-gray-400 hover:bg-white hover:text-gray-700 active:scale-95 transition-all duration-200" onclick="editEntry(${e.id})">编辑</button>
+        <button class="flex items-center gap-1 px-3.5 py-1.5 rounded-lg border border-gray-200 text-sm font-medium cursor-pointer font-boba bg-white text-gray-400 hover:bg-red-50 hover:text-red-400 active:scale-95 transition-all duration-200" onclick="delEntry(${e.id})">删除</button>
+        <span class="text-xs text-gray-400 bg-gray-100 px-3 py-1 rounded-full ml-auto">${fmtDate(e.date)}</span>
+      </div>
+    </div>
+  </article>`;
+}
+
+function renderYesterday() {
+  const yd = new Date(Date.now() - 86400000),
+    yds = yd.toISOString().split('T')[0],
+    fl = entries.filter(e => e.date === yds).sort((a, b) => b.createdAt - a.createdAt),
+    ct = document.getElementById('yesterday-container'),
+    badge = document.getElementById('yesterday-count');
+  badge.textContent = fl.length + ' 杯';
+  ct.querySelectorAll('.yesterday-card').forEach(el => el.remove());
+  if (!fl.length) {
+    ct.setAttribute('data-empty', 'true');
+    ct.querySelector('.text-center').style.display = '';
+  } else {
+    ct.setAttribute('data-empty', 'false');
+    ct.querySelector('.text-center').style.display = 'none';
+    fl.forEach(e => {
+      const icon = pickIcon(e.name);
+      const stars = [1, 2, 3, 4, 5].map(s =>
+        `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-2.5 h-2.5 ${s <= (e.rating || 0) ? 'star-filled' : 'star-empty'}"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`
+      ).join('');
+      const h = `<div class="yesterday-card flex items-center gap-3 px-3.5 py-3 rounded-xl bg-white/50 backdrop-blur-sm border border-white/50 mb-2 cursor-pointer hover:-translate-y-0.5 hover:shadow-card-hover transition-all duration-200" onclick="selDay('${e.date}')">
+        <div class="w-10 h-10 flex items-center justify-center rounded-lg bg-white">${DRINK_ICONS[icon]}</div>
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-medium text-gray-800 truncate">${e.brand ? esc(e.brand) + ' · ' : ''}${esc(e.name)}</div>
+          <div class="text-xs text-gray-400">${fmtDate(e.date)}</div>
+        </div>
+        <div class="flex gap-0.5 flex-shrink-0">${stars}</div>
+      </div>`;
+      const el = document.createElement('div');
+      el.innerHTML = h;
+      ct.appendChild(el.firstElementChild);
+    });
+  }
+}
+
+function renderPinned() {
+  const p = entries.filter(e => e.isPinned).sort((a, b) => b.createdAt - a.createdAt),
+    list = document.getElementById('pinned-list'),
+    emp = document.getElementById('pinned-empty');
+  list.innerHTML = '';
+  if (!p.length) {
+    emp.style.display = '';
+  } else {
+    emp.style.display = 'none';
+    list.innerHTML = p.map(e => {
+      const icon = pickIcon(e.name);
+      const stars = [1, 2, 3, 4, 5].map(s =>
+        `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-2 h-2 ${s <= (e.rating || 0) ? 'star-filled' : 'star-empty'}"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`
+      ).join('');
+      return `<div class="flex items-center gap-2 px-2 py-2 rounded-xl bg-white/40 mb-1 cursor-pointer hover:bg-white/70 hover:translate-x-1 transition-all duration-200" onclick="selDay('${e.date}')">
+        <div class="w-7 h-7 flex items-center justify-center rounded-lg bg-white">${DRINK_ICONS[icon]}</div>
+        <span class="flex-1 text-sm font-medium text-gray-800 truncate">${e.brand ? esc(e.brand) + ' · ' : ''}${esc(e.name)}</span>
+        <div class="flex gap-px flex-shrink-0">${stars}</div>
+      </div>`;
+    }).join('');
+  }
+}
+
+/* ---- Calendar Nav ---- */
+function selDay(d) { selDate = d; renderAll(); }
+function goToday() {
+  const n = new Date();
+  selDate = n.toISOString().split('T')[0];
+  calY = n.getFullYear();
+  calM = n.getMonth();
+  renderAll();
+}
+function chM(d) {
+  calM += d;
+  if (calM > 11) { calM = 0; calY++; }
+  if (calM < 0) { calM = 11; calY--; }
+  renderCal();
+}
+
+/* ---- Pin / Delete ---- */
+function togPin(id) {
+  const e = entries.find(x => x.id === id);
+  if (e) { e.isPinned = !e.isPinned; e.updatedAt = Date.now(); sv(entries); renderAll(); toast(e.isPinned ? '已置顶' : '已取消置顶', 'info'); }
+}
+function delEntry(id) {
+  if (!confirm('确定删除吗？')) return;
+  entries = entries.filter(e => e.id !== id);
+  sv(entries); renderAll(); toast('已删除', 'info');
+}
+
+/* ---- Search / Filter ---- */
+function doSearch() {
+  const t = document.getElementById('search-input').value.trim().toLowerCase(),
+    b = document.getElementById('filter-brand').value.trim().toLowerCase(),
+    f = document.getElementById('filter-from').value,
+    to = document.getElementById('filter-to').value;
+  document.getElementById('search-clear').classList.toggle('flex', !!(t || b || f || to));
+  document.getElementById('search-clear').classList.toggle('hidden', !(t || b || f || to));
+  if (!t && !b && !f && !to) { renderEntries(); return; }
+  let fl = [...entries];
+  if (t) fl = fl.filter(e => e.name.toLowerCase().includes(t) || (e.brand && e.brand.toLowerCase().includes(t)));
+  if (b) fl = fl.filter(e => e.brand && e.brand.toLowerCase().includes(b));
+  if (f) fl = fl.filter(e => e.date >= f);
+  if (to) fl = fl.filter(e => e.date <= to);
+  showResults(fl, t);
+}
+function showResults(r, term) {
+  const ct = document.getElementById('entries-container');
+  document.getElementById('entry-date-label').textContent = `搜索"${term || '全部'}"`;
+  document.getElementById('entry-count').textContent = `${r.length} 条`;
+  ct.querySelectorAll('.entry-card').forEach(el => el.remove());
+  if (!r.length) {
+    ct.setAttribute('data-empty', 'true');
+    const es = ct.querySelector('.flex.flex-col.items-center');
+    es.style.display = '';
+    es.querySelector('.text-lg').textContent = '没有找到记录';
+    es.querySelector('.text-sm').textContent = '试试其他关键词吧';
+    const btn = es.querySelector('button');
+    if (btn) btn.style.display = 'none';
+  } else {
+    ct.setAttribute('data-empty', 'false');
+    ct.querySelector('.flex.flex-col.items-center').style.display = 'none';
+    r.sort((a, b) => b.createdAt - a.createdAt).forEach(e => {
+      const el = document.createElement('div');
+      el.innerHTML = cardHTML(e);
+      ct.appendChild(el.firstElementChild);
+    });
+  }
+}
+function clearSearch() {
+  ['search-input', 'filter-brand', 'filter-from', 'filter-to'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('search-clear').classList.add('hidden');
+  document.getElementById('search-clear').classList.remove('flex');
+  renderAll();
+}
+function clearFilters() {
+  ['filter-brand', 'filter-from', 'filter-to'].forEach(id => document.getElementById(id).value = '');
+  doSearch();
+}
+function openFilter() {
+  document.getElementById('filter-panel').classList.add('flex');
+  document.getElementById('filter-panel').classList.remove('hidden');
+}
+
+/* ============================================================
+   Helpers
+   ============================================================ */
+function fmtDate(d) { const [, m, dd] = d.split('-'); return `${+m}月${+dd}日`; }
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+function toast(msg, type) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'fixed bottom-8 left-1/2 -translate-x-1/2 px-7 py-3.5 rounded-full text-sm font-medium z-[300] pointer-events-none text-white shadow-lg backdrop-blur-md transition-all duration-300 font-boba toast-in';
+  el.style.background = type === 'warn' ? 'rgba(200,106,75,0.92)' : 'rgba(55,65,81,0.9)';
+  setTimeout(() => { el.classList.remove('toast-in'); el.classList.add('toast-out'); }, 2200);
+}
+
+/* ============================================================
+   DATA LAYER — Journal
+   ============================================================ */
+const DB_JOURNAL = 'journal_v1';
+function ldJournal() { try { return JSON.parse(localStorage.getItem(DB_JOURNAL) || '[]'); } catch (e) { return []; } }
+function svJournal(a) { localStorage.setItem(DB_JOURNAL, JSON.stringify(a)); }
+
+const MOODS = [
+  { key: 'happy', emoji: '😊', label: '开心' },
+  { key: 'sad', emoji: '😢', label: '难过' },
+  { key: 'anxious', emoji: '😰', label: '焦虑' },
+  { key: 'peaceful', emoji: '😌', label: '平静' },
+  { key: 'excited', emoji: '🎉', label: '兴奋' },
+  { key: 'grateful', emoji: '🙏', label: '感恩' },
+  { key: 'inspired', emoji: '💡', label: '灵感' },
+  { key: 'thoughtful', emoji: '🤔', label: '思考' },
+];
+const PAPERS = ['grid', 'lined', 'dot', 'blank'];
+const PAPER_LABELS = { grid: '方格', lined: '横线', dot: '点阵', blank: '做旧' };
+
+let journalEntries = ldJournal();
+let journalEditId = null;
+let journalMood = 'happy';
+let journalCustomMood = '';
+let journalPaper = 'grid';
+
+/* ============================================================
+   Modal — Journal
+   ============================================================ */
+function renderMoodSelector() {
+  const presetHTML = MOODS.map(m =>
+    `<button class="flex flex-col items-center gap-1 p-2 rounded-xl border-2 transition-all duration-200 cursor-pointer font-boba text-xs ${journalMood === m.key ? 'border-accent-500 bg-accent-50 text-accent-700' : 'border-gray-200 text-gray-400 hover:border-gray-300'}" onclick="selectJournalMood('${m.key}')">
+      <span class="text-xl">${m.emoji}</span>
+      <span>${m.label}</span>
+    </button>`
+  ).join('');
+
+  const customBtn = `<button class="flex items-center justify-center p-2 rounded-xl border-2 transition-all duration-200 cursor-pointer font-boba text-xs ${journalMood === 'custom' ? 'border-accent-500 bg-accent-50 text-accent-700' : 'border-gray-200 text-gray-400 hover:border-gray-300'}" onclick="selectJournalMood('custom')">
+    <span>自定义</span>
+  </button>`;
+
+  const customInput = journalMood === 'custom'
+    ? `<div class="mt-2 col-span-4"><input class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-base text-gray-800 bg-white font-boba focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200" id="journal-modal-custom-mood" placeholder="输入你的心情..." value="${esc(journalCustomMood)}" oninput="journalCustomMood=this.value"></div>`
+    : '';
+
+  document.getElementById('journal-modal-moods').innerHTML = presetHTML + customBtn + customInput;
+}
+
+function selectJournalMood(key) {
+  journalMood = key;
+  if (key !== 'custom') journalCustomMood = '';
+  renderMoodSelector();
+}
+
+function selectJournalPaper(paper, el) {
+  journalPaper = paper;
+  document.querySelectorAll('#journal-modal-papers .paper-option').forEach(o => {
+    o.style.borderColor = '#EDE4DB';
+    o.style.boxShadow = 'none';
+  });
+  el.style.borderColor = '#C86A4B';
+  el.style.boxShadow = '0 0 0 3px rgba(200,106,75,0.12)';
+}
+
+function openJournalModal() {
+  journalEditId = null;
+  journalMood = 'happy';
+  journalCustomMood = '';
+  journalPaper = PAPERS[Math.floor(Math.random() * PAPERS.length)];
+  document.getElementById('journal-modal-title').textContent = '写想法';
+  document.getElementById('journal-modal-title-input').value = '';
+  document.getElementById('journal-modal-content').value = '';
+  document.getElementById('journal-modal-date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('journal-modal-content').classList.remove('border-red-400', 'ring-4', 'ring-red-100');
+  renderMoodSelector();
+  // Reset paper options
+  document.querySelectorAll('#journal-modal-papers .paper-option').forEach(o => {
+    o.style.borderColor = '#EDE4DB';
+    o.style.boxShadow = 'none';
+  });
+  const paperEl = document.querySelector(`#journal-modal-papers .paper-option[data-paper="${journalPaper}"]`);
+  if (paperEl) { paperEl.style.borderColor = '#C86A4B'; paperEl.style.boxShadow = '0 0 0 3px rgba(200,106,75,0.12)'; }
+  document.getElementById('journal-modal-overlay').classList.add('flex');
+  document.getElementById('journal-modal-overlay').classList.remove('hidden');
+}
+
+function closeJournalModal() {
+  document.getElementById('journal-modal-overlay').classList.add('hidden');
+  document.getElementById('journal-modal-overlay').classList.remove('flex');
+  journalEditId = null;
+}
+
+function editJournalEntry(id) {
+  const e = journalEntries.find(x => x.id === id);
+  if (!e) return;
+  journalEditId = id;
+  journalMood = e.mood || 'happy';
+  journalCustomMood = e.customMood || '';
+  journalPaper = e.paper || 'grid';
+  document.getElementById('journal-modal-title').textContent = '编辑想法';
+  document.getElementById('journal-modal-title-input').value = e.title || '';
+  document.getElementById('journal-modal-content').value = e.content;
+  document.getElementById('journal-modal-date').value = e.date;
+  document.getElementById('journal-modal-content').classList.remove('border-red-400', 'ring-4', 'ring-red-100');
+  renderMoodSelector();
+  document.querySelectorAll('#journal-modal-papers .paper-option').forEach(o => {
+    o.style.borderColor = '#EDE4DB';
+    o.style.boxShadow = 'none';
+  });
+  const paperEl = document.querySelector(`#journal-modal-papers .paper-option[data-paper="${journalPaper}"]`);
+  if (paperEl) { paperEl.style.borderColor = '#C86A4B'; paperEl.style.boxShadow = '0 0 0 3px rgba(200,106,75,0.12)'; }
+  document.getElementById('journal-modal-overlay').classList.add('flex');
+  document.getElementById('journal-modal-overlay').classList.remove('hidden');
+}
+
+function saveJournalEntry() {
+  const contentEl = document.getElementById('journal-modal-content'),
+    content = contentEl.value.trim();
+  if (!content) {
+    contentEl.classList.add('border-red-400', 'ring-4', 'ring-red-100');
+    toast('请输入内容', 'warn');
+    return;
+  }
+  contentEl.classList.remove('border-red-400', 'ring-4', 'ring-red-100');
+  const title = document.getElementById('journal-modal-title-input').value.trim() || null,
+    date = document.getElementById('journal-modal-date').value;
+  if (journalEditId) {
+    const e = journalEntries.find(x => x.id === journalEditId);
+    if (!e) return;
+    e.title = title; e.content = content; e.date = date;
+    e.mood = journalMood; e.customMood = journalMood === 'custom' ? journalCustomMood.trim() : null;
+    e.paper = journalPaper; e.updatedAt = Date.now();
+    svJournal(journalEntries); toast('想法已更新', 'info');
+  } else {
+    journalEntries.push({
+      id: Date.now(), title, content, date,
+      mood: journalMood, customMood: journalMood === 'custom' ? journalCustomMood.trim() : null,
+      paper: journalPaper,
+      createdAt: Date.now(), updatedAt: Date.now()
+    });
+    svJournal(journalEntries); toast('📝 新想法已记录！', 'info');
+  }
+  closeJournalModal();
+  renderJournal();
+}
+
+function delJournalEntry(id) {
+  if (!confirm('确定删除这条想法吗？')) return;
+  journalEntries = journalEntries.filter(e => e.id !== id);
+  svJournal(journalEntries);
+  renderJournal();
+  toast('已删除', 'info');
+}
+
+/* ============================================================
+   Render — Journal
+   ============================================================ */
+function renderJournal() {
+  const list = document.getElementById('journal-list'),
+    empty = document.getElementById('journal-empty');
+  // Remove old cards (keep empty state)
+  list.querySelectorAll('.journal-card').forEach(el => el.remove());
+
+  if (!journalEntries.length) {
+    empty.style.display = '';
+  } else {
+    empty.style.display = 'none';
+    const sorted = [...journalEntries].sort((a, b) => b.createdAt - a.createdAt);
+    sorted.forEach(e => {
+      const mood = MOODS.find(m => m.key === e.mood);
+      const isCustom = e.mood === 'custom';
+      const moodDisplay = isCustom
+        ? `<span class="text-sm text-gray-400 bg-white/60 px-3 py-1 rounded-full">${esc(e.customMood || '自定义')}</span>`
+        : `<span class="text-sm text-gray-400 bg-white/60 px-3 py-1 rounded-full">${(mood || MOODS[0]).emoji} ${(mood || MOODS[0]).label}</span>`;
+      const moodEmoji = isCustom ? '' : `<span class="text-lg">${(mood || MOODS[0]).emoji}</span>`;
+      const card = document.createElement('div');
+      card.className = `journal-card paper-${e.paper} rounded-2xl shadow-card p-5 flex flex-col gap-3 relative overflow-hidden hover:-translate-y-1 hover:shadow-card-hover transition-all duration-200 cursor-default`;
+      card.style.minHeight = '180px';
+      card.innerHTML = `
+        <div class="flex items-start justify-between gap-2">
+          <div class="text-xs text-gray-400 font-boba">${fmtDate(e.date)}</div>
+          ${moodEmoji}
+        </div>
+        ${e.title ? `<div class="text-base font-bold text-gray-800 font-boba leading-snug">${esc(e.title)}</div>` : ''}
+        <div class="flex-1 text-base text-gray-700 font-boba leading-relaxed whitespace-pre-wrap" style="font-size:18px;line-height:2">${esc(e.content)}</div>
+        <div class="flex items-center justify-between pt-2 border-t border-gray-100">
+          ${moodDisplay}
+          <div class="flex gap-1.5">
+            <button class="text-xs px-2.5 py-1 rounded-lg border border-gray-200 bg-white/60 text-gray-400 cursor-pointer font-boba hover:bg-white hover:text-gray-700 transition-all duration-200" onclick="event.stopPropagation();editJournalEntry(${e.id})">编辑</button>
+            <button class="text-xs px-2.5 py-1 rounded-lg border border-gray-200 bg-white/60 text-gray-400 cursor-pointer font-boba hover:bg-red-50 hover:text-red-400 transition-all duration-200" onclick="event.stopPropagation();delJournalEntry(${e.id})">删除</button>
+          </div>
+        </div>`;
+      list.appendChild(card);
+    });
+  }
+}
+
+/* ============================================================
+   Init
+   ============================================================ */
+renderStars(0);
+renderAll();
+</script>
+</body>
+</html>
