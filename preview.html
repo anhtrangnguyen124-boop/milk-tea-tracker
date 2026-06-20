@@ -181,19 +181,19 @@ tailwind.config = {
 <!-- ============================================================
      Main Content Area
      ============================================================ -->
-<main id="app" class="w-full px-6 sm:px-10 py-6">
-  <div id="panel-zone" class="space-y-6">
+<main id="app" class="w-full px-4 sm:px-6 py-4">
+  <div id="panel-zone" class="space-y-4">
 
     <!-- ============================================================
          PAGE: 奶茶记录 (Tracker)
          ============================================================ -->
-    <div id="page-tracker" class="page space-y-4">
+    <div id="page-tracker" class="page space-y-3">
 
       <!-- Header (无框, 与随想页一致) -->
       <div class="flex items-center justify-between">
         <div>
-          <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 flex items-center gap-2">
-            <svg class="w-7 h-7 sm:w-8 sm:h-8" viewBox="0 0 24 24" fill="none">
+          <h2 class="text-lg sm:text-xl font-bold text-gray-800 flex items-center gap-2">
+            <svg class="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none">
               <g class="animate-boba-bounce" style="transform-origin:center center;">
                 <path d="M5 8 L6 20 C6 21 7 22 8 22 L16 22 C17 22 18 21 18 20 L19 8 Z" fill="#FFF8F0" stroke="#C86A4B" stroke-width="1.6" stroke-linejoin="round"/>
                 <path d="M4 8 Q12 4 20 8" fill="#FFFDF8" stroke="#C86A4B" stroke-width="1.6"/>
@@ -207,23 +207,23 @@ tailwind.config = {
             </svg>
             奶茶记录册
           </h2>
-          <p class="text-sm text-gray-400 mt-0.5">记录每一杯的小确幸</p>
+          <p class="text-[10px] text-gray-400 mt-0">记录每一杯的小确幸</p>
         </div>
-        <button class="px-6 py-3 rounded-2xl bg-[#C86A4B] text-white text-base font-bold shadow-[0_4px_14px_rgba(200,106,75,0.28)] hover:bg-[#A0523A] hover:shadow-[0_6px_20px_rgba(200,106,75,0.38)] active:scale-95 transition-all duration-200" onclick="openModal()">+ 记录奶茶</button>
+        <button class="px-4 py-2 rounded-2xl bg-[#C86A4B] text-white text-xs sm:text-sm font-bold shadow-[0_4px_14px_rgba(200,106,75,0.28)] hover:bg-[#A0523A] hover:shadow-[0_6px_20px_rgba(200,106,75,0.38)] active:scale-95 transition-all duration-200" onclick="openModal()">+ 记录奶茶</button>
       </div>
 
       <!-- ============================================================
            ① 搜索工具区 (Search) — 最轻量
            ============================================================ -->
-      <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-3 sm:p-4">
+      <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-2.5 sm:p-3">
         <div class="flex items-center border border-white/40 rounded-full overflow-hidden bg-white/50 focus-within:border-[#C86A4B] focus-within:ring-4 focus-within:ring-[rgba(200,106,75,0.1)] transition-all duration-200">
-          <input class="flex-1 border-none bg-transparent text-sm text-gray-800 py-2.5 pl-4 pr-1 font-boba outline-none placeholder:text-gray-400" id="search-input" placeholder="搜索奶茶..." onfocus="openFilter()" oninput="doSearch()">
+          <input class="flex-1 border-none bg-transparent text-sm text-gray-800 py-2 pl-4 pr-1 font-boba outline-none placeholder:text-gray-400" id="search-input" placeholder="搜索奶茶..." onfocus="openFilter()" oninput="doSearch()">
           <button class="w-7 h-7 rounded-full border-none bg-gray-200/60 text-gray-400 cursor-pointer hidden items-center justify-center text-xs hover:bg-gray-300/60 transition-all duration-200 font-boba" id="search-clear" onclick="clearSearch()">✕</button>
           <div class="w-10 h-10 flex items-center justify-center flex-shrink-0 text-gray-400 cursor-pointer hover:text-[#C86A4B] transition-colors duration-200" onclick="doSearch()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="w-4 h-4"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           </div>
         </div>
-        <div class="mt-2 hidden flex-wrap gap-2 p-2 bg-white/40 rounded-xl text-xs" id="filter-panel">
+        <div class="mt-1.5 hidden flex-wrap gap-2 p-1.5 bg-white/40 rounded-xl text-xs" id="filter-panel">
           <div class="flex-1 min-w-[60px]">
             <label class="block text-[10px] font-semibold text-gray-400 mb-0.5">品牌</label>
             <input class="w-full px-2 py-1 rounded-lg border border-white/40 text-xs text-gray-800 bg-white/60 font-boba focus:border-[#C86A4B] outline-none" placeholder="品牌..." oninput="doSearch()" id="filter-brand">
@@ -243,33 +243,33 @@ tailwind.config = {
       <!-- ============================================================
            ② 统计数据区 (Analytics) — 次之, 80%高度, 去SVG
            ============================================================ -->
-      <div id="stats-bar" class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-3 sm:p-4">
-        <div class="flex items-center justify-between mb-2">
-          <span class="text-sm font-bold text-gray-800 flex items-center gap-1.5">
-            <svg class="w-4 h-4" viewBox="0 0 20 20" id="stats-chart">
+      <div id="stats-bar" class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-2">
+        <div class="flex items-center justify-between mb-0.5">
+          <span class="text-[10px] font-bold text-gray-800 flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" id="stats-chart">
               <style>#stats-chart rect{transition:y 0.4s ease,height 0.4s ease}</style>
-              <rect x="1" y="14" width="3.5" height="4" rx="0.8" fill="#E8B8A2" id="chart-bar1"/>
-              <rect x="7" y="11" width="3.5" height="8" rx="0.8" fill="#C86A4B" id="chart-bar2"/>
-              <rect x="13" y="8" width="3.5" height="10" rx="0.8" fill="#A0523A" id="chart-bar3"/>
+              <rect x="1" y="14" width="3.5" height="3" rx="0.7" fill="#E8B8A2" id="chart-bar1"/>
+              <rect x="7" y="11" width="3.5" height="6" rx="0.7" fill="#C86A4B" id="chart-bar2"/>
+              <rect x="13" y="8" width="3.5" height="8" rx="0.7" fill="#A0523A" id="chart-bar3"/>
             </svg>
             本月统计
           </span>
-          <button onclick="goToday()" class="px-4 py-1 rounded-full bg-[#C86A4B] text-white text-xs font-bold shadow-[0_4px_14px_rgba(200,106,75,0.28)] hover:bg-[#A0523A] hover:shadow-[0_6px_20px_rgba(200,106,75,0.38)] active:scale-95 transition-all duration-200">
+          <button onclick="goToday()" class="px-3 py-0.5 rounded-full bg-[#C86A4B] text-white text-xs font-bold shadow-[0_4px_14px_rgba(200,106,75,0.28)] hover:bg-[#A0523A] hover:shadow-[0_6px_20px_rgba(200,106,75,0.38)] active:scale-95 transition-all duration-200">
             今天
           </button>
         </div>
-        <div class="grid grid-cols-3 gap-2">
-          <div class="text-center p-2">
-            <div class="text-2xl sm:text-3xl font-bold text-[#C86A4B] leading-tight" id="month-total">0</div>
-            <div class="text-[10px] sm:text-xs text-gray-400 mt-0.5">杯数</div>
+        <div class="grid grid-cols-3 gap-1.5">
+          <div class="text-center p-1">
+            <div class="text-lg sm:text-xl font-bold text-[#C86A4B] leading-tight" id="month-total">0</div>
+            <div class="text-[10px] text-gray-400 mt-0">杯数</div>
           </div>
-          <div class="text-center p-2">
-            <div class="text-2xl sm:text-3xl font-bold text-[#C86A4B] leading-tight" id="week-avg">0</div>
-            <div class="text-[10px] sm:text-xs text-gray-400 mt-0.5">周均</div>
+          <div class="text-center p-1">
+            <div class="text-lg sm:text-xl font-bold text-[#C86A4B] leading-tight" id="week-avg">0</div>
+            <div class="text-[10px] text-gray-400 mt-0">周均</div>
           </div>
-          <div class="text-center p-2">
-            <div class="text-2xl sm:text-3xl font-bold text-[#C86A4B] leading-tight" id="total-spend">¥0</div>
-            <div class="text-[10px] sm:text-xs text-gray-400 mt-0.5">消费</div>
+          <div class="text-center p-1">
+            <div class="text-lg sm:text-xl font-bold text-[#C86A4B] leading-tight" id="total-spend">¥0</div>
+            <div class="text-[10px] text-gray-400 mt-0">消费</div>
           </div>
         </div>
       </div>
@@ -278,22 +278,22 @@ tailwind.config = {
            ③ 记录核心区 (Recording) — 最大
            左列: 日历 + 我的最爱 | 右列: 语录 + 今日奶茶 + 昨日
            ============================================================ -->
-      <div id="content-grid" class="grid grid-cols-1 lg:grid-cols-[60%_40%] gap-4">
+      <div id="content-grid" class="grid grid-cols-1 lg:grid-cols-12 gap-3">
 
         <!-- LEFT COLUMN: 日历 + 我的最爱 -->
-        <div id="left-col" class="space-y-4">
+        <div id="left-col" class="lg:col-span-8 space-y-3">
 
           <!-- 日历 -->
-          <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-4 sm:p-5">
+          <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-2.5 sm:p-3">
             <div class="calendar" id="calendar"></div>
           </div>
 
           <!-- 我的最爱 -->
-          <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-4 sm:p-5 flex flex-col" style="min-height:120px">
-            <div class="flex items-center gap-2 font-bold text-gray-800 text-sm mb-2">📌 我的最爱</div>
+          <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-3 sm:p-4 flex flex-col" style="min-height:100px">
+            <div class="flex items-center gap-2 font-bold text-gray-800 text-xs mb-1.5">📌 我的最爱</div>
             <div id="pinned-list" class="flex-1"></div>
-            <div id="pinned-empty" class="flex-1 flex flex-col items-center justify-center text-center py-2">
-              <svg width="48" height="48" viewBox="0 0 100 100" fill="none" stroke="#C86A4B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.2">
+            <div id="pinned-empty" class="flex-1 flex flex-col items-center justify-center text-center py-1">
+              <svg width="36" height="36" viewBox="0 0 100 100" fill="none" stroke="#C86A4B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.2">
                 <ellipse cx="50" cy="55" rx="24" ry="3.5"/>
                 <path d="M32 32 L35 66 C35 69 37 71 40 71 L60 71 C63 71 65 69 65 66 L68 32 Z"/>
                 <path d="M28 32 Q50 18 72 32"/>
@@ -309,23 +309,23 @@ tailwind.config = {
         </div>
 
         <!-- RIGHT COLUMN: 语录 + 今日奶茶 + 昨日 (填满) -->
-        <div id="right-col" class="flex flex-col gap-4">
+        <div id="right-col" class="lg:col-span-4 flex flex-col gap-3">
 
           <!-- 每日奶茶语录 (缩短) -->
-          <div class="bg-white/20 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-3 sm:p-4 text-center cursor-pointer hover:shadow-[0_12px_36px_rgba(200,106,75,0.1)] transition-all duration-300 relative overflow-hidden flex flex-col items-center justify-center flex-shrink-0"
-               id="quote-w" onclick="nextQuote()" style="min-height:70px;background:linear-gradient(135deg,rgba(254,246,240,0.6),rgba(253,242,248,0.5),rgba(254,249,240,0.5))">
-            <span class="text-2xl sm:text-3xl mb-0.5 animate-float block" id="quote-emoji">💫</span>
-            <div class="text-base sm:text-lg text-gray-800 font-boba font-medium leading-relaxed relative z-10" id="quote-text">生活苦短，全糖加满</div>
-            <div class="text-[10px] sm:text-xs text-gray-400 mt-0.5 font-boba" id="quote-author">— 每日奶茶语录</div>
+          <div class="bg-white/20 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-2 text-center cursor-pointer hover:shadow-[0_12px_36px_rgba(200,106,75,0.1)] transition-all duration-300 relative overflow-hidden flex items-center justify-center gap-2 flex-shrink-0"
+               id="quote-w" onclick="nextQuote()" style="min-height:38px;background:linear-gradient(135deg,rgba(254,246,240,0.6),rgba(253,242,248,0.5),rgba(254,249,240,0.5))">
+            <span class="text-lg animate-float flex-shrink-0" id="quote-emoji">💫</span>
+            <div class="text-xs sm:text-sm text-gray-800 font-boba font-medium relative z-10" id="quote-text">生活苦短，全糖加满</div>
+            <div class="text-[10px] text-gray-400 font-boba flex-shrink-0" id="quote-author">— 每日奶茶语录</div>
           </div>
 
           <!-- 今日奶茶 (撑开) -->
-          <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-4 sm:p-5 flex flex-col flex-1" style="min-height:180px">
-            <div class="flex items-center justify-between mb-3">
-              <h2 class="text-base sm:text-lg font-bold text-gray-800" id="entry-date-label">今日奶茶</h2>
-              <span class="text-xs text-gray-400 bg-white/60 px-2.5 py-0.5 rounded-full font-medium" id="entry-count">0 杯</span>
+          <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-3 sm:p-4 flex flex-col flex-1 min-h-0">
+            <div class="flex items-center justify-between mb-2">
+              <h2 class="text-sm sm:text-base font-bold text-gray-800 flex-shrink-0" id="entry-date-label">今日奶茶</h2>
+              <span class="text-xs text-gray-400 bg-white/60 px-2 py-0.5 rounded-full font-medium flex-shrink-0" id="entry-count">0 杯</span>
             </div>
-            <div id="entries-container" data-empty="true" class="flex-1 flex flex-col">
+            <div id="entries-container" data-empty="true" class="flex-1 flex flex-col overflow-y-auto thin-scroll min-h-0">
               <div class="flex flex-col items-center text-center py-4 flex-1 justify-center">
                 <div class="text-4xl mb-2 animate-float">🧋</div>
                 <div class="text-base font-bold text-gray-800 mb-1">今日暂无记录</div>
@@ -335,12 +335,12 @@ tailwind.config = {
           </div>
 
           <!-- 昨日好心情 (撑开) -->
-          <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-4 sm:p-5 flex-1" style="background:linear-gradient(135deg,rgba(254,246,240,0.7),rgba(253,242,248,0.6),rgba(254,249,240,0.6));min-height:120px">
-            <div class="flex items-center justify-between mb-3">
-              <h2 class="text-base sm:text-lg font-bold text-gray-800">🥤 昨日好心情</h2>
-              <span class="text-xs text-gray-400 bg-white/60 px-2.5 py-0.5 rounded-full font-medium" id="yesterday-count">0 杯</span>
+          <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-3 sm:p-4 flex flex-col flex-1 min-h-0" style="background:linear-gradient(135deg,rgba(254,246,240,0.7),rgba(253,242,248,0.6),rgba(254,249,240,0.6))">
+            <div class="flex items-center justify-between mb-2 flex-shrink-0">
+              <h2 class="text-sm sm:text-base font-bold text-gray-800">🥤 昨日好心情</h2>
+              <span class="text-xs text-gray-400 bg-white/60 px-2 py-0.5 rounded-full font-medium" id="yesterday-count">0 杯</span>
             </div>
-            <div id="yesterday-container" data-empty="true">
+            <div id="yesterday-container" data-empty="true" class="overflow-y-auto thin-scroll min-h-0 flex-1"
               <div class="text-center py-3 text-xs sm:text-sm text-gray-400">昨日暂无记录，今天记得来一杯 ~</div>
             </div>
           </div>
@@ -356,17 +356,17 @@ tailwind.config = {
       <!-- Journal Header -->
       <div class="flex items-center justify-between">
         <div>
-          <h2 class="text-2xl font-boba font-bold text-gray-800 flex items-center gap-2">
-            <svg class="w-7 h-7 sm:w-8 sm:h-8" viewBox="0 0 24 24" fill="none" stroke="#C86A4B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <h2 class="text-lg font-boba font-bold text-gray-800 flex items-center gap-2">
+            <svg class="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" stroke="#C86A4B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
               <g class="animate-pen-write" style="transform-origin:50% 70%;">
                 <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
               </g>
             </svg>
             随想记录册
           </h2>
-          <p class="text-sm text-gray-400 mt-0.5">记录灵感、摘抄与即刻的想法</p>
+          <p class="text-[10px] text-gray-400 mt-0">记录灵感、摘抄与即刻的想法</p>
         </div>
-        <button onclick="openJournalModal()" class="px-6 py-3 rounded-full bg-accent-500 text-white text-base font-bold cursor-pointer font-boba shadow-btn hover:bg-accent-600 hover:shadow-btn-hover active:scale-95 transition-all duration-200">+ 写想法</button>
+        <button onclick="openJournalModal()" class="px-4 py-2 rounded-full bg-accent-500 text-white text-xs sm:text-sm font-bold cursor-pointer font-boba shadow-btn hover:bg-accent-600 hover:shadow-btn-hover active:scale-95 transition-all duration-200">+ 写想法</button>
       </div>
 
       <!-- Journal Cards Grid -->
@@ -767,10 +767,10 @@ function renderStats() {
   document.getElementById('week-avg').textContent = wa;
   document.getElementById('total-spend').textContent = '¥' + (me.length * 18);
   // 动态更新柱状图
-  const h1 = Math.max(3, Math.min(16, Math.round(me.length / 30 * 16) || 3));
-  const h2 = Math.max(3, Math.min(16, Math.round(wa / 7 * 16) || 3));
-  const h3 = Math.max(3, Math.min(16, Math.round(me.length * 18 / 540 * 16) || 3));
-  const setBar = (id, h) => { const r = document.getElementById(id); if (r) { r.setAttribute('y', 18 - h); r.setAttribute('height', h); } };
+  const h1 = Math.max(2, Math.min(12, Math.round(me.length / 30 * 12) || 2));
+  const h2 = Math.max(2, Math.min(12, Math.round(wa / 7 * 12) || 2));
+  const h3 = Math.max(2, Math.min(12, Math.round(me.length * 18 / 540 * 12) || 2));
+  const setBar = (id, h) => { const r = document.getElementById(id); if (r) { r.setAttribute('y', 14 - h); r.setAttribute('height', h); } };
   setBar('chart-bar1', h1);
   setBar('chart-bar2', h2);
   setBar('chart-bar3', h3);
@@ -786,24 +786,24 @@ function renderCal() {
   const byD = {};
   entries.forEach(e => { if (!byD[e.date]) byD[e.date] = []; byD[e.date].push(e); });
 
-  let h = `<div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
-    <h2 class="text-xl sm:text-2xl font-bold text-gray-800">${calY}年 ${calM + 1}月</h2>
-    <div class="flex items-center gap-2.5">
-      <button class="px-4 py-2 rounded-full bg-accent-500 text-white text-sm font-bold shadow-btn hover:bg-accent-600 active:scale-95 transition-all duration-200" onclick="goToday()">今天</button>
-      <button class="w-9 h-9 rounded-full border border-gray-200 bg-white text-gray-400 cursor-pointer text-lg flex items-center justify-center hover:bg-accent-50 hover:text-accent-500 hover:border-accent-500 active:scale-90 transition-all duration-200" onclick="chM(-1)">‹</button>
-      <button class="w-9 h-9 rounded-full border border-gray-200 bg-white text-gray-400 cursor-pointer text-lg flex items-center justify-center hover:bg-accent-50 hover:text-accent-500 hover:border-accent-500 active:scale-90 transition-all duration-200" onclick="chM(1)">›</button>
+  let h = `<div class="flex items-center justify-between mb-1.5 pb-1.5 border-b border-gray-100">
+    <h2 class="text-base sm:text-lg font-bold text-gray-800">${calY}年 ${calM + 1}月</h2>
+    <div class="flex items-center gap-2">
+      <button class="px-3 py-1 rounded-full bg-accent-500 text-white text-xs font-bold shadow-btn hover:bg-accent-600 active:scale-95 transition-all duration-200" onclick="goToday()">今天</button>
+      <button class="w-7 h-7 rounded-full border border-gray-200 bg-white text-gray-400 cursor-pointer text-sm flex items-center justify-center hover:bg-accent-50 hover:text-accent-500 hover:border-accent-500 active:scale-90 transition-all duration-200" onclick="chM(-1)">‹</button>
+      <button class="w-7 h-7 rounded-full border border-gray-200 bg-white text-gray-400 cursor-pointer text-sm flex items-center justify-center hover:bg-accent-50 hover:text-accent-500 hover:border-accent-500 active:scale-90 transition-all duration-200" onclick="chM(1)">›</button>
     </div>
   </div>`;
 
-  h += `<div class="grid grid-cols-7 mb-1.5">${['一', '二', '三', '四', '五', '六', '日'].map(d => `<div class="text-center text-sm font-semibold text-gray-400 py-2">${d}</div>`).join('')}</div>`;
-  h += `<div class="grid grid-cols-7 gap-1">`;
+  h += `<div class="grid grid-cols-7 mb-1">${['一', '二', '三', '四', '五', '六', '日'].map(d => `<div class="text-center text-xs font-semibold text-gray-400 py-1">${d}</div>`).join('')}</div>`;
+  h += `<div class="grid grid-cols-7 gap-0.5">`;
 
-  for (let i = 0; i < off; i++) h += `<div class="aspect-[1.05] flex flex-col items-center justify-center rounded-xl text-gray-300 opacity-20"></div>`;
+  for (let i = 0; i < off; i++) h += `<div class="h-11 flex flex-col items-center justify-center rounded-xl text-gray-300 opacity-20"></div>`;
 
   for (let d = 1; d <= tot; d++) {
     const ds = `${calY}-${String(calM + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`,
       de = byD[ds];
-    let cls = 'aspect-[1.05] flex flex-col items-center justify-center rounded-xl border-2 cursor-pointer transition-all duration-200 font-medium relative';
+    let cls = 'h-11 flex flex-col items-center justify-center rounded-xl border-2 cursor-pointer transition-all duration-200 font-medium relative';
     if (ds === selDate) cls += ' border-accent-500 bg-accent-50 text-accent-700 shadow-[0_4px_16px_rgba(200,106,75,0.18)]';
     else cls += ' border-transparent text-gray-700 hover:bg-accent-50 hover:border-accent-300';
     if (ds === today) cls += ' font-bold';
@@ -813,10 +813,10 @@ function renderCal() {
     const isSel = ds === selDate;
 
     h += `<div class="${cls}" onclick="selDay('${ds}')">`;
-    h += `<span class="text-lg sm:text-xl">${d}</span>`;
-    if (isToday && !isSel) h += `<span class="absolute top-1 right-1.5 text-[10px] text-accent-500 font-bold">今</span>`;
+    h += `<span class="text-sm sm:text-base">${d}</span>`;
+    if (isToday && !isSel) h += `<span class="absolute top-0.5 right-0.5 text-[9px] text-accent-500 font-bold">今</span>`;
     if (de && de.length) {
-      h += DRINK_ICONS[pickIcon(de[0].name)].replace('<svg', '<svg class="w-6 h-6 mt-0.5"');
+      h += DRINK_ICONS[pickIcon(de[0].name)].replace('<svg', '<svg class="w-4 h-4 mt-0.5"');
     }
     h += `</div>`;
   }
@@ -860,19 +860,19 @@ function cardHTML(e) {
   const imgs = (e.images || []),
     thumbs = imgs.length ? `<div class="flex gap-1.5 flex-wrap mb-1">${imgs.map(u => `<img class="w-[52px] aspect-[4/3] rounded-lg object-cover border border-gray-200 cursor-pointer hover:scale-110 transition-transform duration-200" src="${u}" loading="lazy" onerror="this.style.display='none'">`).join('')}</div>` : '';
   const bh = e.brand ? `<span class="font-semibold text-accent-500">${esc(e.brand)} · </span>` : '',
-    ch = e.comment ? `<div class="text-sm text-gray-400 px-3.5 py-1.5 rounded-lg bg-gray-50 mt-1">💬 ${esc(e.comment)}</div>` : '';
-  return `<article class="entry-card grid grid-cols-[56px_1fr] gap-3.5 p-4 bg-white/60 backdrop-blur-sm border border-white/60 rounded-2xl mb-2.5 hover:-translate-y-1 hover:shadow-card-hover transition-all duration-200">
-    <div class="w-14 h-14 flex items-center justify-center rounded-xl bg-gray-50">${DRINK_ICONS[icon]}</div>
+    ch = e.comment ? `<div class="text-xs text-gray-400 px-3 py-1 rounded-lg bg-gray-50 mt-1">💬 ${esc(e.comment)}</div>` : '';
+  return `<article class="entry-card grid grid-cols-[48px_1fr] gap-3 p-3 bg-white/60 backdrop-blur-sm border border-white/60 rounded-2xl mb-2 hover:-translate-y-1 hover:shadow-card-hover transition-all duration-200">
+    <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-gray-50">${DRINK_ICONS[icon]}</div>
     <div class="flex flex-col gap-1 min-w-0">
       ${thumbs}
-      <div class="text-base font-bold text-gray-800 flex items-center gap-1.5">${bh}${esc(e.name)}</div>
+      <div class="text-sm font-bold text-gray-800 flex items-center gap-1.5">${bh}${esc(e.name)}</div>
       <div class="flex gap-0.5">${stars}</div>
       ${ch}
       <div class="flex items-center justify-end gap-2 mt-2 pt-2 border-t border-gray-100">
-        <button class="flex items-center gap-1 px-3.5 py-1.5 rounded-lg border border-gray-200 text-sm font-medium cursor-pointer font-boba bg-white text-gray-400 hover:bg-white hover:text-gray-700 active:scale-95 transition-all duration-200 ${e.isPinned ? '!border-accent-300 !bg-accent-50 !text-accent-500' : ''}" onclick="togPin(${e.id})">📌 ${e.isPinned ? '已收藏' : '我的最爱'}</button>
-        <button class="flex items-center gap-1 px-3.5 py-1.5 rounded-lg border border-gray-200 text-sm font-medium cursor-pointer font-boba bg-white text-gray-400 hover:bg-white hover:text-gray-700 active:scale-95 transition-all duration-200" onclick="editEntry(${e.id})">编辑</button>
-        <button class="flex items-center gap-1 px-3.5 py-1.5 rounded-lg border border-gray-200 text-sm font-medium cursor-pointer font-boba bg-white text-gray-400 hover:bg-red-50 hover:text-red-400 active:scale-95 transition-all duration-200" onclick="delEntry(${e.id})">删除</button>
-        <span class="text-xs text-gray-400 bg-gray-100 px-3 py-1 rounded-full ml-auto">${fmtDate(e.date)}</span>
+        <button class="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-gray-200 text-xs font-medium cursor-pointer font-boba bg-white text-gray-400 hover:bg-white hover:text-gray-700 active:scale-95 transition-all duration-200 ${e.isPinned ? '!border-accent-300 !bg-accent-50 !text-accent-500' : ''}" onclick="togPin(${e.id})">📌 ${e.isPinned ? '已收藏' : '我的最爱'}</button>
+        <button class="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-gray-200 text-xs font-medium cursor-pointer font-boba bg-white text-gray-400 hover:bg-white hover:text-gray-700 active:scale-95 transition-all duration-200" onclick="editEntry(${e.id})">编辑</button>
+        <button class="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-gray-200 text-xs font-medium cursor-pointer font-boba bg-white text-gray-400 hover:bg-red-50 hover:text-red-400 active:scale-95 transition-all duration-200" onclick="delEntry(${e.id})">删除</button>
+        <span class="text-[10px] text-gray-400 bg-gray-100 px-2.5 py-0.5 rounded-full ml-auto">${fmtDate(e.date)}</span>
       </div>
     </div>
   </article>`;
@@ -897,11 +897,10 @@ function renderYesterday() {
       const stars = [1, 2, 3, 4, 5].map(s =>
         `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-2.5 h-2.5 ${s <= (e.rating || 0) ? 'star-filled' : 'star-empty'}"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`
       ).join('');
-      const h = `<div class="yesterday-card flex items-center gap-3 px-3.5 py-3 rounded-xl bg-white/50 backdrop-blur-sm border border-white/50 mb-2 cursor-pointer hover:-translate-y-0.5 hover:shadow-card-hover transition-all duration-200" onclick="selDay('${e.date}')">
-        <div class="w-10 h-10 flex items-center justify-center rounded-lg bg-white">${DRINK_ICONS[icon]}</div>
+      const h = `<div class="yesterday-card flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-white/50 backdrop-blur-sm border border-white/50 mb-1.5 cursor-pointer hover:-translate-y-0.5 hover:shadow-card-hover transition-all duration-200" onclick="selDay('${e.date}')">
+        <div class="w-8 h-8 flex items-center justify-center rounded-lg bg-white">${DRINK_ICONS[icon]}</div>
         <div class="flex-1 min-w-0">
-          <div class="text-sm font-medium text-gray-800 truncate">${e.brand ? esc(e.brand) + ' · ' : ''}${esc(e.name)}</div>
-          <div class="text-xs text-gray-400">${fmtDate(e.date)}</div>
+          <div class="text-xs font-medium text-gray-800 truncate">${e.brand ? esc(e.brand) + ' · ' : ''}${esc(e.name)}</div>
         </div>
         <div class="flex gap-0.5 flex-shrink-0">${stars}</div>
       </div>`;
@@ -926,9 +925,9 @@ function renderPinned() {
       const stars = [1, 2, 3, 4, 5].map(s =>
         `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-2 h-2 ${s <= (e.rating || 0) ? 'star-filled' : 'star-empty'}"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`
       ).join('');
-      return `<div class="flex items-center gap-2 px-2 py-2 rounded-xl bg-white/40 mb-1 cursor-pointer hover:bg-white/70 hover:translate-x-1 transition-all duration-200" onclick="selDay('${e.date}')">
-        <div class="w-7 h-7 flex items-center justify-center rounded-lg bg-white">${DRINK_ICONS[icon]}</div>
-        <span class="flex-1 text-sm font-medium text-gray-800 truncate">${e.brand ? esc(e.brand) + ' · ' : ''}${esc(e.name)}</span>
+      return `<div class="flex items-center gap-2 px-2 py-1.5 rounded-xl bg-white/40 mb-1 cursor-pointer hover:bg-white/70 hover:translate-x-1 transition-all duration-200" onclick="selDay('${e.date}')">
+        <div class="w-6 h-6 flex items-center justify-center rounded-lg bg-white">${DRINK_ICONS[icon]}</div>
+        <span class="flex-1 text-xs font-medium text-gray-800 truncate">${e.brand ? esc(e.brand) + ' · ' : ''}${esc(e.name)}</span>
         <div class="flex gap-px flex-shrink-0">${stars}</div>
       </div>`;
     }).join('');
