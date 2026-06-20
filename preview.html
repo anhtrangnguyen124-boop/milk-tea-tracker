@@ -97,6 +97,71 @@ tailwind.config = {
   }
 
   /* ============================================================
+     Liquid Glass Card — multi-layer distortion + specular
+     ============================================================ */
+  @keyframes glassShimmer {
+    0%, 100% { opacity: 0.35; }
+    50% { opacity: 0.55; }
+  }
+  @keyframes glassFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-2px); }
+  }
+
+  .liquid-glass {
+    position: relative;
+    overflow: hidden;
+    background: rgba(255,255,255,0.3);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.5);
+    box-shadow:
+      0 6px 6px rgba(0,0,0,0.06),
+      0 0 20px rgba(0,0,0,0.04);
+    transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .liquid-glass::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    filter: url(#glass-distortion);
+    border-radius: inherit;
+    pointer-events: none;
+  }
+  .liquid-glass::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: rgba(255,255,255,0.18);
+    border-radius: inherit;
+    box-shadow:
+      inset 2px 2px 1px 0 rgba(255,255,255,0.45),
+      inset -1px -1px 1px 1px rgba(255,255,255,0.4);
+    pointer-events: none;
+  }
+  .liquid-glass > .liquid-glass-content {
+    position: relative;
+    z-index: 10;
+  }
+
+  /* Hover — intensify glass */
+  .liquid-glass:hover {
+    box-shadow:
+      0 8px 12px rgba(0,0,0,0.08),
+      0 0 28px rgba(0,0,0,0.06);
+  }
+  .liquid-glass:hover::after {
+    background: rgba(255,255,255,0.28);
+    box-shadow:
+      inset 3px 3px 2px 0 rgba(255,255,255,0.55),
+      inset -1px -1px 2px 1px rgba(255,255,255,0.5);
+  }
+
+  /* ============================================================
      Paper Textures for Journal Cards
      ============================================================ */
   .paper-grid {
@@ -121,10 +186,400 @@ tailwind.config = {
                       radial-gradient(ellipse at 80% 50%, rgba(200,106,75,0.03) 0%, transparent 50%);
     box-shadow: inset 0 0 60px rgba(200,106,75,0.05);
   }
+
+  /* ============================================================
+     Metal Button — gradient border + inner layer + press animation
+     ============================================================ */
+  .metal-btn-wrap {
+    position: relative;
+    display: inline-flex;
+    transform: translateY(0) scale(1);
+    border-radius: 0.75rem;
+    padding: 1.25px;
+    background: linear-gradient(to bottom, #000, #A0A0A0);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+    transition: all 250ms cubic-bezier(0.1, 0.4, 0.2, 1);
+    cursor: pointer;
+    transform-origin: center center;
+    will-change: transform;
+  }
+  .metal-btn-wrap:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  }
+  .metal-btn-wrap:has(.metal-btn:active) {
+    transform: translateY(2.5px) scale(0.99);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+  }
+  /* Accent variant — warm brown gradient border */
+  .metal-btn-wrap.accent {
+    background: linear-gradient(to bottom, #52291C, #F09A5A);
+  }
+  /* Inner gradient layer */
+  .metal-btn-inner {
+    position: absolute;
+    inset: 1px;
+    border-radius: 0.65rem;
+    background: linear-gradient(to bottom, #FAFAFA, #3E3E3E, #E5E5E5);
+    transition: all 250ms cubic-bezier(0.1, 0.4, 0.2, 1);
+    z-index: 0;
+  }
+  .metal-btn-wrap.accent .metal-btn-inner {
+    background: linear-gradient(to bottom, #fef6f0, #8A4530, #fde8db);
+  }
+  .metal-btn-wrap:hover .metal-btn-inner {
+    filter: brightness(1.05);
+  }
+  /* The button element */
+  .metal-btn {
+    position: relative;
+    z-index: 10;
+    margin: 1px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.65rem;
+    padding: 0.5rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    font-family: inherit;
+    color: #FFF7F0;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(to bottom, #B9B9B9, #969696);
+    text-shadow: 0 -1px 0 rgb(80,80,80);
+    transform: scale(1);
+    transition: all 250ms cubic-bezier(0.1, 0.4, 0.2, 1);
+    transform-origin: center center;
+    outline: none;
+    overflow: hidden;
+  }
+  .metal-btn-wrap.accent .metal-btn {
+    background: linear-gradient(to bottom, #C86A4B, #A0523A);
+    text-shadow: 0 -1px 0 rgb(120, 50, 30);
+  }
+  .metal-btn-wrap:has(.metal-btn:active) .metal-btn {
+    transform: scale(0.97);
+  }
+  .metal-btn-wrap:has(.metal-btn:active) .metal-btn-shine {
+    opacity: 0.25;
+  }
+  .metal-btn-wrap:hover .metal-btn {
+    filter: brightness(1.03);
+  }
+  /* Shine flash on click */
+  .metal-btn-shine {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    border-radius: inherit;
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent);
+    opacity: 0;
+    transition: opacity 300ms ease;
+    pointer-events: none;
+  }
+  /* Hover glow overlay */
+  .metal-btn-hover-glow {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    border-radius: inherit;
+    background: linear-gradient(to top, transparent, rgba(255,255,255,0.08));
+    opacity: 0;
+    transition: opacity 200ms ease;
+    pointer-events: none;
+  }
+  .metal-btn-wrap:hover .metal-btn-hover-glow {
+    opacity: 1;
+  }
+  /* Full-width variant */
+  .metal-btn-wrap.w-full {
+    display: flex;
+    width: 100%;
+  }
+  .metal-btn-wrap.w-full .metal-btn {
+    width: 100%;
+  }
+
+  /* ============================================================
+     3D Tilt Card — framer-motion ProductHighlightCard inspired
+     ============================================================ */
+  .tilt-card {
+    perspective: 800px;
+    transform-style: preserve-3d;
+  }
+  .tilt-card-inner {
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.15s ease-out;
+    will-change: transform;
+  }
+  /* Diagonal line texture */
+  .tilt-card-inner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    background:
+      linear-gradient(to right, rgba(128,128,128,0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(128,128,128,0.04) 1px, transparent 1px);
+    background-size: 32px 32px;
+    mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, #000 60%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, #000 60%, transparent 100%);
+    pointer-events: none;
+  }
+  /* Glow overlay — follows mouse */
+  .tilt-card-glow {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .tilt-card-glow.active {
+    opacity: 1;
+  }
+  /* Content layer above texture + glow */
+  .tilt-card-content {
+    position: relative;
+    z-index: 10;
+  }
+
+  /* ============================================================
+     Auth Overlay
+     ============================================================ */
+  .auth-overlay-hidden {
+    opacity: 0 !important;
+    pointer-events: none;
+  }
+  @keyframes authPanelIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .animate-auth-panel-in {
+    animation: authPanelIn 0.3s ease-out;
+  }
+
+  /* Character blink animation */
+  .char-blink {
+    animation: charBlink 150ms ease-out;
+  }
+  @keyframes charBlink {
+    0%, 100% { transform: scaleY(1); }
+    50% { transform: scaleY(0.08); }
+  }
+  /* Character eye/mouth visibility */
+  .char-eyes, .char-mouth, .char-pupil-alone { transition: opacity 0.3s; }
+
+  /* Pupil smooth following */
+  .char-pupil, .char-pupil-alone {
+    transition: transform 0.1s ease-out;
+  }
+  /* Auth loading spinner */
+  @keyframes authSpin {
+    to { transform: rotate(360deg); }
+  }
+  .auth-spinner {
+    width: 18px; height: 18px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: authSpin 0.6s linear infinite;
+    display: inline-block;
+  }
 </style>
 </head>
 <body class="min-h-screen font-boba text-gray-800 antialiased leading-relaxed"
       style="background: linear-gradient(160deg, #FDF6F0 0%, #FEF9F4 30%, #FDF3F0 60%, #FFF8F4 100%); background-attachment: fixed;">
+
+<!-- ============================================================
+     Auth Overlay — Two-Column Layout + Animated Characters
+     ============================================================ -->
+<div id="auth-overlay" class="fixed inset-0 z-[100] transition-opacity duration-500 bg-white">
+  <div class="h-full grid lg:grid-cols-2">
+    <!-- Left: Brand + Animated Characters (hidden on mobile) -->
+    <div class="hidden lg:flex flex-col justify-between relative overflow-hidden" style="background:linear-gradient(160deg,#C86A4B 0%,#A0523A 30%,#8A4530 60%,#6E3726 100%)">
+      <!-- Decorative bg elements -->
+      <div class="absolute inset-0 opacity-10" style="background-image:radial-gradient(circle,rgba(255,255,255,0.3) 1px,transparent 1px);background-size:24px 24px"></div>
+      <div class="absolute top-1/4 right-1/4 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-1/4 left-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
+
+      <!-- Brand -->
+      <div class="relative z-20 p-10">
+        <div class="flex items-center gap-2 text-lg font-semibold text-white/90">
+          <span class="text-2xl">🧋</span>
+          <span class="font-boba">wxh的记录册</span>
+        </div>
+      </div>
+
+      <!-- Animated Characters Area -->
+      <div class="relative z-20 flex items-end justify-center flex-1 pb-8" id="characters-stage">
+        <div class="relative w-full max-w-[500px]" style="height:380px" id="characters-container">
+          <!-- Purple character — back layer, tall rectangle -->
+          <div id="char-purple" class="char-body absolute bottom-0 transition-all duration-700 ease-in-out"
+            style="left:70px;width:180px;height:400px;background:#6C3FF5;border-radius:10px 10px 0 0;z-index:1;transform-origin:bottom center">
+            <div class="char-eyes absolute flex gap-8 transition-all duration-200 ease-out" style="left:45px;top:40px">
+              <div class="char-eye w-[18px] h-[18px] rounded-full bg-white flex items-center justify-center overflow-hidden" data-side="left"><div class="char-pupil w-[7px] h-[7px] rounded-full" style="background:#2D2D2D"></div></div>
+              <div class="char-eye w-[18px] h-[18px] rounded-full bg-white flex items-center justify-center overflow-hidden" data-side="right"><div class="char-pupil w-[7px] h-[7px] rounded-full" style="background:#2D2D2D"></div></div>
+            </div>
+          </div>
+
+          <!-- Black character — middle layer -->
+          <div id="char-black" class="char-body absolute bottom-0 transition-all duration-700 ease-in-out"
+            style="left:240px;width:120px;height:310px;background:#2D2D2D;border-radius:8px 8px 0 0;z-index:2;transform-origin:bottom center">
+            <div class="char-eyes absolute flex gap-6 transition-all duration-200 ease-out" style="left:26px;top:32px">
+              <div class="char-eye w-[16px] h-[16px] rounded-full bg-white flex items-center justify-center overflow-hidden" data-side="left"><div class="char-pupil w-[6px] h-[6px] rounded-full" style="background:#2D2D2D"></div></div>
+              <div class="char-eye w-[16px] h-[16px] rounded-full bg-white flex items-center justify-center overflow-hidden" data-side="right"><div class="char-pupil w-[6px] h-[6px] rounded-full" style="background:#2D2D2D"></div></div>
+            </div>
+          </div>
+
+          <!-- Orange character — front-left semi-circle -->
+          <div id="char-orange" class="char-body absolute bottom-0 transition-all duration-700 ease-in-out"
+            style="left:0px;width:240px;height:200px;background:#FF9B6B;border-radius:120px 120px 0 0;z-index:3;transform-origin:bottom center">
+            <div class="char-eyes absolute flex gap-8 transition-all duration-200 ease-out" style="left:82px;top:90px">
+              <div class="char-pupil-alone w-[12px] h-[12px] rounded-full" style="background:#2D2D2D" data-side="left"></div>
+              <div class="char-pupil-alone w-[12px] h-[12px] rounded-full" style="background:#2D2D2D" data-side="right"></div>
+            </div>
+          </div>
+
+          <!-- Yellow character — front-right semi-circle -->
+          <div id="char-yellow" class="char-body absolute bottom-0 transition-all duration-700 ease-in-out"
+            style="left:310px;width:140px;height:230px;background:#E8D754;border-radius:70px 70px 0 0;z-index:4;transform-origin:bottom center">
+            <div class="char-eyes absolute flex gap-6 transition-all duration-200 ease-out" style="left:52px;top:40px">
+              <div class="char-pupil-alone w-[12px] h-[12px] rounded-full" style="background:#2D2D2D" data-side="left"></div>
+              <div class="char-pupil-alone w-[12px] h-[12px] rounded-full" style="background:#2D2D2D" data-side="right"></div>
+            </div>
+            <!-- Mouth line -->
+            <div class="char-mouth absolute w-20 h-[4px] rounded-full transition-all duration-200 ease-out" style="left:40px;top:88px;background:#2D2D2D"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer links -->
+      <div class="relative z-20 p-10 flex items-center gap-6 text-xs text-white/40">
+        <a href="#" class="hover:text-white/70 transition-colors">Privacy</a>
+        <a href="#" class="hover:text-white/70 transition-colors">Terms</a>
+      </div>
+    </div>
+
+    <!-- Right: Login / Register Form -->
+    <div class="flex items-center justify-center p-6 sm:p-10 bg-white">
+      <div class="w-full max-w-[400px]">
+        <!-- Mobile Logo -->
+        <div class="lg:hidden flex items-center justify-center gap-2 text-lg font-semibold mb-10">
+          <span class="text-2xl">🧋</span>
+          <span class="font-boba text-gray-800">wxh的记录册</span>
+        </div>
+
+        <!-- Title -->
+        <div class="text-center mb-8">
+          <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 font-boba" id="auth-title">欢迎回来</h2>
+          <p class="text-sm text-gray-400 mt-1">请输入你的账户信息</p>
+        </div>
+
+        <!-- Login Panel -->
+        <div id="auth-panel-login" class="flex flex-col gap-4">
+          <!-- Email -->
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1.5">邮箱</label>
+            <input id="auth-login-email" type="email" placeholder="your@email.com" autocomplete="email"
+              class="w-full px-4 py-3 rounded-xl border border-gray-200 text-base text-gray-800 bg-white font-boba focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200"
+              onfocus="onAuthInputFocus(this)" onblur="onAuthInputBlur()">
+          </div>
+          <!-- Password with show/hide toggle -->
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1.5">密码</label>
+            <div class="relative">
+              <input id="auth-login-password" type="password" placeholder="••••••••" autocomplete="current-password"
+                class="w-full px-4 py-3 pr-12 rounded-xl border border-gray-200 text-base text-gray-800 bg-white font-boba focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200"
+                onfocus="onAuthInputFocus(this)" onblur="onAuthInputBlur()">
+              <button type="button" id="auth-pw-toggle" onclick="toggleAuthPassword()"
+                class="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors cursor-pointer border-none bg-transparent">
+                <!-- Eye icon -->
+                <svg id="auth-eye-on" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <!-- EyeOff icon -->
+                <svg id="auth-eye-off" class="w-5 h-5 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><path d="m14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Error -->
+          <div id="auth-login-error" class="text-xs text-red-400 hidden p-2.5 bg-red-50 rounded-lg"></div>
+
+          <!-- Remember me + Forgot -->
+          <div class="flex items-center justify-between">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="auth-remember" class="w-4 h-4 rounded border-gray-300 text-accent-500 focus:ring-accent-500 accent-accent-500">
+              <span class="text-sm text-gray-500">记住我</span>
+            </label>
+            <a href="#" class="text-sm text-accent-500 hover:underline font-medium">忘记密码？</a>
+          </div>
+
+          <!-- Submit -->
+          <div class="metal-btn-wrap accent w-full">
+            <div class="metal-btn-inner"></div>
+            <button id="auth-login-btn" class="metal-btn text-base font-boba" onclick="handleLogin()" style="padding-top:0.75rem;padding-bottom:0.75rem">
+              <span class="metal-btn-shine"></span><span class="metal-btn-hover-glow"></span>
+              <span id="auth-login-btn-text">登录</span>
+            </button>
+          </div>
+
+          <!-- Google login -->
+          <button class="w-full py-3 rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-600 hover:bg-gray-50 active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 font-boba">
+            <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+            使用 Google 登录
+          </button>
+
+          <!-- Switch to Register -->
+          <p class="text-sm text-gray-400 text-center">还没有账户？<button class="text-accent-500 hover:underline cursor-pointer bg-transparent border-none font-boba font-bold p-0" onclick="showAuthPanel('register')">注册</button></p>
+        </div>
+
+        <!-- Register Panel (hidden by default) -->
+        <div id="auth-panel-register" class="flex flex-col gap-4 hidden">
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1.5">邮箱</label>
+            <input id="auth-register-email" type="email" placeholder="your@email.com" autocomplete="email"
+              class="w-full px-4 py-3 rounded-xl border border-gray-200 text-base text-gray-800 bg-white font-boba focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200"
+              onfocus="onAuthInputFocus(this)" onblur="onAuthInputBlur()">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1.5">密码</label>
+            <input id="auth-register-password" type="password" placeholder="至少6位密码" autocomplete="new-password"
+              class="w-full px-4 py-3 rounded-xl border border-gray-200 text-base text-gray-800 bg-white font-boba focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200"
+              onfocus="onAuthInputFocus(this)" onblur="onAuthInputBlur()">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1.5">确认密码</label>
+            <input id="auth-register-confirm" type="password" placeholder="再次输入密码" autocomplete="new-password"
+              class="w-full px-4 py-3 rounded-xl border border-gray-200 text-base text-gray-800 bg-white font-boba focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200">
+          </div>
+          <div id="auth-register-error" class="text-xs text-red-400 hidden p-2.5 bg-red-50 rounded-lg"></div>
+          <div class="metal-btn-wrap accent w-full">
+            <div class="metal-btn-inner"></div>
+            <button class="metal-btn text-base font-boba" onclick="handleRegister()" style="padding-top:0.75rem;padding-bottom:0.75rem">
+              <span class="metal-btn-shine"></span><span class="metal-btn-hover-glow"></span>
+              注册
+            </button>
+          </div>
+          <p class="text-sm text-gray-400 text-center">已有账户？<button class="text-accent-500 hover:underline cursor-pointer bg-transparent border-none font-boba font-bold p-0" onclick="showAuthPanel('login')">登录</button></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SVG Filters — Liquid Glass Distortion
+     ============================================================ -->
+<svg style="display:none" aria-hidden="true">
+  <filter id="glass-distortion" x="-20%" y="-20%" width="140%" height="140%" filterUnits="objectBoundingBox">
+    <feTurbulence type="fractalNoise" baseFrequency="0.001 0.004" numOctaves="1" seed="17" result="turbulence"/>
+    <feGaussianBlur in="turbulence" stdDeviation="3" result="softMap"/>
+    <feDisplacementMap in="SourceGraphic" in2="softMap" scale="120" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
 
 <!-- ============================================================
      Top Navigation Bar
@@ -170,6 +625,14 @@ tailwind.config = {
       <button class="bg-dot w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 cursor-pointer hover:scale-125 active:scale-90 transition-all duration-200" data-bg="sky" title="天空" style="background:linear-gradient(135deg,#D6ECFB,#B8DCF8);border-color:transparent"></button>
       <button class="bg-dot w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 cursor-pointer hover:scale-125 active:scale-90 transition-all duration-200" data-bg="rose" title="玫瑰" style="background:linear-gradient(135deg,#FCE4EC,#F8D0D8);border-color:transparent"></button>
     </div>
+    <!-- Logout Button -->
+    <button id="logout-btn" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-gray-200 bg-white/60 flex items-center justify-center cursor-pointer hover:border-accent-500 hover:bg-accent-50 active:scale-90 transition-all duration-200 ml-1.5" title="退出登录" onclick="handleLogout()" style="display:none;">
+      <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" viewBox="0 0 24 24" fill="none" stroke="#C86A4B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+        <polyline points="16 17 21 12 16 7"/>
+        <line x1="21" y1="12" x2="9" y2="12"/>
+      </svg>
+    </button>
     <!-- Tab Switcher — text only -->
     <nav class="ml-auto flex items-center gap-4">
       <button data-tab="tracker" class="tab-btn text-sm font-bold transition-all duration-200 cursor-pointer border-none bg-transparent px-1 py-1 border-b-2 rounded-none tracking-wide" style="color:#C86A4B;border-color:#C86A4B;" onclick="switchTab('tracker')">奶茶记录</button>
@@ -209,7 +672,14 @@ tailwind.config = {
           </h2>
           <p class="text-[10px] text-gray-400 mt-0">记录每一杯的小确幸</p>
         </div>
-        <button class="px-4 py-2 rounded-2xl bg-[#C86A4B] text-white text-xs sm:text-sm font-bold shadow-[0_4px_14px_rgba(200,106,75,0.28)] hover:bg-[#A0523A] hover:shadow-[0_6px_20px_rgba(200,106,75,0.38)] active:scale-95 transition-all duration-200" onclick="openModal()">+ 记录奶茶</button>
+        <div class="metal-btn-wrap accent">
+          <div class="metal-btn-inner"></div>
+          <button class="metal-btn text-xs sm:text-sm" onclick="openModal()">
+            <span class="metal-btn-shine"></span>
+            <span class="metal-btn-hover-glow"></span>
+            + 记录奶茶
+          </button>
+        </div>
       </div>
 
       <!-- ============================================================
@@ -284,8 +754,10 @@ tailwind.config = {
         <div id="left-col" class="lg:col-span-8 space-y-3">
 
           <!-- 日历 -->
-          <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-2.5 sm:p-3">
-            <div class="calendar" id="calendar"></div>
+          <div class="liquid-glass rounded-[24px] p-2.5 sm:p-3">
+            <div class="liquid-glass-content">
+              <div class="calendar" id="calendar"></div>
+            </div>
           </div>
 
           <!-- 我的最爱 -->
@@ -366,7 +838,14 @@ tailwind.config = {
           </h2>
           <p class="text-[10px] text-gray-400 mt-0">记录灵感、摘抄与即刻的想法</p>
         </div>
-        <button onclick="openJournalModal()" class="px-4 py-2 rounded-full bg-accent-500 text-white text-xs sm:text-sm font-bold cursor-pointer font-boba shadow-btn hover:bg-accent-600 hover:shadow-btn-hover active:scale-95 transition-all duration-200">+ 写想法</button>
+        <div class="metal-btn-wrap accent">
+          <div class="metal-btn-inner"></div>
+          <button class="metal-btn text-xs sm:text-sm font-boba" onclick="openJournalModal()">
+            <span class="metal-btn-shine"></span>
+            <span class="metal-btn-hover-glow"></span>
+            + 写想法
+          </button>
+        </div>
       </div>
 
       <!-- Journal Cards Grid -->
@@ -376,7 +855,14 @@ tailwind.config = {
           <div class="text-6xl mb-4 animate-float">📝</div>
           <div class="text-xl font-bold text-gray-800 mb-2 font-boba">还没有随想记录</div>
           <div class="text-sm text-gray-400 mb-6">写下今天一闪而过的灵感或摘抄吧</div>
-          <button onclick="openJournalModal()" class="px-8 py-3 rounded-full bg-accent-500 text-white text-base font-bold cursor-pointer font-boba shadow-btn hover:bg-accent-600 hover:shadow-btn-hover active:scale-95 transition-all duration-200">+ 写想法</button>
+          <div class="metal-btn-wrap accent">
+            <div class="metal-btn-inner"></div>
+            <button class="metal-btn text-base font-boba" onclick="openJournalModal()" style="padding-left:2rem;padding-right:2rem;padding-top:0.75rem;padding-bottom:0.75rem">
+              <span class="metal-btn-shine"></span>
+              <span class="metal-btn-hover-glow"></span>
+              + 写想法
+            </button>
+          </div>
         </div>
       </div>
     </div><!-- /#page-journal -->
@@ -425,7 +911,14 @@ tailwind.config = {
     <label class="block text-sm font-semibold text-gray-400 mb-1">评论</label>
     <textarea class="w-full px-4 py-3 rounded-xl border border-gray-200 text-base text-gray-800 bg-white font-boba mb-4 focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200 resize-none" id="modal-comment" placeholder="写写当时喝奶茶的心情..." rows="2"></textarea>
 
-    <button class="w-full py-3.5 rounded-full bg-accent-500 text-white text-lg font-bold cursor-pointer font-boba shadow-btn hover:bg-accent-600 hover:shadow-btn-hover active:scale-95 transition-all duration-200" onclick="saveEntry()">添加记录</button>
+    <div class="metal-btn-wrap accent w-full">
+      <div class="metal-btn-inner"></div>
+      <button class="metal-btn text-base font-boba" onclick="saveEntry()" style="padding-top:0.875rem;padding-bottom:0.875rem">
+        <span class="metal-btn-shine"></span>
+        <span class="metal-btn-hover-glow"></span>
+        添加记录
+      </button>
+    </div>
   </div>
 </div>
 
@@ -457,7 +950,14 @@ tailwind.config = {
       <div class="paper-option flex-1 h-14 rounded-xl border-2 border-gray-200 cursor-pointer hover:border-accent-400 transition-all duration-200 paper-blank flex items-center justify-center text-xs text-gray-400" data-paper="blank" onclick="selectJournalPaper('blank',this)">做旧</div>
     </div>
 
-    <button class="w-full py-3.5 rounded-full bg-accent-500 text-white text-lg font-bold cursor-pointer font-boba shadow-btn hover:bg-accent-600 hover:shadow-btn-hover active:scale-95 transition-all duration-200" onclick="saveJournalEntry()">保存想法</button>
+    <div class="metal-btn-wrap accent w-full">
+      <div class="metal-btn-inner"></div>
+      <button class="metal-btn text-base font-boba" onclick="saveJournalEntry()" style="padding-top:0.875rem;padding-bottom:0.875rem">
+        <span class="metal-btn-shine"></span>
+        <span class="metal-btn-hover-glow"></span>
+        保存想法
+      </button>
+    </div>
   </div>
 </div>
 
@@ -755,6 +1255,46 @@ function saveEntry() {
    ============================================================ */
 function renderAll() { renderCal(); renderEntries(); renderYesterday(); renderPinned(); renderStats(); }
 
+/* ============================================================
+   3D Tilt Card — vanilla JS mouse-tracking
+   ============================================================ */
+function initTiltCards() {
+  document.querySelectorAll('.tilt-card').forEach(card => {
+    // Skip if already initialized
+    if (card.dataset.tiltReady) return;
+    card.dataset.tiltReady = '1';
+
+    const inner = card.querySelector('.tilt-card-inner');
+    const glow = card.querySelector('.tilt-card-glow');
+    if (!inner) return;
+
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const w = rect.width;
+      const h = rect.height;
+
+      const rotateX = ((y - h / 2) / (h / 2)) * -5;
+      const rotateY = ((x - w / 2) / (w / 2)) * 5;
+
+      inner.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+
+      if (glow) {
+        const gx = (x / w) * 100;
+        const gy = (y / h) * 100;
+        glow.style.background = `radial-gradient(circle 100px at ${gx}% ${gy}%, rgba(200,106,75,0.13), transparent 50%)`;
+        glow.classList.add('active');
+      }
+    });
+
+    card.addEventListener('mouseleave', () => {
+      inner.style.transform = 'rotateX(0deg) rotateY(0deg)';
+      if (glow) glow.classList.remove('active');
+    });
+  });
+}
+
 function renderStats() {
   const now = new Date(), m = now.getMonth(), y = now.getFullYear();
   const me = entries.filter(e => {
@@ -835,7 +1375,7 @@ function renderEntries() {
   const [, m, d] = selDate.split('-');
   document.getElementById('entry-date-label').textContent = `今日奶茶`;
   document.getElementById('entry-count').textContent = `${fl.length} 杯`;
-  ct.querySelectorAll('.entry-card').forEach(el => el.remove());
+  ct.querySelectorAll('.tilt-card').forEach(el => el.remove());
   if (!fl.length) {
     ct.setAttribute('data-empty', 'true');
     ct.querySelector('.flex.flex-col.items-center').style.display = '';
@@ -849,6 +1389,7 @@ function renderEntries() {
       el.innerHTML = cardHTML(e);
       ct.appendChild(el.firstElementChild);
     });
+    initTiltCards();
   }
 }
 
@@ -861,21 +1402,26 @@ function cardHTML(e) {
     thumbs = imgs.length ? `<div class="flex gap-1.5 flex-wrap mb-1">${imgs.map(u => `<img class="w-[52px] aspect-[4/3] rounded-lg object-cover border border-gray-200 cursor-pointer hover:scale-110 transition-transform duration-200" src="${u}" loading="lazy" onerror="this.style.display='none'">`).join('')}</div>` : '';
   const bh = e.brand ? `<span class="font-semibold text-accent-500">${esc(e.brand)} · </span>` : '',
     ch = e.comment ? `<div class="text-xs text-gray-400 px-3 py-1 rounded-lg bg-gray-50 mt-1">💬 ${esc(e.comment)}</div>` : '';
-  return `<article class="entry-card grid grid-cols-[48px_1fr] gap-3 p-3 bg-white/60 backdrop-blur-sm border border-white/60 rounded-2xl mb-2 hover:-translate-y-1 hover:shadow-card-hover transition-all duration-200">
-    <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-gray-50">${DRINK_ICONS[icon]}</div>
-    <div class="flex flex-col gap-1 min-w-0">
-      ${thumbs}
-      <div class="text-sm font-bold text-gray-800 flex items-center gap-1.5">${bh}${esc(e.name)}</div>
-      <div class="flex gap-0.5">${stars}</div>
-      ${ch}
-      <div class="flex items-center justify-end gap-2 mt-2 pt-2 border-t border-gray-100">
-        <button class="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-gray-200 text-xs font-medium cursor-pointer font-boba bg-white text-gray-400 hover:bg-white hover:text-gray-700 active:scale-95 transition-all duration-200 ${e.isPinned ? '!border-accent-300 !bg-accent-50 !text-accent-500' : ''}" onclick="togPin(${e.id})">📌 ${e.isPinned ? '已收藏' : '我的最爱'}</button>
-        <button class="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-gray-200 text-xs font-medium cursor-pointer font-boba bg-white text-gray-400 hover:bg-white hover:text-gray-700 active:scale-95 transition-all duration-200" onclick="editEntry(${e.id})">编辑</button>
-        <button class="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-gray-200 text-xs font-medium cursor-pointer font-boba bg-white text-gray-400 hover:bg-red-50 hover:text-red-400 active:scale-95 transition-all duration-200" onclick="delEntry(${e.id})">删除</button>
-        <span class="text-[10px] text-gray-400 bg-gray-100 px-2.5 py-0.5 rounded-full ml-auto">${fmtDate(e.date)}</span>
-      </div>
+  return `<div class="tilt-card mb-2">
+    <div class="tilt-card-inner rounded-2xl">
+      <div class="tilt-card-glow rounded-2xl"></div>
+      <article class="entry-card tilt-card-content grid grid-cols-[48px_1fr] gap-3 p-3 bg-white/60 backdrop-blur-sm border border-white/60 rounded-2xl transition-shadow duration-300">
+        <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-gray-50">${DRINK_ICONS[icon]}</div>
+        <div class="flex flex-col gap-1 min-w-0">
+          ${thumbs}
+          <div class="text-sm font-bold text-gray-800 flex items-center gap-1.5">${bh}${esc(e.name)}</div>
+          <div class="flex gap-0.5">${stars}</div>
+          ${ch}
+          <div class="flex items-center justify-end gap-2 mt-2 pt-2 border-t border-gray-100">
+            <button class="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-gray-200 text-xs font-medium cursor-pointer font-boba bg-white text-gray-400 hover:bg-white hover:text-gray-700 active:scale-95 transition-all duration-200 ${e.isPinned ? '!border-accent-300 !bg-accent-50 !text-accent-500' : ''}" onclick="togPin(${e.id})">📌 ${e.isPinned ? '已收藏' : '我的最爱'}</button>
+            <button class="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-gray-200 text-xs font-medium cursor-pointer font-boba bg-white text-gray-400 hover:bg-white hover:text-gray-700 active:scale-95 transition-all duration-200" onclick="editEntry(${e.id})">编辑</button>
+            <button class="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-gray-200 text-xs font-medium cursor-pointer font-boba bg-white text-gray-400 hover:bg-red-50 hover:text-red-400 active:scale-95 transition-all duration-200" onclick="delEntry(${e.id})">删除</button>
+            <span class="text-[10px] text-gray-400 bg-gray-100 px-2.5 py-0.5 rounded-full ml-auto">${fmtDate(e.date)}</span>
+          </div>
+        </div>
+      </article>
     </div>
-  </article>`;
+  </div>`;
 }
 
 function renderYesterday() {
@@ -981,7 +1527,7 @@ function showResults(r, term) {
   const ct = document.getElementById('entries-container');
   document.getElementById('entry-date-label').textContent = `搜索"${term || '全部'}"`;
   document.getElementById('entry-count').textContent = `${r.length} 条`;
-  ct.querySelectorAll('.entry-card').forEach(el => el.remove());
+  ct.querySelectorAll('.tilt-card').forEach(el => el.remove());
   if (!r.length) {
     ct.setAttribute('data-empty', 'true');
     const es = ct.querySelector('.flex.flex-col.items-center');
@@ -998,6 +1544,7 @@ function showResults(r, term) {
       el.innerHTML = cardHTML(e);
       ct.appendChild(el.firstElementChild);
     });
+    initTiltCards();
   }
 }
 function clearSearch() {
@@ -1226,10 +1773,486 @@ function renderJournal() {
 }
 
 /* ============================================================
+   Auth — Local Account + Animated Characters
+   ============================================================ */
+const DB_AUTH = 'auth_v1';
+let authMouseX = 0, authMouseY = 0, authTyping = false, authBlinkTimers = [];
+let authFocusTarget = 'none'; // 'none' | 'email' | 'password'
+let isPurplePeeking = false, purplePeekTimer = null;
+let isLookingAtEachOther = false, lookEachOtherTimer = null;
+
+function loadAuth() { try { return JSON.parse(localStorage.getItem(DB_AUTH) || 'null'); } catch (e) { return null; } }
+function saveAuth(d) { localStorage.setItem(DB_AUTH, JSON.stringify(d)); }
+
+// ── Character Animation Engine ──
+function initCharacters() {
+  const stage = document.getElementById('auth-overlay');
+  if (!stage) return;
+
+  // Track mouse position
+  stage.addEventListener('mousemove', (e) => { authMouseX = e.clientX; authMouseY = e.clientY; });
+
+  // Set up blinking for characters with white eyes (purple + black)
+  setupBlink('char-purple');
+  setupBlink('char-black');
+
+  // Start the animation loop
+  requestAnimationFrame(animChars);
+}
+
+function setupBlink(charId) {
+  function schedule() {
+    const delay = Math.random() * 4000 + 3000; // 3-7s
+    const timer = setTimeout(() => {
+      const el = document.getElementById(charId);
+      if (!el) return;
+      const eyes = el.querySelectorAll('.char-eye');
+      eyes.forEach(eye => { eye.style.transform = 'scaleY(0.1)'; });
+      setTimeout(() => {
+        eyes.forEach(eye => { eye.style.transform = 'scaleY(1)'; });
+        schedule();
+      }, 150);
+    }, delay);
+    authBlinkTimers.push(timer);
+  }
+  schedule();
+}
+
+function calcFace(bodyId) {
+  const body = document.getElementById(bodyId);
+  if (!body) return { faceX: 0, faceY: 0 };
+  const rect = body.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 3;
+  const dx = authMouseX - cx;
+  const dy = authMouseY - cy;
+  return {
+    faceX: Math.max(-15, Math.min(15, dx / 20)),
+    faceY: Math.max(-10, Math.min(10, dy / 30)),
+  };
+}
+
+function animChars() {
+  const pwInput = document.getElementById('auth-login-password');
+  const pwValue = pwInput ? pwInput.value : '';
+  const pwVisible = pwInput && pwInput.type === 'text' && pwValue.length > 0;
+  const typingActive = authTyping || (pwValue.length > 0 && !pwVisible);
+  const bodies = document.querySelectorAll('#characters-container .char-body');
+  const allPupils = document.querySelectorAll('#characters-container .char-pupil, #characters-container .char-pupil-alone');
+
+  // ── Compute mouse-based skew & face per character ──
+  const bodySkews = {};
+  const faces = {};
+  bodies.forEach(body => {
+    const rect = body.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    bodySkews[body.id] = Math.max(-6, Math.min(6, -(authMouseX - cx) / 120));
+    faces[body.id] = calcFace(body.id);
+  });
+
+  // ── Default eye positions (used as base + face offset) ──
+  const defaultEyes = {
+    'char-purple':  { left: 45, top: 40,  pupilForce: null },
+    'char-black':   { left: 26, top: 32,  pupilForce: null },
+    'char-orange':  { left: 82, top: 90,  pupilForce: null, isPupilAlone: true },
+    'char-yellow':  { left: 52, top: 40,  pupilForce: null, isPupilAlone: true, mouth: { left: 40, top: 88 } },
+  };
+
+  // ═══════════════════════════════════════════════════════════
+  // State machine (priority order)
+  // ═══════════════════════════════════════════════════════════
+  const purple = document.getElementById('char-purple');
+  const black = document.getElementById('char-black');
+
+  if (pwVisible) {
+    // ═══ Mode 1: Password VISIBLE → stand straight, eyes to side ═══
+    bodies.forEach(body => {
+      body.style.transformOrigin = 'bottom center';
+      body.style.transform = 'skewX(0deg)';
+      body.dataset.manualPose = '1';
+    });
+    if (purple) purple.style.height = '400px';
+    // Eyes shift to the left side (looking away from password)
+    setEyes('char-purple', 20, 35, true);
+    setEyes('char-black', 10, 28, true);
+    setEyes('char-orange', 50, 85, true);
+    setEyes('char-yellow', 20, 35, true);
+    setMouth('char-yellow', 10, 88, true);
+    // Force pupils to look away (left)
+    forceAllPupils(allPupils, -4, -4);
+    // Purple peeking: change pupil forceLook direction
+    if (isPurplePeeking) {
+      forceCharPupils('char-purple', 4, 5);
+    }
+  } else if (isLookingAtEachOther) {
+    // ═══ Mode 2: Looking at each other (800ms after focus) ═══
+    bodies.forEach(body => {
+      body.style.transformOrigin = 'bottom center';
+      if (body.id === 'char-black') {
+        body.style.transform = `skewX(${(bodySkews['char-black'] || 0) * 1.5 + 10}deg) translateX(20px)`;
+        body.dataset.manualPose = '1';
+      } else if (body.id === 'char-purple') {
+        body.style.transform = `skewX(${bodySkews['char-purple'] || 0}deg)`;
+        body.dataset.manualPose = '1';
+      } else {
+        body.style.transform = `skewX(${bodySkews[body.id] || 0}deg)`;
+        body.dataset.manualPose = '';
+      }
+    });
+    if (purple) purple.style.height = '400px';
+    setEyes('char-purple', 55, 65, true);
+    setEyes('char-black', 32, 12, true);
+    setEyes('char-orange', 82 + faces['char-orange'].faceX, 90 + faces['char-orange'].faceY, false);
+    setEyes('char-yellow', 52 + faces['char-yellow'].faceX, 40 + faces['char-yellow'].faceY, false);
+    setMouth('char-yellow', 40 + faces['char-yellow'].faceX, 88 + faces['char-yellow'].faceY, false);
+    forceCharPupils('char-purple', 3, 4);
+    forceCharPupils('char-black', 0, -4);
+    // Orange/yellow normal mouse tracking
+    trackPupilByMouse('char-orange');
+    trackPupilByMouse('char-yellow');
+  } else if (typingActive) {
+    // ═══ Mode 3: Typing → purple stretches + leans, black exaggerated lean ═══
+    bodies.forEach(body => {
+      body.style.transformOrigin = 'bottom center';
+      if (body.id === 'char-purple') {
+        body.style.height = '440px';
+        body.style.transform = `skewX(${(bodySkews['char-purple'] || 0) - 12}deg) translateX(40px)`;
+        body.dataset.manualPose = '1';
+      } else if (body.id === 'char-black') {
+        body.style.transform = `skewX(${(bodySkews['char-black'] || 0) * 1.5}deg)`;
+        body.dataset.manualPose = '1';
+      } else {
+        body.style.transform = `skewX(${bodySkews[body.id] || 0}deg)`;
+        body.dataset.manualPose = '';
+      }
+    });
+    // Eyes follow face positions normally
+    setEyes('char-purple', 45 + faces['char-purple'].faceX, 40 + faces['char-purple'].faceY, false);
+    setEyes('char-black', 26 + faces['char-black'].faceX, 32 + faces['char-black'].faceY, false);
+    setEyes('char-orange', 82 + faces['char-orange'].faceX, 90 + faces['char-orange'].faceY, false);
+    setEyes('char-yellow', 52 + faces['char-yellow'].faceX, 40 + faces['char-yellow'].faceY, false);
+    setMouth('char-yellow', 40 + faces['char-yellow'].faceX, 88 + faces['char-yellow'].faceY, false);
+    // Normal mouse pupil tracking
+    trackAllPupils(allPupils);
+  } else {
+    // ═══ Mode 4: Default — mouse-following skewX ═══
+    bodies.forEach(body => {
+      body.dataset.manualPose = '';
+      body.style.transformOrigin = 'bottom center';
+      body.style.transform = `skewX(${bodySkews[body.id] || 0}deg)`;
+    });
+    if (purple) purple.style.height = '400px';
+    // Eyes follow face positions
+    setEyes('char-purple', 45 + faces['char-purple'].faceX, 40 + faces['char-purple'].faceY, false);
+    setEyes('char-black', 26 + faces['char-black'].faceX, 32 + faces['char-black'].faceY, false);
+    setEyes('char-orange', 82 + faces['char-orange'].faceX, 90 + faces['char-orange'].faceY, false);
+    setEyes('char-yellow', 52 + faces['char-yellow'].faceX, 40 + faces['char-yellow'].faceY, false);
+    setMouth('char-yellow', 40 + faces['char-yellow'].faceX, 88 + faces['char-yellow'].faceY, false);
+    // Normal mouse pupil tracking
+    trackAllPupils(allPupils);
+  }
+
+  requestAnimationFrame(animChars);
+}
+
+// ── Helpers ──
+function setEyes(charId, left, top, force) {
+  const char = document.getElementById(charId);
+  if (!char) return;
+  const eyesDiv = char.querySelector('.char-eyes');
+  if (!eyesDiv) return;
+  // If force=true, skip transition for instant reposition
+  if (force) eyesDiv.style.transition = 'none';
+  else eyesDiv.style.transition = '';
+  eyesDiv.style.left = left + 'px';
+  eyesDiv.style.top = top + 'px';
+  // Ensure both eyes visible
+  eyesDiv.querySelectorAll('.char-eye, .char-pupil-alone').forEach(el => { el.style.opacity = '1'; });
+}
+
+function setMouth(charId, left, top, force) {
+  const char = document.getElementById(charId);
+  if (!char) return;
+  const mouth = char.querySelector('.char-mouth');
+  if (!mouth) return;
+  if (force) mouth.style.transition = 'none';
+  else mouth.style.transition = '';
+  mouth.style.left = left + 'px';
+  mouth.style.top = top + 'px';
+  mouth.style.opacity = force ? '0' : '1';
+}
+
+function forceAllPupils(pupils, tx, ty) {
+  pupils.forEach(p => { p.style.transform = `translate(${tx}px, ${ty}px)`; });
+}
+
+function forceCharPupils(charId, tx, ty) {
+  const char = document.getElementById(charId);
+  if (!char) return;
+  char.querySelectorAll('.char-pupil, .char-pupil-alone').forEach(p => {
+    p.style.transform = `translate(${tx}px, ${ty}px)`;
+  });
+}
+
+function trackPupilByMouse(charId) {
+  const char = document.getElementById(charId);
+  if (!char) return;
+  char.querySelectorAll('.char-pupil, .char-pupil-alone').forEach(pupil => {
+    const rect = pupil.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
+    const dx = authMouseX - cx, dy = authMouseY - cy;
+    const maxDist = pupil.classList.contains('char-pupil-alone') ? 5 : 4;
+    const dist = Math.min(Math.sqrt(dx * dx + dy * dy), maxDist);
+    const angle = Math.atan2(dy, dx);
+    pupil.style.transform = `translate(${Math.cos(angle) * dist}px, ${Math.sin(angle) * dist}px)`;
+  });
+}
+
+function trackAllPupils(pupils) {
+  pupils.forEach(pupil => {
+    const rect = pupil.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
+    const dx = authMouseX - cx, dy = authMouseY - cy;
+    const maxDist = pupil.classList.contains('char-pupil-alone') ? 5 : 4;
+    const dist = Math.min(Math.sqrt(dx * dx + dy * dy), maxDist);
+    const angle = Math.atan2(dy, dx);
+    pupil.style.transform = `translate(${Math.cos(angle) * dist}px, ${Math.sin(angle) * dist}px)`;
+  });
+}
+
+// ── Auth Input Focus/Blur (for character reactions) ──
+function onAuthInputFocus(el) {
+  authTyping = true;
+  authFocusTarget = (el && el.type === 'email') ? 'email' : 'password';
+  // Trigger "looking at each other" animation
+  isLookingAtEachOther = true;
+  clearTimeout(lookEachOtherTimer);
+  lookEachOtherTimer = setTimeout(() => { isLookingAtEachOther = false; }, 800);
+}
+function onAuthInputBlur() {
+  setTimeout(() => { authTyping = false; authFocusTarget = 'none'; }, 200);
+}
+
+// ── Password Toggle ──
+function toggleAuthPassword() {
+  const input = document.getElementById('auth-login-password');
+  const eyeOn = document.getElementById('auth-eye-on');
+  const eyeOff = document.getElementById('auth-eye-off');
+  if (!input) return;
+  if (input.type === 'password') {
+    // Show password
+    input.type = 'text'; if (eyeOn) eyeOn.classList.add('hidden'); if (eyeOff) eyeOff.classList.remove('hidden');
+    // Start purple peeking
+    if (input.value.length > 0) schedulePurplePeek();
+  } else {
+    // Hide password
+    input.type = 'password'; if (eyeOn) eyeOn.classList.remove('hidden'); if (eyeOff) eyeOff.classList.add('hidden');
+    // Stop peeking
+    cancelPurplePeek();
+  }
+}
+
+function schedulePurplePeek() {
+  cancelPurplePeek();
+  purplePeekTimer = setTimeout(() => {
+    isPurplePeeking = true;
+    setTimeout(() => {
+      isPurplePeeking = false;
+      // Only re-schedule if password is still visible
+      const pwInput = document.getElementById('auth-login-password');
+      if (pwInput && pwInput.type === 'text' && pwInput.value.length > 0) {
+        schedulePurplePeek();
+      }
+    }, 800);
+  }, Math.random() * 3000 + 2000);
+}
+
+function cancelPurplePeek() {
+  if (purplePeekTimer) { clearTimeout(purplePeekTimer); purplePeekTimer = null; }
+  isPurplePeeking = false;
+}
+
+function resetPasswordField() {
+  const input = document.getElementById('auth-login-password');
+  const eyeOn = document.getElementById('auth-eye-on');
+  const eyeOff = document.getElementById('auth-eye-off');
+  if (input) input.type = 'password';
+  if (eyeOn) eyeOn.classList.remove('hidden');
+  if (eyeOff) eyeOff.classList.add('hidden');
+  cancelPurplePeek();
+}
+
+// ── Core Auth ──
+function checkAuth() {
+  const a = loadAuth();
+  if (a && a.isLoggedIn) {
+    document.getElementById('auth-overlay').classList.add('auth-overlay-hidden');
+    document.getElementById('logout-btn').style.display = '';
+    renderAll();
+  } else {
+    document.getElementById('auth-overlay').classList.remove('auth-overlay-hidden');
+    document.getElementById('logout-btn').style.display = 'none';
+    initCharacters();
+  }
+}
+
+function showAuthPanel(mode) {
+  const isLogin = mode === 'login';
+  document.getElementById('auth-panel-login').classList.toggle('hidden', !isLogin);
+  document.getElementById('auth-panel-register').classList.toggle('hidden', isLogin);
+  document.getElementById('auth-title').textContent = isLogin ? '欢迎回来' : '创建账户';
+  // Reset password field to hidden + eye icon
+  resetPasswordField();
+  // Clear all inputs and errors
+  ['auth-login-email','auth-login-password','auth-register-email','auth-register-password','auth-register-confirm'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+    if (el) { el.classList.remove('border-red-400','ring-4','ring-red-100'); }
+  });
+  document.getElementById('auth-login-error').classList.add('hidden');
+  document.getElementById('auth-register-error').classList.add('hidden');
+  // Reset button state
+  resetAuthBtn();
+  // Play animation on the newly visible panel
+  const panel = document.getElementById(isLogin ? 'auth-panel-login' : 'auth-panel-register');
+  panel.classList.add('animate-auth-panel-in');
+  panel.addEventListener('animationend', () => panel.classList.remove('animate-auth-panel-in'), { once: true });
+}
+
+function resetAuthBtn() {
+  const btnText = document.getElementById('auth-login-btn-text');
+  const spinner = document.getElementById('auth-login-spinner');
+  if (btnText) btnText.textContent = '登录';
+  if (spinner) spinner.remove();
+}
+
+function setAuthLoading(loading) {
+  const btnText = document.getElementById('auth-login-btn-text');
+  if (!btnText) return;
+  if (loading) {
+    btnText.innerHTML = '<span class="auth-spinner" id="auth-login-spinner"></span> 登录中...';
+  } else {
+    resetAuthBtn();
+  }
+}
+
+function handleLogin() {
+  const email = document.getElementById('auth-login-email').value.trim(),
+    pw = document.getElementById('auth-login-password').value,
+    err = document.getElementById('auth-login-error');
+  err.classList.add('hidden');
+  // Validate
+  if (!email || !email.includes('@') || !email.includes('.')) {
+    err.textContent = '请输入有效的邮箱地址'; err.classList.remove('hidden');
+    document.getElementById('auth-login-email').classList.add('border-red-400','ring-4','ring-red-100');
+    return;
+  }
+  if (!pw) {
+    err.textContent = '请输入密码'; err.classList.remove('hidden');
+    document.getElementById('auth-login-password').classList.add('border-red-400','ring-4','ring-red-100');
+    return;
+  }
+  // Loading state
+  setAuthLoading(true);
+  setTimeout(() => {
+    const a = loadAuth();
+    if (!a || a.email !== email || a.password !== pw) {
+      err.textContent = '邮箱或密码错误'; err.classList.remove('hidden');
+      setAuthLoading(false);
+      return;
+    }
+    // Remember me
+    const remember = document.getElementById('auth-remember');
+    if (remember && remember.checked) {
+      a.remember = true;
+    }
+    a.isLoggedIn = true; saveAuth(a); onAuthSuccess();
+  }, 600);
+}
+
+function handleRegister() {
+  const email = document.getElementById('auth-register-email').value.trim(),
+    pw = document.getElementById('auth-register-password').value,
+    confirm = document.getElementById('auth-register-confirm').value,
+    err = document.getElementById('auth-register-error');
+  err.classList.add('hidden');
+  ['auth-register-email','auth-register-password','auth-register-confirm'].forEach(id => {
+    document.getElementById(id).classList.remove('border-red-400','ring-4','ring-red-100');
+  });
+  if (!email || !email.includes('@') || !email.includes('.')) {
+    err.textContent = '请输入有效的邮箱地址'; err.classList.remove('hidden');
+    document.getElementById('auth-register-email').classList.add('border-red-400','ring-4','ring-red-100');
+    return;
+  }
+  if (!pw || pw.length < 6) {
+    err.textContent = '密码至少需要6位'; err.classList.remove('hidden');
+    document.getElementById('auth-register-password').classList.add('border-red-400','ring-4','ring-red-100');
+    return;
+  }
+  if (pw !== confirm) {
+    err.textContent = '两次密码不一致'; err.classList.remove('hidden');
+    document.getElementById('auth-register-confirm').classList.add('border-red-400','ring-4','ring-red-100');
+    return;
+  }
+  // Save account (NOT auto-login — must log in manually)
+  saveAuth({ email, password: pw, isLoggedIn: false });
+  // Show success and switch to login
+  const loginErr = document.getElementById('auth-login-error');
+  loginErr.textContent = '✅ 注册成功！请登录你的账户';
+  loginErr.classList.remove('hidden');
+  loginErr.classList.remove('text-red-400');
+  loginErr.classList.add('text-green-600', 'bg-green-50');
+  // Pre-fill email
+  document.getElementById('auth-login-email').value = email;
+  showAuthPanel('login');
+  // Reset error style after 5s
+  setTimeout(() => {
+    loginErr.classList.add('hidden', 'text-red-400');
+    loginErr.classList.remove('text-green-600', 'bg-green-50');
+    loginErr.textContent = '';
+  }, 5000);
+}
+
+function onAuthSuccess() {
+  const overlay = document.getElementById('auth-overlay');
+  overlay.classList.add('auth-overlay-hidden');
+  document.getElementById('logout-btn').style.display = '';
+  // Clean up character animation timers
+  authBlinkTimers.forEach(t => clearTimeout(t));
+  authBlinkTimers = [];
+  setTimeout(() => overlay.classList.add('hidden'), 500);
+  renderAll();
+}
+
+function handleLogout() {
+  const a = loadAuth();
+  if (a) { a.isLoggedIn = false; saveAuth(a); }
+  const overlay = document.getElementById('auth-overlay');
+  overlay.classList.remove('hidden','auth-overlay-hidden');
+  document.getElementById('logout-btn').style.display = 'none';
+  resetPasswordField();
+  showAuthPanel('login');
+  initCharacters();
+}
+
+// Enter key support for auth inputs
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    document.querySelectorAll('#auth-overlay input').forEach(input => {
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          const inRegister = !document.getElementById('auth-panel-register').classList.contains('hidden');
+          if (inRegister) handleRegister(); else handleLogin();
+        }
+      });
+    });
+  }, 200);
+});
+
+/* ============================================================
    Init
    ============================================================ */
 renderStars(0);
-renderAll();
+checkAuth();
 </script>
 </body>
 </html>
