@@ -81,6 +81,9 @@ tailwind.config = {
   .toast-in { opacity: 1; transform: translateX(-50%) translateY(-6px); }
   .toast-out { opacity: 0; transform: translateX(-50%) translateY(0); }
 
+  /* Body background transition */
+  body { transition: background 0.6s ease; }
+
   /* Focus ring override */
   *:focus-visible { outline: 2px solid #C86A4B; outline-offset: 2px; }
 
@@ -128,34 +131,45 @@ tailwind.config = {
      ============================================================ -->
 <header class="sticky top-0 z-30 bg-white/60 backdrop-blur-xl border-b border-white/50 shadow-sm">
   <div class="w-full px-6 sm:px-10 py-3 flex items-center gap-3">
-    <!-- Animated Boba Tea SVG -->
+    <!-- Cute Boy SVG -->
     <svg class="w-10 h-10 flex-shrink-0" viewBox="0 0 100 100" fill="none">
       <g class="animate-boba-bounce" style="transform-origin:center center;">
-        <!-- Cup body -->
-        <path d="M22 32 L28 85 C28 89 31 91 35 91 L65 91 C69 91 72 89 72 85 L78 32 Z" fill="#FFF8F0" stroke="#C86A4B" stroke-width="2.8" stroke-linejoin="round"/>
-        <!-- Cup rim -->
-        <path d="M20 32 Q50 22 80 32" fill="#FFFDF8" stroke="#C86A4B" stroke-width="2.8"/>
-        <ellipse cx="50" cy="32" rx="30" ry="5" fill="#FFFDF8" stroke="#C86A4B" stroke-width="2.8"/>
-        <!-- Tea liquid -->
-        <ellipse cx="50" cy="52" rx="24" ry="14" fill="#F5D5B8" opacity="0.7"/>
-        <!-- Boba pearls -->
-        <circle cx="38" cy="58" r="5" fill="#3D2B1F" opacity="0.85"/>
-        <circle cx="52" cy="62" r="5" fill="#3D2B1F" opacity="0.85"/>
-        <circle cx="62" cy="54" r="4.5" fill="#3D2B1F" opacity="0.75"/>
-        <circle cx="46" cy="52" r="4" fill="#3D2B1F" opacity="0.7"/>
-        <circle cx="56" cy="70" r="4.5" fill="#3D2B1F" opacity="0.8"/>
-        <circle cx="44" cy="68" r="5" fill="#3D2B1F" opacity="0.85"/>
-        <circle cx="38" cy="72" r="3.5" fill="#3D2B1F" opacity="0.65"/>
-        <circle cx="60" cy="76" r="4" fill="#3D2B1F" opacity="0.75"/>
-        <!-- Straw -->
-        <line x1="60" y1="10" x2="60" y2="70" stroke="#C86A4B" stroke-width="3.5" stroke-linecap="round"/>
-        <line x1="60" y1="12" x2="68" y2="22" stroke="#C86A4B" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-        <!-- Condensation drops -->
-        <circle cx="30" cy="50" r="1.8" fill="#C86A4B" opacity="0.25"/>
-        <circle cx="74" cy="55" r="1.5" fill="#C86A4B" opacity="0.2"/>
+        <!-- Hair (messy/curly) -->
+        <ellipse cx="50" cy="30" rx="30" ry="24" fill="#5C3D2E"/>
+        <ellipse cx="50" cy="26" rx="26" ry="20" fill="#6B4533"/>
+        <!-- Hair tufts -->
+        <path d="M24 26 Q20 14 28 12 Q24 20 28 26" fill="#5C3D2E"/>
+        <path d="M42 18 Q38 6 46 4 Q42 14 46 20" fill="#6B4533"/>
+        <path d="M58 18 Q56 5 62 3 Q60 15 62 20" fill="#5C3D2E"/>
+        <path d="M76 26 Q82 12 74 10 Q78 20 73 26" fill="#6B4533"/>
+        <!-- Face -->
+        <ellipse cx="50" cy="46" rx="25" ry="23" fill="#FCE4D6"/>
+        <!-- Blush -->
+        <ellipse cx="34" cy="50" rx="6" ry="3.5" fill="#F2B8A0" opacity="0.5" class="animate-blush-pulse"/>
+        <ellipse cx="66" cy="50" rx="6" ry="3.5" fill="#F2B8A0" opacity="0.5" class="animate-blush-pulse"/>
+        <!-- Eyes (happy curved) -->
+        <path d="M36 43 Q40 38 44 43" fill="none" stroke="#3D2B1F" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M56 43 Q60 38 64 43" fill="none" stroke="#3D2B1F" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Eye shine -->
+        <circle cx="41" cy="41" r="1.8" fill="white" opacity="0.8"/>
+        <circle cx="61" cy="41" r="1.8" fill="white" opacity="0.8"/>
+        <!-- Mouth (smile) -->
+        <path d="M43 54 Q50 61 57 54" fill="none" stroke="#D4896A" stroke-width="2" stroke-linecap="round"/>
+        <!-- Body/torso -->
+        <rect x="36" y="67" width="28" height="22" rx="10" fill="#4A90D9" stroke="#3A7BC8" stroke-width="2"/>
+        <!-- Collar -->
+        <path d="M40 67 L50 75 L60 67" fill="none" stroke="#3A7BC8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       </g>
     </svg>
     <h1 class="text-xl sm:text-2xl font-boba font-bold text-gray-800 tracking-wide whitespace-nowrap">wxh的记录册</h1>
+    <!-- Background Theme Switcher — 5 pastel dots -->
+    <div class="flex items-center gap-1.5 ml-2 sm:ml-4" id="bg-theme-switcher">
+      <button class="bg-dot w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 cursor-pointer hover:scale-125 active:scale-90 transition-all duration-200" data-bg="warm" title="暖橘" style="background:linear-gradient(135deg,#FDE8DB,#F5C9A5);border-color:#C86A4B;box-shadow:0 0 0 3px rgba(200,106,75,0.15)"></button>
+      <button class="bg-dot w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 cursor-pointer hover:scale-125 active:scale-90 transition-all duration-200" data-bg="mint" title="薄荷" style="background:linear-gradient(135deg,#D4EDDA,#A8DFC8);border-color:transparent"></button>
+      <button class="bg-dot w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 cursor-pointer hover:scale-125 active:scale-90 transition-all duration-200" data-bg="lavender" title="薰衣草" style="background:linear-gradient(135deg,#E8DCF0,#D4C4E8);border-color:transparent"></button>
+      <button class="bg-dot w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 cursor-pointer hover:scale-125 active:scale-90 transition-all duration-200" data-bg="sky" title="天空" style="background:linear-gradient(135deg,#D6ECFB,#B8DCF8);border-color:transparent"></button>
+      <button class="bg-dot w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 cursor-pointer hover:scale-125 active:scale-90 transition-all duration-200" data-bg="rose" title="玫瑰" style="background:linear-gradient(135deg,#FCE4EC,#F8D0D8);border-color:transparent"></button>
+    </div>
     <!-- Tab Switcher — text only -->
     <nav class="ml-auto flex items-center gap-4">
       <button data-tab="tracker" class="tab-btn text-sm font-bold transition-all duration-200 cursor-pointer border-none bg-transparent px-1 py-1 border-b-2 rounded-none tracking-wide" style="color:#C86A4B;border-color:#C86A4B;" onclick="switchTab('tracker')">奶茶记录</button>
@@ -173,84 +187,113 @@ tailwind.config = {
     <!-- ============================================================
          PAGE: 奶茶记录 (Tracker)
          ============================================================ -->
-    <div id="page-tracker" class="page space-y-6">
+    <div id="page-tracker" class="page space-y-4">
 
-      <!-- Stats Bar (full width) — glass floating -->
-      <div id="stats-bar" class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-5 sm:p-6">
-        <div class="flex items-center justify-between mb-4">
-          <div class="flex items-center gap-2.5">
-            <svg class="w-8 h-8" viewBox="0 0 80 30" fill="none">
-              <path d="M3 5 L5 27 C5 28.5 5.5 29.5 7 29.5 L15 29.5 C16.5 29.5 17 28.5 17 27 L19 5 Z" fill="rgba(200,106,75,0.15)" stroke="#C86A4B" stroke-width="1.5" stroke-linejoin="round"/>
-              <path d="M2 5 Q11 1 20 5" fill="rgba(200,106,75,0.08)" stroke="#C86A4B" stroke-width="1.5"/>
-              <ellipse cx="11" cy="5" rx="9" ry="1.8" fill="rgba(200,106,75,0.1)" stroke="#C86A4B" stroke-width="1.2"/>
-              <path d="M29 5 L31 27 C31 28.5 31.5 29.5 33 29.5 L41 29.5 C42.5 29.5 43 28.5 43 27 L45 5 Z" fill="rgba(200,106,75,0.15)" stroke="#C86A4B" stroke-width="1.5" stroke-linejoin="round"/>
-              <path d="M28 5 Q37 1 46 5" fill="rgba(200,106,75,0.08)" stroke="#C86A4B" stroke-width="1.5"/>
-              <ellipse cx="37" cy="5" rx="9" ry="1.8" fill="rgba(200,106,75,0.1)" stroke="#C86A4B" stroke-width="1.2"/>
-              <path d="M55 5 L57 27 C57 28.5 57.5 29.5 59 29.5 L67 29.5 C68.5 29.5 69 28.5 69 27 L71 5 Z" fill="rgba(200,106,75,0.15)" stroke="#C86A4B" stroke-width="1.5" stroke-linejoin="round"/>
-              <path d="M54 5 Q63 1 72 5" fill="rgba(200,106,75,0.08)" stroke="#C86A4B" stroke-width="1.5"/>
-              <ellipse cx="63" cy="5" rx="9" ry="1.8" fill="rgba(200,106,75,0.1)" stroke="#C86A4B" stroke-width="1.2"/>
+      <!-- Header (无框, 与随想页一致) -->
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 flex items-center gap-2">
+            <svg class="w-7 h-7 sm:w-8 sm:h-8" viewBox="0 0 24 24" fill="none">
+              <g class="animate-boba-bounce" style="transform-origin:center center;">
+                <path d="M5 8 L6 20 C6 21 7 22 8 22 L16 22 C17 22 18 21 18 20 L19 8 Z" fill="#FFF8F0" stroke="#C86A4B" stroke-width="1.6" stroke-linejoin="round"/>
+                <path d="M4 8 Q12 4 20 8" fill="#FFFDF8" stroke="#C86A4B" stroke-width="1.6"/>
+                <ellipse cx="12" cy="8" rx="8" ry="1.6" fill="#FFFDF8" stroke="#C86A4B" stroke-width="1.6"/>
+                <line x1="15" y1="2" x2="15" y2="16" stroke="#C86A4B" stroke-width="2.2" stroke-linecap="round"/>
+                <circle cx="9" cy="14" r="1.3" fill="#3D2B1F" opacity="0.75"/>
+                <circle cx="13" cy="15.5" r="1.3" fill="#3D2B1F" opacity="0.75"/>
+                <circle cx="15.5" cy="13" r="1.1" fill="#3D2B1F" opacity="0.65"/>
+                <circle cx="11" cy="17" r="1.2" fill="#3D2B1F" opacity="0.7"/>
+              </g>
             </svg>
-            <span class="text-lg font-bold text-gray-800">本月统计</span>
+            奶茶记录册
+          </h2>
+          <p class="text-sm text-gray-400 mt-0.5">记录每一杯的小确幸</p>
+        </div>
+        <button class="px-6 py-3 rounded-2xl bg-[#C86A4B] text-white text-base font-bold shadow-[0_4px_14px_rgba(200,106,75,0.28)] hover:bg-[#A0523A] hover:shadow-[0_6px_20px_rgba(200,106,75,0.38)] active:scale-95 transition-all duration-200" onclick="openModal()">+ 记录奶茶</button>
+      </div>
+
+      <!-- ============================================================
+           ① 搜索工具区 (Search) — 最轻量
+           ============================================================ -->
+      <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-3 sm:p-4">
+        <div class="flex items-center border border-white/40 rounded-full overflow-hidden bg-white/50 focus-within:border-[#C86A4B] focus-within:ring-4 focus-within:ring-[rgba(200,106,75,0.1)] transition-all duration-200">
+          <input class="flex-1 border-none bg-transparent text-sm text-gray-800 py-2.5 pl-4 pr-1 font-boba outline-none placeholder:text-gray-400" id="search-input" placeholder="搜索奶茶..." onfocus="openFilter()" oninput="doSearch()">
+          <button class="w-7 h-7 rounded-full border-none bg-gray-200/60 text-gray-400 cursor-pointer hidden items-center justify-center text-xs hover:bg-gray-300/60 transition-all duration-200 font-boba" id="search-clear" onclick="clearSearch()">✕</button>
+          <div class="w-10 h-10 flex items-center justify-center flex-shrink-0 text-gray-400 cursor-pointer hover:text-[#C86A4B] transition-colors duration-200" onclick="doSearch()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="w-4 h-4"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           </div>
-          <button onclick="goToday()" class="px-5 py-2 rounded-full bg-[#C86A4B] text-white text-sm font-bold shadow-[0_4px_14px_rgba(200,106,75,0.28)] hover:bg-[#A0523A] hover:shadow-[0_6px_20px_rgba(200,106,75,0.38)] active:scale-95 transition-all duration-200">
+        </div>
+        <div class="mt-2 hidden flex-wrap gap-2 p-2 bg-white/40 rounded-xl text-xs" id="filter-panel">
+          <div class="flex-1 min-w-[60px]">
+            <label class="block text-[10px] font-semibold text-gray-400 mb-0.5">品牌</label>
+            <input class="w-full px-2 py-1 rounded-lg border border-white/40 text-xs text-gray-800 bg-white/60 font-boba focus:border-[#C86A4B] outline-none" placeholder="品牌..." oninput="doSearch()" id="filter-brand">
+          </div>
+          <div class="flex-1 min-w-[60px]">
+            <label class="block text-[10px] font-semibold text-gray-400 mb-0.5">开始</label>
+            <input class="w-full px-2 py-1 rounded-lg border border-white/40 text-xs text-gray-800 bg-white/60 font-boba focus:border-[#C86A4B] outline-none" type="date" onchange="doSearch()" id="filter-from">
+          </div>
+          <div class="flex-1 min-w-[60px]">
+            <label class="block text-[10px] font-semibold text-gray-400 mb-0.5">结束</label>
+            <input class="w-full px-2 py-1 rounded-lg border border-white/40 text-xs text-gray-800 bg-white/60 font-boba focus:border-[#C86A4B] outline-none" type="date" onchange="doSearch()" id="filter-to">
+          </div>
+          <button class="text-[10px] px-2 py-1 border-none bg-transparent text-gray-400 cursor-pointer font-boba hover:text-gray-600" onclick="clearFilters()">清除</button>
+        </div>
+      </div>
+
+      <!-- ============================================================
+           ② 统计数据区 (Analytics) — 次之, 80%高度, 去SVG
+           ============================================================ -->
+      <div id="stats-bar" class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-3 sm:p-4">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-sm font-bold text-gray-800 flex items-center gap-1.5">
+            <svg class="w-4 h-4" viewBox="0 0 20 20" id="stats-chart">
+              <style>#stats-chart rect{transition:y 0.4s ease,height 0.4s ease}</style>
+              <rect x="1" y="14" width="3.5" height="4" rx="0.8" fill="#E8B8A2" id="chart-bar1"/>
+              <rect x="7" y="11" width="3.5" height="8" rx="0.8" fill="#C86A4B" id="chart-bar2"/>
+              <rect x="13" y="8" width="3.5" height="10" rx="0.8" fill="#A0523A" id="chart-bar3"/>
+            </svg>
+            本月统计
+          </span>
+          <button onclick="goToday()" class="px-4 py-1 rounded-full bg-[#C86A4B] text-white text-xs font-bold shadow-[0_4px_14px_rgba(200,106,75,0.28)] hover:bg-[#A0523A] hover:shadow-[0_6px_20px_rgba(200,106,75,0.38)] active:scale-95 transition-all duration-200">
             今天
           </button>
         </div>
-        <div class="grid grid-cols-3 gap-3">
-          <div class="text-center p-3 sm:p-4">
-            <div class="text-4xl sm:text-5xl font-bold text-[#C86A4B] leading-tight" id="month-total">0</div>
-            <div class="text-xs sm:text-sm text-gray-400 mt-1.5">杯数</div>
+        <div class="grid grid-cols-3 gap-2">
+          <div class="text-center p-2">
+            <div class="text-2xl sm:text-3xl font-bold text-[#C86A4B] leading-tight" id="month-total">0</div>
+            <div class="text-[10px] sm:text-xs text-gray-400 mt-0.5">杯数</div>
           </div>
-          <div class="text-center p-3 sm:p-4">
-            <div class="text-4xl sm:text-5xl font-bold text-[#C86A4B] leading-tight" id="week-avg">0</div>
-            <div class="text-xs sm:text-sm text-gray-400 mt-1.5">周均</div>
+          <div class="text-center p-2">
+            <div class="text-2xl sm:text-3xl font-bold text-[#C86A4B] leading-tight" id="week-avg">0</div>
+            <div class="text-[10px] sm:text-xs text-gray-400 mt-0.5">周均</div>
           </div>
-          <div class="text-center p-3 sm:p-4">
-            <div class="text-4xl sm:text-5xl font-bold text-[#C86A4B] leading-tight" id="total-spend">¥0</div>
-            <div class="text-xs sm:text-sm text-gray-400 mt-1.5">消费</div>
+          <div class="text-center p-2">
+            <div class="text-2xl sm:text-3xl font-bold text-[#C86A4B] leading-tight" id="total-spend">¥0</div>
+            <div class="text-[10px] sm:text-xs text-gray-400 mt-0.5">消费</div>
           </div>
         </div>
       </div>
 
-      <!-- Content Grid: Left (Calendar+Entries) 60% / Right (Pinned+Quote+Search+Yesterday) 40% -->
-      <div id="content-grid" class="grid grid-cols-1 lg:grid-cols-[60%_40%] gap-6">
+      <!-- ============================================================
+           ③ 记录核心区 (Recording) — 最大
+           左列: 日历 + 我的最爱 | 右列: 语录 + 今日奶茶 + 昨日
+           ============================================================ -->
+      <div id="content-grid" class="grid grid-cols-1 lg:grid-cols-[60%_40%] gap-4">
 
-        <!-- ===== LEFT COLUMN: Calendar + Entries ===== -->
-        <div id="left-col" class="space-y-6">
+        <!-- LEFT COLUMN: 日历 + 我的最爱 -->
+        <div id="left-col" class="space-y-4">
 
-          <!-- Calendar — glass floating -->
-          <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-5 sm:p-6">
+          <!-- 日历 -->
+          <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-4 sm:p-5">
             <div class="calendar" id="calendar"></div>
           </div>
 
-          <!-- Add Record + Today's Records — glass floating -->
-          <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-5 sm:p-6">
-            <div class="flex items-center justify-between mb-4">
-              <h2 class="text-lg font-bold text-gray-800" id="entry-date-label">今日记录</h2>
-              <div class="flex items-center gap-2">
-                <span class="text-xs text-gray-400 bg-white/60 px-3 py-1 rounded-full font-medium" id="entry-count">0 杯</span>
-                <button class="px-5 py-2 rounded-full bg-[#C86A4B] text-white text-sm font-bold shadow-[0_4px_14px_rgba(200,106,75,0.28)] hover:bg-[#A0523A] hover:shadow-[0_6px_20px_rgba(200,106,75,0.38)] active:scale-95 transition-all duration-200" onclick="openModal()">+ 记录奶茶</button>
-              </div>
-            </div>
-            <div id="entries-container" data-empty="true">
-              <div class="flex flex-col items-center text-center py-8">
-                <div class="text-5xl mb-3 animate-float">🧋</div>
-                <div class="text-lg font-bold text-gray-800 mb-1">还没有奶茶记录</div>
-                <div class="text-sm text-gray-400">记录下今天喝的第一杯奶茶吧</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ===== RIGHT COLUMN: Pinned + Quote + Search + Yesterday ===== -->
-        <div id="right-col" class="space-y-6">
-
-          <!-- Pinned — glass floating -->
-          <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-5 sm:p-6 flex flex-col" style="min-height:140px">
-            <div class="flex items-center gap-2 font-bold text-gray-800 text-base mb-3">📌 置顶</div>
+          <!-- 我的最爱 -->
+          <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-4 sm:p-5 flex flex-col" style="min-height:120px">
+            <div class="flex items-center gap-2 font-bold text-gray-800 text-sm mb-2">📌 我的最爱</div>
             <div id="pinned-list" class="flex-1"></div>
-            <div id="pinned-empty" class="flex-1 flex flex-col items-center justify-center text-center py-4">
-              <svg width="64" height="64" viewBox="0 0 100 100" fill="none" stroke="#C86A4B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.2">
+            <div id="pinned-empty" class="flex-1 flex flex-col items-center justify-center text-center py-2">
+              <svg width="48" height="48" viewBox="0 0 100 100" fill="none" stroke="#C86A4B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.2">
                 <ellipse cx="50" cy="55" rx="24" ry="3.5"/>
                 <path d="M32 32 L35 66 C35 69 37 71 40 71 L60 71 C63 71 65 69 65 66 L68 32 Z"/>
                 <path d="M28 32 Q50 18 72 32"/>
@@ -260,54 +303,45 @@ tailwind.config = {
                 <circle cx="50" cy="24.5" r="1.8"/>
                 <circle cx="66" cy="24.5" r="1.8"/>
               </svg>
-              <p class="text-xs text-gray-400 mt-2">快去置顶最爱 🧋</p>
+              <p class="text-xs text-gray-400 mt-1">快去标记最爱 🧋</p>
             </div>
           </div>
+        </div>
 
-          <!-- Quote — glass floating -->
-          <div class="bg-white/20 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-6 sm:p-8 text-center cursor-pointer hover:shadow-[0_12px_36px_rgba(200,106,75,0.1)] transition-all duration-300 relative overflow-hidden flex flex-col items-center justify-center"
-               id="quote-w" onclick="nextQuote()" style="min-height:110px;background:linear-gradient(135deg,rgba(254,246,240,0.6),rgba(253,242,248,0.5),rgba(254,249,240,0.5))">
-            <span class="text-4xl sm:text-5xl mb-2 animate-float block" id="quote-emoji">💫</span>
-            <div class="text-xl sm:text-2xl text-gray-800 font-boba font-medium leading-relaxed relative z-10" id="quote-text">生活苦短，全糖加满</div>
-            <div class="text-sm text-gray-400 mt-2 font-boba" id="quote-author">— 每日奶茶语录</div>
+        <!-- RIGHT COLUMN: 语录 + 今日奶茶 + 昨日 (填满) -->
+        <div id="right-col" class="flex flex-col gap-4">
+
+          <!-- 每日奶茶语录 (缩短) -->
+          <div class="bg-white/20 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-3 sm:p-4 text-center cursor-pointer hover:shadow-[0_12px_36px_rgba(200,106,75,0.1)] transition-all duration-300 relative overflow-hidden flex flex-col items-center justify-center flex-shrink-0"
+               id="quote-w" onclick="nextQuote()" style="min-height:70px;background:linear-gradient(135deg,rgba(254,246,240,0.6),rgba(253,242,248,0.5),rgba(254,249,240,0.5))">
+            <span class="text-2xl sm:text-3xl mb-0.5 animate-float block" id="quote-emoji">💫</span>
+            <div class="text-base sm:text-lg text-gray-800 font-boba font-medium leading-relaxed relative z-10" id="quote-text">生活苦短，全糖加满</div>
+            <div class="text-[10px] sm:text-xs text-gray-400 mt-0.5 font-boba" id="quote-author">— 每日奶茶语录</div>
           </div>
 
-          <!-- Search — glass floating -->
-          <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-5 flex items-center">
-            <div class="w-full">
-              <div class="flex items-center border border-white/40 rounded-full overflow-hidden bg-white/50 focus-within:border-[#C86A4B] focus-within:ring-4 focus-within:ring-[rgba(200,106,75,0.1)] transition-all duration-200">
-                <div class="w-12 h-12 flex items-center justify-center flex-shrink-0 text-gray-400">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="w-5 h-5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                </div>
-                <input class="flex-1 border-none bg-transparent text-base text-gray-800 py-3 font-boba outline-none placeholder:text-gray-400" id="search-input" placeholder="搜索奶茶..." onfocus="openFilter()" oninput="doSearch()">
-                <button class="w-9 h-9 rounded-full border-none bg-gray-200/60 text-gray-400 cursor-pointer hidden items-center justify-center mr-2 text-sm hover:bg-gray-300/60 transition-all duration-200 font-boba" id="search-clear" onclick="clearSearch()">✕</button>
-              </div>
-              <div class="mt-3 hidden flex-wrap gap-2 p-3 bg-white/40 rounded-xl text-sm" id="filter-panel">
-                <div class="flex-1 min-w-[80px]">
-                  <label class="block text-xs font-semibold text-gray-400 mb-1">品牌</label>
-                  <input class="w-full px-3 py-1.5 rounded-lg border border-white/40 text-sm text-gray-800 bg-white/60 font-boba focus:border-[#C86A4B] outline-none" placeholder="品牌..." oninput="doSearch()" id="filter-brand">
-                </div>
-                <div class="flex-1 min-w-[80px]">
-                  <label class="block text-xs font-semibold text-gray-400 mb-1">开始</label>
-                  <input class="w-full px-3 py-1.5 rounded-lg border border-white/40 text-sm text-gray-800 bg-white/60 font-boba focus:border-[#C86A4B] outline-none" type="date" onchange="doSearch()" id="filter-from">
-                </div>
-                <div class="flex-1 min-w-[80px]">
-                  <label class="block text-xs font-semibold text-gray-400 mb-1">结束</label>
-                  <input class="w-full px-3 py-1.5 rounded-lg border border-white/40 text-sm text-gray-800 bg-white/60 font-boba focus:border-[#C86A4B] outline-none" type="date" onchange="doSearch()" id="filter-to">
-                </div>
-                <button class="text-xs px-3 py-1 border-none bg-transparent text-gray-400 cursor-pointer font-boba hover:text-gray-600" onclick="clearFilters()">清除</button>
+          <!-- 今日奶茶 (撑开) -->
+          <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-4 sm:p-5 flex flex-col flex-1" style="min-height:180px">
+            <div class="flex items-center justify-between mb-3">
+              <h2 class="text-base sm:text-lg font-bold text-gray-800" id="entry-date-label">今日奶茶</h2>
+              <span class="text-xs text-gray-400 bg-white/60 px-2.5 py-0.5 rounded-full font-medium" id="entry-count">0 杯</span>
+            </div>
+            <div id="entries-container" data-empty="true" class="flex-1 flex flex-col">
+              <div class="flex flex-col items-center text-center py-4 flex-1 justify-center">
+                <div class="text-4xl mb-2 animate-float">🧋</div>
+                <div class="text-base font-bold text-gray-800 mb-1">今日暂无记录</div>
+                <div class="text-xs sm:text-sm text-gray-400">点击上方按钮记录今天的第一杯奶茶吧</div>
               </div>
             </div>
           </div>
 
-          <!-- Yesterday Mood — glass floating -->
-          <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-5 sm:p-6" style="background:linear-gradient(135deg,rgba(254,246,240,0.7),rgba(253,242,248,0.6),rgba(254,249,240,0.6))">
-            <div class="flex items-center justify-between mb-4">
-              <h2 class="text-lg font-bold text-gray-800">🥤 昨日好心情</h2>
-              <span class="text-xs text-gray-400 bg-white/60 px-3 py-1 rounded-full font-medium" id="yesterday-count">0 杯</span>
+          <!-- 昨日好心情 (撑开) -->
+          <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-4 sm:p-5 flex-1" style="background:linear-gradient(135deg,rgba(254,246,240,0.7),rgba(253,242,248,0.6),rgba(254,249,240,0.6));min-height:120px">
+            <div class="flex items-center justify-between mb-3">
+              <h2 class="text-base sm:text-lg font-bold text-gray-800">🥤 昨日好心情</h2>
+              <span class="text-xs text-gray-400 bg-white/60 px-2.5 py-0.5 rounded-full font-medium" id="yesterday-count">0 杯</span>
             </div>
             <div id="yesterday-container" data-empty="true">
-              <div class="text-center py-4 text-sm text-gray-400">昨日暂无记录，今天记得来一杯 ~</div>
+              <div class="text-center py-3 text-xs sm:text-sm text-gray-400">昨日暂无记录，今天记得来一杯 ~</div>
             </div>
           </div>
         </div>
@@ -322,7 +356,14 @@ tailwind.config = {
       <!-- Journal Header -->
       <div class="flex items-center justify-between">
         <div>
-          <h2 class="text-2xl font-boba font-bold text-gray-800">✍️ 随想记录册</h2>
+          <h2 class="text-2xl font-boba font-bold text-gray-800 flex items-center gap-2">
+            <svg class="w-7 h-7 sm:w-8 sm:h-8" viewBox="0 0 24 24" fill="none" stroke="#C86A4B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <g class="animate-pen-write" style="transform-origin:50% 70%;">
+                <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
+              </g>
+            </svg>
+            随想记录册
+          </h2>
           <p class="text-sm text-gray-400 mt-0.5">记录灵感、摘抄与即刻的想法</p>
         </div>
         <button onclick="openJournalModal()" class="px-6 py-3 rounded-full bg-accent-500 text-white text-base font-bold cursor-pointer font-boba shadow-btn hover:bg-accent-600 hover:shadow-btn-hover active:scale-95 transition-all duration-200">+ 写想法</button>
@@ -486,8 +527,40 @@ const QUOTES = [
   { text: '今天也是被奶茶治愈的一天', emoji: '💕' },
   { text: '奶茶在手，天下我有', emoji: '👑' },
   { text: '好喝到冒泡泡', emoji: '🫧' },
+  { text: '没有一杯奶茶解决不了的烦恼', emoji: '🍵' },
+  { text: '如果有，那就两杯', emoji: '☕' },
+  { text: '今日份的甜，奶茶来承包', emoji: '🧁' },
+  { text: '吸一口珍珠，嚼一口快乐', emoji: '😋' },
+  { text: '奶茶是成年人的奶嘴', emoji: '👶' },
+  { text: '糖分即正义', emoji: '⚡' },
+  { text: '这杯敬自由，那杯敬明天', emoji: '🥂' },
+  { text: '减肥是明天的事', emoji: '🤫' },
+  { text: '奶茶配电影，快乐加倍', emoji: '🎬' },
+  { text: '一口下去，烦恼清零', emoji: '🔄' },
+  { text: '我的血液里流的是奶茶', emoji: '🩸' },
+  { text: '喝奶茶不需要理由', emoji: '🤷' },
+  { text: '奶茶是疲惫生活里的温柔', emoji: '🌙' },
+  { text: '喝完继续搬砖', emoji: '🧱' },
+  { text: '波霸波霸，啵啵啵', emoji: '💋' },
+  { text: '奶盖是奶茶的灵魂', emoji: '👻' },
+  { text: '一杯敬朝阳，一杯敬月光', emoji: '🌅' },
+  { text: '甜度刚好，心情刚好', emoji: '🎯' },
+  { text: '奶茶是快乐水，不接受反驳', emoji: '🥤' },
+  { text: '与其庸人自扰，不如奶茶喝饱', emoji: '🧘' },
+  { text: '今日糖分已充值', emoji: '🔋' },
+  { text: '喝杯奶茶压压惊', emoji: '😌' },
+  { text: '世上无难事，只要有奶茶', emoji: '🏔️' },
+  { text: '奶茶是社交的润滑剂', emoji: '🤝' },
+  { text: '一杯奶茶的时间，治愈整个世界', emoji: '⏳' },
+  { text: '今日奶茶KPI：已完成', emoji: '✅' },
+  { text: '没有什么比奶茶更懂我', emoji: '🎈' },
+  { text: '喝奶茶的女生运气不会太差', emoji: '🍀' },
+  { text: '甜蜜的负担，我愿意', emoji: '💝' },
+  { text: '奶茶是对自己最好的犒劳', emoji: '🏆' },
+  { text: '每一口都是幸福的味道', emoji: '😊' },
+  { text: '快乐就是奶茶加冰', emoji: '🧊' },
 ];
-let quoteIdx = 0;
+let quoteIdx = Math.floor(Date.now() / 86400000) % QUOTES.length;
 function nextQuote() { quoteIdx = (quoteIdx + 1) % QUOTES.length; updateQuote(); }
 function updateQuote() {
   const q = QUOTES[quoteIdx];
@@ -495,6 +568,48 @@ function updateQuote() {
   document.getElementById('quote-text').textContent = q.text;
 }
 updateQuote();
+
+/* ============================================================
+   Background Theme Switcher — 5 Pastel Colors
+   ============================================================ */
+const BG_THEMES = {
+  warm:    'linear-gradient(160deg, #FDF6F0 0%, #FEF9F4 30%, #FDF3F0 60%, #FFF8F4 100%)',
+  mint:    'linear-gradient(160deg, #F0FAF4 0%, #F4FCF8 30%, #EDF7F2 60%, #F8FCF9 100%)',
+  lavender:'linear-gradient(160deg, #F6F2FA 0%, #F9F7FC 30%, #F4F0F8 60%, #FAF8FC 100%)',
+  sky:     'linear-gradient(160deg, #F0F6FA 0%, #F5F9FC 30%, #EEF4F8 60%, #F8FAFC 100%)',
+  rose:    'linear-gradient(160deg, #FCF0F4 0%, #FDF6F8 30%, #FAF0F4 60%, #FEF8F9 100%)',
+};
+const BG_COLORS = { warm: '#C86A4B', mint: '#7FB87F', lavender: '#B8A8D8', sky: '#8CB8D0', rose: '#E0A8B0' };
+
+function switchBgTheme(theme, el) {
+  document.body.style.background = BG_THEMES[theme];
+  document.body.style.backgroundAttachment = 'fixed';
+  // Update dot borders
+  document.querySelectorAll('#bg-theme-switcher .bg-dot').forEach(d => {
+    d.style.borderColor = 'transparent';
+    d.style.boxShadow = 'none';
+  });
+  el.style.borderColor = BG_COLORS[theme];
+  el.style.boxShadow = `0 0 0 3px ${BG_COLORS[theme]}26`;
+  localStorage.setItem('bg_theme', theme);
+}
+
+// Init bg theme from localStorage
+(function initBgTheme() {
+  const saved = localStorage.getItem('bg_theme') || 'warm';
+  document.body.style.background = BG_THEMES[saved];
+  document.body.style.backgroundAttachment = 'fixed';
+  const dot = document.querySelector(`#bg-theme-switcher .bg-dot[data-bg="${saved}"]`);
+  if (dot) {
+    dot.style.borderColor = BG_COLORS[saved];
+    dot.style.boxShadow = `0 0 0 3px ${BG_COLORS[saved]}26`;
+  }
+})();
+
+// Attach click handlers
+document.querySelectorAll('#bg-theme-switcher .bg-dot').forEach(d => {
+  d.addEventListener('click', function() { switchBgTheme(this.dataset.bg, this); });
+});
 
 /* ============================================================
    Data Layer — Milk Tea
@@ -648,8 +763,17 @@ function renderStats() {
   });
   document.getElementById('month-total').textContent = me.length;
   const dim = new Date(y, m + 1, 0).getDate();
-  document.getElementById('week-avg').textContent = Math.round(me.length / Math.ceil(dim / 7) || 0);
+  const wa = Math.round(me.length / Math.ceil(dim / 7) || 0);
+  document.getElementById('week-avg').textContent = wa;
   document.getElementById('total-spend').textContent = '¥' + (me.length * 18);
+  // 动态更新柱状图
+  const h1 = Math.max(3, Math.min(16, Math.round(me.length / 30 * 16) || 3));
+  const h2 = Math.max(3, Math.min(16, Math.round(wa / 7 * 16) || 3));
+  const h3 = Math.max(3, Math.min(16, Math.round(me.length * 18 / 540 * 16) || 3));
+  const setBar = (id, h) => { const r = document.getElementById(id); if (r) { r.setAttribute('y', 18 - h); r.setAttribute('height', h); } };
+  setBar('chart-bar1', h1);
+  setBar('chart-bar2', h2);
+  setBar('chart-bar3', h3);
 }
 
 function renderCal() {
@@ -689,7 +813,7 @@ function renderCal() {
     const isSel = ds === selDate;
 
     h += `<div class="${cls}" onclick="selDay('${ds}')">`;
-    h += `<span class="text-xl sm:text-2xl">${d}</span>`;
+    h += `<span class="text-lg sm:text-xl">${d}</span>`;
     if (isToday && !isSel) h += `<span class="absolute top-1 right-1.5 text-[10px] text-accent-500 font-bold">今</span>`;
     if (de && de.length) {
       h += DRINK_ICONS[pickIcon(de[0].name)].replace('<svg', '<svg class="w-6 h-6 mt-0.5"');
@@ -709,7 +833,7 @@ function renderEntries() {
   const fl = entries.filter(e => e.date === selDate).sort((a, b) => b.createdAt - a.createdAt),
     ct = document.getElementById('entries-container');
   const [, m, d] = selDate.split('-');
-  document.getElementById('entry-date-label').textContent = `${+m}月${+d}日`;
+  document.getElementById('entry-date-label').textContent = `今日奶茶`;
   document.getElementById('entry-count').textContent = `${fl.length} 杯`;
   ct.querySelectorAll('.entry-card').forEach(el => el.remove());
   if (!fl.length) {
@@ -745,7 +869,7 @@ function cardHTML(e) {
       <div class="flex gap-0.5">${stars}</div>
       ${ch}
       <div class="flex items-center justify-end gap-2 mt-2 pt-2 border-t border-gray-100">
-        <button class="flex items-center gap-1 px-3.5 py-1.5 rounded-lg border border-gray-200 text-sm font-medium cursor-pointer font-boba bg-white text-gray-400 hover:bg-white hover:text-gray-700 active:scale-95 transition-all duration-200 ${e.isPinned ? '!border-accent-300 !bg-accent-50 !text-accent-500' : ''}" onclick="togPin(${e.id})">📌 ${e.isPinned ? '已置顶' : '置顶'}</button>
+        <button class="flex items-center gap-1 px-3.5 py-1.5 rounded-lg border border-gray-200 text-sm font-medium cursor-pointer font-boba bg-white text-gray-400 hover:bg-white hover:text-gray-700 active:scale-95 transition-all duration-200 ${e.isPinned ? '!border-accent-300 !bg-accent-50 !text-accent-500' : ''}" onclick="togPin(${e.id})">📌 ${e.isPinned ? '已收藏' : '我的最爱'}</button>
         <button class="flex items-center gap-1 px-3.5 py-1.5 rounded-lg border border-gray-200 text-sm font-medium cursor-pointer font-boba bg-white text-gray-400 hover:bg-white hover:text-gray-700 active:scale-95 transition-all duration-200" onclick="editEntry(${e.id})">编辑</button>
         <button class="flex items-center gap-1 px-3.5 py-1.5 rounded-lg border border-gray-200 text-sm font-medium cursor-pointer font-boba bg-white text-gray-400 hover:bg-red-50 hover:text-red-400 active:scale-95 transition-all duration-200" onclick="delEntry(${e.id})">删除</button>
         <span class="text-xs text-gray-400 bg-gray-100 px-3 py-1 rounded-full ml-auto">${fmtDate(e.date)}</span>
@@ -830,7 +954,7 @@ function chM(d) {
 /* ---- Pin / Delete ---- */
 function togPin(id) {
   const e = entries.find(x => x.id === id);
-  if (e) { e.isPinned = !e.isPinned; e.updatedAt = Date.now(); sv(entries); renderAll(); toast(e.isPinned ? '已置顶' : '已取消置顶', 'info'); }
+  if (e) { e.isPinned = !e.isPinned; e.updatedAt = Date.now(); sv(entries); renderAll(); toast(e.isPinned ? '已收藏' : '已取消收藏', 'info'); }
 }
 function delEntry(id) {
   if (!confirm('确定删除吗？')) return;
@@ -863,8 +987,8 @@ function showResults(r, term) {
     ct.setAttribute('data-empty', 'true');
     const es = ct.querySelector('.flex.flex-col.items-center');
     es.style.display = '';
-    es.querySelector('.text-lg').textContent = '没有找到记录';
-    es.querySelector('.text-sm').textContent = '试试其他关键词吧';
+    es.querySelector('.text-base.font-bold').textContent = '没有找到记录';
+    es.querySelector('.text-xs').textContent = '试试其他关键词吧';
     const btn = es.querySelector('button');
     if (btn) btn.style.display = 'none';
   } else {
