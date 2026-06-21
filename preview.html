@@ -837,7 +837,7 @@ tailwind.config = {
               <h2 class="text-sm sm:text-base font-bold text-gray-800">🥤 近期好心情</h2>
               <span class="text-xs text-gray-400 bg-white/60 px-2 py-0.5 rounded-full font-medium" id="yesterday-count">0 杯</span>
             </div>
-            <div id="yesterday-container" data-empty="true" class="overflow-y-auto thin-scroll min-h-0 flex-1"
+            <div id="yesterday-container" data-empty="true" class="overflow-y-auto thin-scroll min-h-0 flex-1">
               <div class="text-center py-3 text-xs sm:text-sm text-gray-400">近三天暂无记录，今天记得来一杯 ~</div>
             </div>
           </div>
@@ -1210,7 +1210,7 @@ function openModal() {
   editId = null; modalTheme = 'orange'; modalR = 0; pendingImgs = [];
   document.getElementById('modal-title').textContent = '添加奶茶记录';
   ['modal-name', 'modal-brand', 'modal-comment'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('modal-price').value = '18';
+  document.getElementById('modal-price').value = '';
   document.getElementById('modal-date').value = selDate;
   document.getElementById('modal-name').classList.remove('border-red-400', 'ring-4', 'ring-red-100');
   document.querySelectorAll('#theme-selector .tdot').forEach(d => {
@@ -1239,7 +1239,7 @@ function editEntry(id) {
   document.getElementById('modal-brand').value = e.brand || '';
   document.getElementById('modal-date').value = e.date;
   document.getElementById('modal-comment').value = e.comment || '';
-  document.getElementById('modal-price').value = e.price || 18;
+  document.getElementById('modal-price').value = e.price || '';
   document.getElementById('modal-name').classList.remove('border-red-400', 'ring-4', 'ring-red-100');
   document.querySelectorAll('#theme-selector .tdot').forEach(d => {
     d.classList.remove('selected');
@@ -1262,7 +1262,7 @@ function saveEntry() {
   nm.classList.remove('border-red-400', 'ring-4', 'ring-red-100');
   const brand = document.getElementById('modal-brand').value.trim() || null,
     date = document.getElementById('modal-date').value,
-    price = +document.getElementById('modal-price').value || 18,
+    price = +document.getElementById('modal-price').value || null,
     comment = document.getElementById('modal-comment').value.trim() || null,
     images = pendingImgs.map(i => i.dataUrl);
   if (!THEMES.includes(modalTheme)) modalTheme = randTheme();
@@ -1335,7 +1335,7 @@ function renderStats() {
     return d.getMonth() === m && d.getFullYear() === y;
   });
   const cupCount = me.length;
-  const totalSpend = me.reduce((s, e) => s + (e.price || 18), 0);
+  const totalSpend = me.reduce((s, e) => s + (e.price || 0), 0);
   const dim = new Date(y, m + 1, 0).getDate();
   const weeks = Math.ceil(dim / 7) || 1;
   const weekAvg = Math.round(totalSpend / weeks);
@@ -1465,7 +1465,7 @@ function cardHTML(e) {
         <div class="flex flex-col gap-1 min-w-0">
           ${thumbs}
           <div class="text-sm font-bold text-gray-800 flex items-center gap-1.5">${bh}${esc(e.name)}</div>
-          <div class="flex items-center gap-2"><div class="flex gap-0.5">${stars}</div><span class="text-xs text-gray-400">¥${e.price || 18}</span></div>
+          <div class="flex items-center gap-2"><div class="flex gap-0.5">${stars}</div>${e.price ? `<span class="text-xs text-gray-400">¥${e.price}</span>` : ''}</div>
           ${ch}
           <div class="flex items-center justify-end gap-2 mt-2 pt-2 border-t border-gray-100">
             <button class="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-gray-200 text-xs font-medium cursor-pointer font-boba bg-white text-gray-400 hover:bg-white hover:text-gray-700 active:scale-95 transition-all duration-200 ${e.isPinned ? '!border-accent-300 !bg-accent-50 !text-accent-500' : ''}" onclick="togPin(${e.id})">📌 ${e.isPinned ? '已收藏' : '我的最爱'}</button>
@@ -1507,7 +1507,7 @@ function renderYesterday() {
         <div class="w-8 h-8 flex items-center justify-center rounded-lg bg-white">${DRINK_ICONS[icon]}</div>
         <div class="flex-1 min-w-0">
           <div class="text-xs font-medium text-gray-800 truncate">${e.brand ? esc(e.brand) + ' · ' : ''}${esc(e.name)}</div>
-          <div class="text-[10px] text-gray-400">¥${e.price || 18} · ${fmtDate(e.date)}</div>
+          <div class="text-[10px] text-gray-400">${e.price ? '¥' + e.price + ' · ' : ''}${fmtDate(e.date)}</div>
         </div>
         <div class="flex gap-0.5 flex-shrink-0">${stars}</div>
       </div>`;
