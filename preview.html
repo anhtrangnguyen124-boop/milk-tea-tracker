@@ -1383,7 +1383,8 @@ function renderCal() {
     if (ds === selDate) cls += ' border-accent-500 bg-accent-50 text-accent-700 shadow-[0_4px_16px_rgba(200,106,75,0.18)]';
     else cls += ' border-transparent text-gray-700 hover:bg-accent-50 hover:border-accent-300';
     if (ds === today) cls += ' font-bold';
-    if (ds !== selDate && dayDiff(ds) < 0) cls += ' opacity-25 pointer-events-none';
+    if (dayDiff(ds) < 0) cls += ' opacity-25';
+    if (ds !== selDate && dayDiff(ds) > 0) cls += ' opacity-25 pointer-events-none';
 
     const isToday = ds === today;
     const isSel = ds === selDate;
