@@ -890,7 +890,7 @@ tailwind.config = {
     <label class="block text-sm font-semibold text-gray-400 mb-1">日期</label>
     <input type="date" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-base text-gray-800 bg-white font-boba mb-4 focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200" id="modal-date">
 
-    <label class="block text-sm font-semibold text-gray-400 mb-1">照片 <span class="font-normal text-xs">（可选,≤9张,单图≤20MB）</span></label>
+    <label class="block text-sm font-semibold text-gray-400 mb-1">照片 <span class="font-normal text-xs">（可选,≤9张,单图≤5MB）</span></label>
     <div class="border-2 border-dashed border-gray-200 rounded-xl p-5 text-center cursor-pointer mb-4 hover:border-accent-500 hover:bg-accent-50 transition-all duration-200" id="upload-zone" onclick="document.getElementById('upload-input').click()">
       <svg class="w-9 h-9 text-gray-400 mx-auto mb-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
       <p class="text-sm text-gray-400">点击/拖拽上传照片</p>
@@ -1130,8 +1130,7 @@ let entries = ld(),
   editId = null,
   modalR = 0,
   modalTheme = 'orange',
-let pendingImgs = [],
-  pendingUploads = 0;  // 跟踪正在读取的图片数量
+  pendingImgs = [];
 
 /* ============================================================
    Image Upload
@@ -1146,30 +1145,19 @@ function handleFiles(files) {
   if (!files || !files.length) return;
   const ok = ['image/jpeg', 'image/png', 'image/webp'];
   for (const f of files) {
-    if (pendingImgs.length + pendingUploads >= 9) { toast('最多9张', 'warn'); break; }
+    if (pendingImgs.length >= 9) { toast('最多9张', 'warn'); break; }
     if (!ok.includes(f.type)) { toast('不支持 ' + f.type, 'warn'); continue; }
-    if (f.size > 20 * 1024 * 1024) { toast('单图≤20MB', 'warn'); continue; }
-    pendingUploads++;
-    renderThumbs();
+    if (f.size > 5 * 1024 * 1024) { toast('单图≤5MB', 'warn'); continue; }
     const r = new FileReader();
-    r.onload = e => {
-      pendingImgs.push({ dataUrl: e.target.result });
-      pendingUploads--;
-      renderThumbs();
-    };
-    r.onerror = () => { pendingUploads--; renderThumbs(); toast('图片读取失败', 'warn'); };
+    r.onload = e => { pendingImgs.push({ dataUrl: e.target.result }); renderThumbs(); };
     r.readAsDataURL(f);
   }
   upI.value = '';
 }
 function renderThumbs() {
-  const loaded = pendingImgs.map((x, i) =>
+  tL.innerHTML = pendingImgs.map((x, i) =>
     `<div class="relative w-[62px] h-[62px] rounded-lg overflow-hidden border border-gray-200"><img src="${x.dataUrl}" class="w-full h-full object-cover"><button class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-400 border-none text-white text-[10px] cursor-pointer flex items-center justify-center" onclick="removeImg(${i})">✕</button></div>`
-  );
-  const loading = Array.from({length: pendingUploads}, () =>
-    `<div class="w-[62px] h-[62px] rounded-lg border-2 border-dashed border-accent-300 bg-accent-50/50 flex items-center justify-center animate-pulse"><span class="text-[10px] text-accent-400">加载中</span></div>`
-  );
-  tL.innerHTML = loaded.join('') + loading.join('');
+  ).join('');
 }
 function removeImg(i) { pendingImgs.splice(i, 1); renderThumbs(); }
 
@@ -1197,7 +1185,7 @@ function setRating(v) { modalR = v; renderStars(v); }
 function openModal() {
   const today = new Date().toISOString().split('T')[0];
   if (selDate !== today) { toast('只能为今天添加记录哦 ~', 'warn'); return; }
-  editId = null; modalTheme = 'orange'; modalR = 0; pendingImgs = []; pendingUploads = 0;
+  editId = null; modalTheme = 'orange'; modalR = 0; pendingImgs = [];
   document.getElementById('modal-title').textContent = '添加奶茶记录';
   ['modal-name', 'modal-brand', 'modal-comment'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('modal-price').value = '';
@@ -1234,7 +1222,7 @@ function editEntry(id) {
   if (!e) { console.warn('[EDIT] 未找到记录, id:', numId); return; }
   console.log('[EDIT] 打开编辑 Modal, entry:', e.name, 'id:', numId);
   editId = numId; modalR = e.rating || 0; modalTheme = e.theme || 'orange';
-  pendingImgs = (e.images || []).map(d => ({ dataUrl: d })); pendingUploads = 0;
+  pendingImgs = (e.images || []).map(d => ({ dataUrl: d }));
   document.getElementById('modal-title').textContent = '编辑奶茶记录';
   document.getElementById('modal-name').value = e.name;
   document.getElementById('modal-brand').value = e.brand || '';
@@ -1262,11 +1250,6 @@ function editEntry(id) {
   document.getElementById('modal-overlay').classList.remove('hidden');
 }
 function saveEntry() {
-  // 检查是否有图片正在读取中
-  if (pendingUploads > 0) {
-    toast('图片正在处理中，请稍候...', 'warn');
-    return;
-  }
   const nm = document.getElementById('modal-name'), name = nm.value.trim();
   if (!name) {
     nm.classList.add('border-red-400', 'ring-4', 'ring-red-100');
@@ -1891,8 +1874,7 @@ function renderJournal() {
    Auth — Local Account + Animated Characters
    ============================================================ */
 const DB_AUTH = 'auth_v1';
-let authMouseX = window.innerWidth / 2, authMouseY = window.innerHeight / 2;
-let authTyping = false, authBlinkTimers = [], authAnimRunning = false, authAnimId = null;
+let authMouseX = 0, authMouseY = 0, authTyping = false, authBlinkTimers = [];
 let authFocusTarget = 'none'; // 'none' | 'email' | 'password'
 let isPurplePeeking = false, purplePeekTimer = null;
 let isLookingAtEachOther = false, lookEachOtherTimer = null;
@@ -1902,48 +1884,32 @@ function saveAuth(d) { localStorage.setItem(DB_AUTH, JSON.stringify(d)); }
 
 // ── Character Animation Engine ──
 function initCharacters() {
-  // Track mouse position on entire document (not just overlay)
-  document.addEventListener('mousemove', onAuthMouseMove, { passive: true });
+  const stage = document.getElementById('auth-overlay');
+  if (!stage) return;
+
+  // Track mouse position
+  stage.addEventListener('mousemove', (e) => { authMouseX = e.clientX; authMouseY = e.clientY; });
 
   // Set up blinking for characters with white eyes (purple + black)
   setupBlink('char-purple');
   setupBlink('char-black');
 
-  // Start the animation loop (only once)
-  startAnimLoop();
+  // Start the animation loop
+  requestAnimationFrame(animChars);
 
   // Hide swipe hints after first horizontal scroll
-  const stage = document.getElementById('auth-overlay');
-  if (stage) {
-    const swipeContainer = stage.querySelector('.snap-x');
-    if (swipeContainer) {
-      let hintHidden = false;
-      swipeContainer.addEventListener('scroll', () => {
-        if (hintHidden) return;
-        hintHidden = true;
-        swipeContainer.querySelectorAll('.swipe-hint').forEach(el => {
-          el.style.opacity = '0';
-          el.style.transition = 'opacity 0.3s ease';
-        });
-      }, { once: false });
-    }
+  const swipeContainer = stage.querySelector('.snap-x');
+  if (swipeContainer) {
+    let hintHidden = false;
+    swipeContainer.addEventListener('scroll', () => {
+      if (hintHidden) return;
+      hintHidden = true;
+      swipeContainer.querySelectorAll('.swipe-hint').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transition = 'opacity 0.3s ease';
+      });
+    }, { once: false });
   }
-}
-
-function onAuthMouseMove(e) {
-  authMouseX = e.clientX;
-  authMouseY = e.clientY;
-}
-
-function startAnimLoop() {
-  if (authAnimRunning) return;
-  authAnimRunning = true;
-  authAnimId = requestAnimationFrame(animChars);
-}
-
-function stopAnimLoop() {
-  authAnimRunning = false;
-  if (authAnimId) { cancelAnimationFrame(authAnimId); authAnimId = null; }
 }
 
 function setupBlink(charId) {
@@ -1951,9 +1917,9 @@ function setupBlink(charId) {
     const delay = Math.random() * 4000 + 3000; // 3-7s
     const timer = setTimeout(() => {
       const el = document.getElementById(charId);
-      if (!el) { schedule(); return; }
+      if (!el) return;
       const eyes = el.querySelectorAll('.char-eye');
-      eyes.forEach(eye => { eye.style.transform = 'scaleY(0.08)'; });
+      eyes.forEach(eye => { eye.style.transform = 'scaleY(0.1)'; });
       setTimeout(() => {
         eyes.forEach(eye => { eye.style.transform = 'scaleY(1)'; });
         schedule();
@@ -1973,21 +1939,12 @@ function calcFace(bodyId) {
   const dx = authMouseX - cx;
   const dy = authMouseY - cy;
   return {
-    faceX: Math.max(-18, Math.min(18, dx / 18)),
-    faceY: Math.max(-12, Math.min(12, dy / 25)),
+    faceX: Math.max(-15, Math.min(15, dx / 20)),
+    faceY: Math.max(-10, Math.min(10, dy / 30)),
   };
 }
 
-function animChars(ts) {
-  if (!authAnimRunning) return;
-  authAnimId = requestAnimationFrame(animChars);
-
-  // Check if characters are visible (auth overlay not hidden)
-  const overlay = document.getElementById('auth-overlay');
-  if (!overlay || overlay.classList.contains('auth-overlay-hidden') || overlay.classList.contains('hidden')) {
-    return;
-  }
-
+function animChars() {
   const pwInput = document.getElementById('auth-login-password');
   const pwValue = pwInput ? pwInput.value : '';
   const pwVisible = pwInput && pwInput.type === 'text' && pwValue.length > 0;
@@ -1995,24 +1952,23 @@ function animChars(ts) {
   const bodies = document.querySelectorAll('#characters-container .char-body');
   const allPupils = document.querySelectorAll('#characters-container .char-pupil, #characters-container .char-pupil-alone');
 
-  if (!bodies.length) return;
-
-  // ── Idle bobbing (subtle floating, always active) ──
-  const idleTime = ts * 0.001; // seconds
-  const idleBob = Math.sin(idleTime * 0.8) * 3; // gentle vertical bob
-  const idleSway = Math.sin(idleTime * 0.6 + 1) * 2; // gentle horizontal sway
-
   // ── Compute mouse-based skew & face per character ──
   const bodySkews = {};
   const faces = {};
   bodies.forEach(body => {
     const rect = body.getBoundingClientRect();
     const cx = rect.left + rect.width / 2;
-    // Blend mouse skew with idle sway for continuous motion
-    const mouseSkew = Math.max(-8, Math.min(8, -(authMouseX - cx) / 100));
-    bodySkews[body.id] = mouseSkew + idleSway * (body.id === 'char-purple' ? 1 : body.id === 'char-black' ? 1.3 : 0.7);
+    bodySkews[body.id] = Math.max(-6, Math.min(6, -(authMouseX - cx) / 120));
     faces[body.id] = calcFace(body.id);
   });
+
+  // ── Default eye positions (used as base + face offset) ──
+  const defaultEyes = {
+    'char-purple':  { left: 45, top: 40,  pupilForce: null },
+    'char-black':   { left: 26, top: 32,  pupilForce: null },
+    'char-orange':  { left: 82, top: 90,  pupilForce: null, isPupilAlone: true },
+    'char-yellow':  { left: 52, top: 40,  pupilForce: null, isPupilAlone: true, mouth: { left: 40, top: 88 } },
+  };
 
   // ═══════════════════════════════════════════════════════════
   // State machine (priority order)
@@ -2024,17 +1980,19 @@ function animChars(ts) {
     // ═══ Mode 1: Password VISIBLE → stand straight, eyes to side ═══
     bodies.forEach(body => {
       body.style.transformOrigin = 'bottom center';
-      body.style.transform = `translateY(${idleBob * 0.5}px) skewX(0deg)`;
+      body.style.transform = 'skewX(0deg)';
       body.dataset.manualPose = '1';
     });
     if (purple) purple.style.height = '400px';
     // Eyes shift to the left side (looking away from password)
-    setEyes('char-purple', 20, 35 + idleBob * 0.3, true);
-    setEyes('char-black', 10, 28 + idleBob * 0.3, true);
-    setEyes('char-orange', 50, 85 + idleBob * 0.3, true);
-    setEyes('char-yellow', 20, 35 + idleBob * 0.3, true);
-    setMouth('char-yellow', 10, 88 + idleBob * 0.3, true);
+    setEyes('char-purple', 20, 35, true);
+    setEyes('char-black', 10, 28, true);
+    setEyes('char-orange', 50, 85, true);
+    setEyes('char-yellow', 20, 35, true);
+    setMouth('char-yellow', 10, 88, true);
+    // Force pupils to look away (left)
     forceAllPupils(allPupils, -4, -4);
+    // Purple peeking: change pupil forceLook direction
     if (isPurplePeeking) {
       forceCharPupils('char-purple', 4, 5);
     }
@@ -2043,24 +2001,25 @@ function animChars(ts) {
     bodies.forEach(body => {
       body.style.transformOrigin = 'bottom center';
       if (body.id === 'char-black') {
-        body.style.transform = `translateY(${idleBob * 0.5}px) skewX(${(bodySkews['char-black'] || 0) * 1.5 + 10}deg) translateX(20px)`;
+        body.style.transform = `skewX(${(bodySkews['char-black'] || 0) * 1.5 + 10}deg) translateX(20px)`;
         body.dataset.manualPose = '1';
       } else if (body.id === 'char-purple') {
-        body.style.transform = `translateY(${idleBob * 0.5}px) skewX(${bodySkews['char-purple'] || 0}deg)`;
+        body.style.transform = `skewX(${bodySkews['char-purple'] || 0}deg)`;
         body.dataset.manualPose = '1';
       } else {
-        body.style.transform = `translateY(${idleBob * 0.5}px) skewX(${bodySkews[body.id] || 0}deg)`;
+        body.style.transform = `skewX(${bodySkews[body.id] || 0}deg)`;
         body.dataset.manualPose = '';
       }
     });
     if (purple) purple.style.height = '400px';
-    setEyes('char-purple', 55, 65 + idleBob * 0.3, true);
-    setEyes('char-black', 32, 12 + idleBob * 0.3, true);
-    setEyes('char-orange', 82 + (faces['char-orange'] ? faces['char-orange'].faceX : 0), 90 + (faces['char-orange'] ? faces['char-orange'].faceY : 0) + idleBob * 0.3, false);
-    setEyes('char-yellow', 52 + (faces['char-yellow'] ? faces['char-yellow'].faceX : 0), 40 + (faces['char-yellow'] ? faces['char-yellow'].faceY : 0) + idleBob * 0.3, false);
-    setMouth('char-yellow', 40 + (faces['char-yellow'] ? faces['char-yellow'].faceX : 0), 88 + (faces['char-yellow'] ? faces['char-yellow'].faceY : 0) + idleBob * 0.3, false);
+    setEyes('char-purple', 55, 65, true);
+    setEyes('char-black', 32, 12, true);
+    setEyes('char-orange', 82 + faces['char-orange'].faceX, 90 + faces['char-orange'].faceY, false);
+    setEyes('char-yellow', 52 + faces['char-yellow'].faceX, 40 + faces['char-yellow'].faceY, false);
+    setMouth('char-yellow', 40 + faces['char-yellow'].faceX, 88 + faces['char-yellow'].faceY, false);
     forceCharPupils('char-purple', 3, 4);
     forceCharPupils('char-black', 0, -4);
+    // Orange/yellow normal mouse tracking
     trackPupilByMouse('char-orange');
     trackPupilByMouse('char-yellow');
   } else if (typingActive) {
@@ -2069,38 +2028,43 @@ function animChars(ts) {
       body.style.transformOrigin = 'bottom center';
       if (body.id === 'char-purple') {
         body.style.height = '440px';
-        body.style.transform = `translateY(${idleBob * 0.3}px) skewX(${(bodySkews['char-purple'] || 0) - 12}deg) translateX(40px)`;
+        body.style.transform = `skewX(${(bodySkews['char-purple'] || 0) - 12}deg) translateX(40px)`;
         body.dataset.manualPose = '1';
       } else if (body.id === 'char-black') {
-        body.style.transform = `translateY(${idleBob * 0.5}px) skewX(${(bodySkews['char-black'] || 0) * 1.5}deg)`;
+        body.style.transform = `skewX(${(bodySkews['char-black'] || 0) * 1.5}deg)`;
         body.dataset.manualPose = '1';
       } else {
-        body.style.transform = `translateY(${idleBob * 0.5}px) skewX(${bodySkews[body.id] || 0}deg)`;
+        body.style.transform = `skewX(${bodySkews[body.id] || 0}deg)`;
         body.dataset.manualPose = '';
       }
     });
-    setEyes('char-purple', 45 + (faces['char-purple'] ? faces['char-purple'].faceX : 0), 40 + (faces['char-purple'] ? faces['char-purple'].faceY : 0) + idleBob * 0.3, false);
-    setEyes('char-black', 26 + (faces['char-black'] ? faces['char-black'].faceX : 0), 32 + (faces['char-black'] ? faces['char-black'].faceY : 0) + idleBob * 0.3, false);
-    setEyes('char-orange', 82 + (faces['char-orange'] ? faces['char-orange'].faceX : 0), 90 + (faces['char-orange'] ? faces['char-orange'].faceY : 0) + idleBob * 0.3, false);
-    setEyes('char-yellow', 52 + (faces['char-yellow'] ? faces['char-yellow'].faceX : 0), 40 + (faces['char-yellow'] ? faces['char-yellow'].faceY : 0) + idleBob * 0.3, false);
-    setMouth('char-yellow', 40 + (faces['char-yellow'] ? faces['char-yellow'].faceX : 0), 88 + (faces['char-yellow'] ? faces['char-yellow'].faceY : 0) + idleBob * 0.3, false);
+    // Eyes follow face positions normally
+    setEyes('char-purple', 45 + faces['char-purple'].faceX, 40 + faces['char-purple'].faceY, false);
+    setEyes('char-black', 26 + faces['char-black'].faceX, 32 + faces['char-black'].faceY, false);
+    setEyes('char-orange', 82 + faces['char-orange'].faceX, 90 + faces['char-orange'].faceY, false);
+    setEyes('char-yellow', 52 + faces['char-yellow'].faceX, 40 + faces['char-yellow'].faceY, false);
+    setMouth('char-yellow', 40 + faces['char-yellow'].faceX, 88 + faces['char-yellow'].faceY, false);
+    // Normal mouse pupil tracking
     trackAllPupils(allPupils);
   } else {
-    // ═══ Mode 4: Default — mouse-following skewX + idle bobbing ═══
+    // ═══ Mode 4: Default — mouse-following skewX ═══
     bodies.forEach(body => {
       body.dataset.manualPose = '';
       body.style.transformOrigin = 'bottom center';
-      const extraBob = body.id === 'char-orange' ? idleBob * 1.2 : body.id === 'char-yellow' ? idleBob * 0.9 : idleBob;
-      body.style.transform = `translateY(${extraBob}px) skewX(${bodySkews[body.id] || 0}deg)`;
+      body.style.transform = `skewX(${bodySkews[body.id] || 0}deg)`;
     });
     if (purple) purple.style.height = '400px';
-    setEyes('char-purple', 45 + (faces['char-purple'] ? faces['char-purple'].faceX : 0), 40 + (faces['char-purple'] ? faces['char-purple'].faceY : 0) + idleBob * 0.3, false);
-    setEyes('char-black', 26 + (faces['char-black'] ? faces['char-black'].faceX : 0), 32 + (faces['char-black'] ? faces['char-black'].faceY : 0) + idleBob * 0.3, false);
-    setEyes('char-orange', 82 + (faces['char-orange'] ? faces['char-orange'].faceX : 0), 90 + (faces['char-orange'] ? faces['char-orange'].faceY : 0) + idleBob * 0.3, false);
-    setEyes('char-yellow', 52 + (faces['char-yellow'] ? faces['char-yellow'].faceX : 0), 40 + (faces['char-yellow'] ? faces['char-yellow'].faceY : 0) + idleBob * 0.3, false);
-    setMouth('char-yellow', 40 + (faces['char-yellow'] ? faces['char-yellow'].faceX : 0), 88 + (faces['char-yellow'] ? faces['char-yellow'].faceY : 0) + idleBob * 0.3, false);
+    // Eyes follow face positions
+    setEyes('char-purple', 45 + faces['char-purple'].faceX, 40 + faces['char-purple'].faceY, false);
+    setEyes('char-black', 26 + faces['char-black'].faceX, 32 + faces['char-black'].faceY, false);
+    setEyes('char-orange', 82 + faces['char-orange'].faceX, 90 + faces['char-orange'].faceY, false);
+    setEyes('char-yellow', 52 + faces['char-yellow'].faceX, 40 + faces['char-yellow'].faceY, false);
+    setMouth('char-yellow', 40 + faces['char-yellow'].faceX, 88 + faces['char-yellow'].faceY, false);
+    // Normal mouse pupil tracking
     trackAllPupils(allPupils);
   }
+
+  requestAnimationFrame(animChars);
 }
 
 // ── Helpers ──
@@ -2364,10 +2328,9 @@ function onAuthSuccess() {
   const overlay = document.getElementById('auth-overlay');
   overlay.classList.add('auth-overlay-hidden');
   document.getElementById('logout-btn').style.display = '';
-  // Clean up character animation
+  // Clean up character animation timers
   authBlinkTimers.forEach(t => clearTimeout(t));
   authBlinkTimers = [];
-  stopAnimLoop();
   setTimeout(() => overlay.classList.add('hidden'), 500);
   renderAll();
 }
@@ -2380,10 +2343,6 @@ function handleLogout() {
   document.getElementById('logout-btn').style.display = 'none';
   resetPasswordField();
   showAuthPanel('login');
-  // Reset animation state
-  isPurplePeeking = false;
-  isLookingAtEachOther = false;
-  authTyping = false;
   initCharacters();
 }
 
