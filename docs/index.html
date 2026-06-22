@@ -1130,7 +1130,8 @@ let entries = ld(),
   editId = null,
   modalR = 0,
   modalTheme = 'orange',
-  pendingImgs = [];
+let pendingImgs = [],
+  pendingUploads = 0;  // 跟踪正在读取的图片数量
 
 /* ============================================================
    Image Upload
@@ -1145,19 +1146,30 @@ function handleFiles(files) {
   if (!files || !files.length) return;
   const ok = ['image/jpeg', 'image/png', 'image/webp'];
   for (const f of files) {
-    if (pendingImgs.length >= 9) { toast('最多9张', 'warn'); break; }
+    if (pendingImgs.length + pendingUploads >= 9) { toast('最多9张', 'warn'); break; }
     if (!ok.includes(f.type)) { toast('不支持 ' + f.type, 'warn'); continue; }
     if (f.size > 20 * 1024 * 1024) { toast('单图≤20MB', 'warn'); continue; }
+    pendingUploads++;
+    renderThumbs();
     const r = new FileReader();
-    r.onload = e => { pendingImgs.push({ dataUrl: e.target.result }); renderThumbs(); };
+    r.onload = e => {
+      pendingImgs.push({ dataUrl: e.target.result });
+      pendingUploads--;
+      renderThumbs();
+    };
+    r.onerror = () => { pendingUploads--; renderThumbs(); toast('图片读取失败', 'warn'); };
     r.readAsDataURL(f);
   }
   upI.value = '';
 }
 function renderThumbs() {
-  tL.innerHTML = pendingImgs.map((x, i) =>
+  const loaded = pendingImgs.map((x, i) =>
     `<div class="relative w-[62px] h-[62px] rounded-lg overflow-hidden border border-gray-200"><img src="${x.dataUrl}" class="w-full h-full object-cover"><button class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-400 border-none text-white text-[10px] cursor-pointer flex items-center justify-center" onclick="removeImg(${i})">✕</button></div>`
-  ).join('');
+  );
+  const loading = Array.from({length: pendingUploads}, () =>
+    `<div class="w-[62px] h-[62px] rounded-lg border-2 border-dashed border-accent-300 bg-accent-50/50 flex items-center justify-center animate-pulse"><span class="text-[10px] text-accent-400">加载中</span></div>`
+  );
+  tL.innerHTML = loaded.join('') + loading.join('');
 }
 function removeImg(i) { pendingImgs.splice(i, 1); renderThumbs(); }
 
@@ -1185,7 +1197,7 @@ function setRating(v) { modalR = v; renderStars(v); }
 function openModal() {
   const today = new Date().toISOString().split('T')[0];
   if (selDate !== today) { toast('只能为今天添加记录哦 ~', 'warn'); return; }
-  editId = null; modalTheme = 'orange'; modalR = 0; pendingImgs = [];
+  editId = null; modalTheme = 'orange'; modalR = 0; pendingImgs = []; pendingUploads = 0;
   document.getElementById('modal-title').textContent = '添加奶茶记录';
   ['modal-name', 'modal-brand', 'modal-comment'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('modal-price').value = '';
@@ -1222,7 +1234,7 @@ function editEntry(id) {
   if (!e) { console.warn('[EDIT] 未找到记录, id:', numId); return; }
   console.log('[EDIT] 打开编辑 Modal, entry:', e.name, 'id:', numId);
   editId = numId; modalR = e.rating || 0; modalTheme = e.theme || 'orange';
-  pendingImgs = (e.images || []).map(d => ({ dataUrl: d }));
+  pendingImgs = (e.images || []).map(d => ({ dataUrl: d })); pendingUploads = 0;
   document.getElementById('modal-title').textContent = '编辑奶茶记录';
   document.getElementById('modal-name').value = e.name;
   document.getElementById('modal-brand').value = e.brand || '';
@@ -1250,6 +1262,11 @@ function editEntry(id) {
   document.getElementById('modal-overlay').classList.remove('hidden');
 }
 function saveEntry() {
+  // 检查是否有图片正在读取中
+  if (pendingUploads > 0) {
+    toast('图片正在处理中，请稍候...', 'warn');
+    return;
+  }
   const nm = document.getElementById('modal-name'), name = nm.value.trim();
   if (!name) {
     nm.classList.add('border-red-400', 'ring-4', 'ring-red-100');
