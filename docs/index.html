@@ -523,12 +523,12 @@ tailwind.config = {
               <input id="auth-login-password" type="password" placeholder="••••••••" autocomplete="current-password"
                 class="w-full px-4 py-3 pr-12 rounded-xl border border-gray-200 text-base text-gray-800 bg-white font-boba focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200"
                 onfocus="onAuthInputFocus(this)" onblur="onAuthInputBlur()">
-              <button type="button" id="auth-pw-toggle" onclick="toggleAuthPassword()"
+              <button type="button" id="auth-pw-toggle" onclick="togglePwVisibility(this)"
                 class="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors cursor-pointer border-none bg-transparent">
                 <!-- Eye icon -->
-                <svg id="auth-eye-on" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg class="auth-eye-on w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                 <!-- EyeOff icon -->
-                <svg id="auth-eye-off" class="w-5 h-5 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><path d="m14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                <svg class="auth-eye-off w-5 h-5 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><path d="m14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
               </button>
             </div>
           </div>
@@ -539,10 +539,10 @@ tailwind.config = {
           <!-- Remember me + Forgot -->
           <div class="flex items-center justify-between">
             <label class="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" id="auth-remember" class="w-4 h-4 rounded border-gray-300 text-accent-500 focus:ring-accent-500 accent-accent-500">
+              <input type="checkbox" id="auth-remember" class="w-4 h-4 rounded border-gray-300 text-accent-500 focus:ring-accent-500 accent-accent-500" onchange="if(!this.checked)localStorage.removeItem('auth_remember')">
               <span class="text-sm text-gray-500">记住我</span>
             </label>
-            <a href="#" class="text-sm text-accent-500 hover:underline font-medium">忘记密码？</a>
+            <a class="text-sm text-accent-500 hover:underline font-medium cursor-pointer" onclick="showAuthPanel('reset')">忘记密码？</a>
           </div>
 
           <!-- Submit -->
@@ -555,7 +555,7 @@ tailwind.config = {
           </div>
 
           <!-- Google login -->
-          <button class="w-full py-3 rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-600 hover:bg-gray-50 active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 font-boba">
+          <button id="google-login-btn" onclick="handleGoogleLogin()" class="w-full py-3 rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-600 hover:bg-gray-50 active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 font-boba">
             <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
             使用 Google 登录
           </button>
@@ -573,15 +573,29 @@ tailwind.config = {
               onfocus="onAuthInputFocus(this)" onblur="onAuthInputBlur()">
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-600 mb-1.5">密码</label>
-            <input id="auth-register-password" type="password" placeholder="至少6位密码" autocomplete="new-password"
-              class="w-full px-4 py-3 rounded-xl border border-gray-200 text-base text-gray-800 bg-white font-boba focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200"
-              onfocus="onAuthInputFocus(this)" onblur="onAuthInputBlur()">
+            <label class="block text-sm font-medium text-gray-600 mb-1.5">新密码</label>
+            <div class="relative">
+              <input id="auth-register-password" type="password" placeholder="至少6位密码" autocomplete="new-password"
+                class="w-full px-4 py-3 pr-12 rounded-xl border border-gray-200 text-base text-gray-800 bg-white font-boba focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200"
+                onfocus="onAuthInputFocus(this)" onblur="onAuthInputBlur()">
+              <button type="button" onclick="togglePwVisibility(this)"
+                class="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors cursor-pointer border-none bg-transparent">
+                <svg class="auth-eye-on w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg class="auth-eye-off w-5 h-5 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><path d="m14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+              </button>
+            </div>
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-600 mb-1.5">确认密码</label>
-            <input id="auth-register-confirm" type="password" placeholder="再次输入密码" autocomplete="new-password"
-              class="w-full px-4 py-3 rounded-xl border border-gray-200 text-base text-gray-800 bg-white font-boba focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200">
+            <div class="relative">
+              <input id="auth-register-confirm" type="password" placeholder="再次输入密码" autocomplete="new-password"
+                class="w-full px-4 py-3 pr-12 rounded-xl border border-gray-200 text-base text-gray-800 bg-white font-boba focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200">
+              <button type="button" onclick="togglePwVisibility(this)"
+                class="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors cursor-pointer border-none bg-transparent">
+                <svg class="auth-eye-on w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg class="auth-eye-off w-5 h-5 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><path d="m14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+              </button>
+            </div>
           </div>
           <div id="auth-register-error" class="text-xs text-red-400 hidden p-2.5 bg-red-50 rounded-lg"></div>
           <div class="metal-btn-wrap accent w-full">
@@ -593,12 +607,63 @@ tailwind.config = {
           </div>
           <p class="text-sm text-gray-400 text-center">已有账户？<button class="text-accent-500 hover:underline cursor-pointer bg-transparent border-none font-boba font-bold p-0" onclick="showAuthPanel('login')">登录</button></p>
         </div>
+
+        <!-- Reset Password Panel (hidden by default) -->
+        <div id="auth-panel-reset" class="flex flex-col gap-4 hidden">
+          <p class="text-sm text-gray-500 mb-1">验证注册邮箱以重置密码</p>
+          <!-- Step 1: Email -->
+          <div id="reset-step-1">
+            <label class="block text-sm font-medium text-gray-600 mb-1.5">注册邮箱</label>
+            <input id="auth-reset-email" type="email" placeholder="your@email.com" autocomplete="email"
+              class="w-full px-4 py-3 rounded-xl border border-gray-200 text-base text-gray-800 bg-white font-boba focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200">
+            <button class="metal-btn-wrap accent w-full mt-3" onclick="handleSendCode()" style="display:block">
+              <span class="metal-btn-shine"></span><span class="metal-btn-hover-glow"></span>
+              <span class="metal-btn-inner block text-center py-3 rounded-xl text-white font-boba font-bold text-base">发送验证码</span>
+            </button>
+          </div>
+          <!-- Step 2: Code verification -->
+          <div id="reset-step-2" class="hidden">
+            <label class="block text-sm font-medium text-gray-600 mb-1.5">6位验证码</label>
+            <input id="auth-reset-code" type="text" placeholder="000000" maxlength="6" inputmode="numeric"
+              class="w-full px-4 py-3 rounded-xl border border-gray-200 text-base text-gray-800 bg-white font-boba tracking-[0.3em] text-center focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200">
+            <button class="metal-btn-wrap accent w-full mt-3" onclick="handleVerifyCode()" style="display:block">
+              <span class="metal-btn-shine"></span><span class="metal-btn-hover-glow"></span>
+              <span class="metal-btn-inner block text-center py-3 rounded-xl text-white font-boba font-bold text-base">验证</span>
+            </button>
+          </div>
+          <!-- Step 3: New password -->
+          <div id="reset-step-3" class="hidden">
+            <label class="block text-sm font-medium text-gray-600 mb-1.5">新密码</label>
+            <input id="auth-reset-new-pw" type="password" placeholder="新密码（至少6位）" autocomplete="new-password"
+              class="w-full px-4 py-3 rounded-xl border border-gray-200 text-base text-gray-800 bg-white font-boba focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200">
+            <label class="block text-sm font-medium text-gray-600 mb-1.5 mt-3">确认新密码</label>
+            <input id="auth-reset-confirm-pw" type="password" placeholder="再次输入新密码" autocomplete="new-password"
+              class="w-full px-4 py-3 rounded-xl border border-gray-200 text-base text-gray-800 bg-white font-boba focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200">
+            <button class="metal-btn-wrap accent w-full mt-3" onclick="handleDoResetPassword()" style="display:block">
+              <span class="metal-btn-shine"></span><span class="metal-btn-hover-glow"></span>
+              <span class="metal-btn-inner block text-center py-3 rounded-xl text-white font-boba font-bold text-base">重置密码</span>
+            </button>
+          </div>
+          <div id="auth-reset-error" class="text-xs text-red-400 hidden p-2.5 bg-red-50 rounded-lg"></div>
+          <p class="text-sm text-gray-400 text-center"><button class="text-accent-500 hover:underline cursor-pointer bg-transparent border-none font-boba font-bold p-0" onclick="showAuthPanel('login')">返回登录</button></p>
+        </div>
       </div>
       <!-- Back-swipe hint (mobile only) -->
       <div class="sm:hidden flex items-center justify-center pt-4 swipe-hint">
         <span class="text-gray-300 text-xs font-boba">→ 查看小人们 →</span>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     Registration Success Dialog
+     ============================================================ -->
+<div id="reg-success-dialog" class="fixed inset-0 z-[200] hidden items-center justify-center bg-black/20 backdrop-blur-sm">
+  <div class="bg-white/95 rounded-3xl p-10 shadow-2xl text-center max-w-sm w-[90%] animate-modal-in">
+    <div class="text-5xl mb-4">🎉</div>
+    <p class="text-lg font-boba font-bold text-gray-800 mb-2">注册成功</p>
+    <p class="text-sm text-gray-500 font-boba leading-relaxed">请开启人间小事档案馆的探索吧</p>
   </div>
 </div>
 
@@ -890,7 +955,7 @@ tailwind.config = {
     <label class="block text-sm font-semibold text-gray-400 mb-1">日期</label>
     <input type="date" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-base text-gray-800 bg-white font-boba mb-4 focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200" id="modal-date">
 
-    <label class="block text-sm font-semibold text-gray-400 mb-1">照片 <span class="font-normal text-xs">（可选,≤9张,单图≤5MB）</span></label>
+    <label class="block text-sm font-semibold text-gray-400 mb-1">照片 <span class="font-normal text-xs">（可选,≤9张,单图≤20MB）</span></label>
     <div class="border-2 border-dashed border-gray-200 rounded-xl p-5 text-center cursor-pointer mb-4 hover:border-accent-500 hover:bg-accent-50 transition-all duration-200" id="upload-zone" onclick="document.getElementById('upload-input').click()">
       <svg class="w-9 h-9 text-gray-400 mx-auto mb-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
       <p class="text-sm text-gray-400">点击/拖拽上传照片</p>
@@ -919,10 +984,10 @@ tailwind.config = {
 
     <div class="metal-btn-wrap accent w-full">
       <div class="metal-btn-inner"></div>
-      <button class="metal-btn text-base font-boba" onclick="saveEntry()" style="padding-top:0.875rem;padding-bottom:0.875rem">
+      <button class="metal-btn text-base font-boba" onclick="saveEntry()" style="padding-top:0.875rem;padding-bottom:0.875rem" id="modal-save-btn">
         <span class="metal-btn-shine"></span>
         <span class="metal-btn-hover-glow"></span>
-        添加记录
+        <span id="modal-save-text">添加记录</span>
       </button>
     </div>
   </div>
@@ -1122,7 +1187,10 @@ document.querySelectorAll('#bg-theme-switcher .bg-dot').forEach(d => {
    ============================================================ */
 const DB = 'milktea_v10';
 function ld() { try { return JSON.parse(localStorage.getItem(DB) || '[]'); } catch (e) { return []; } }
-function sv(a) { localStorage.setItem(DB, JSON.stringify(a)); }
+function sv(a) {
+  try { localStorage.setItem(DB, JSON.stringify(a)); }
+  catch (e) { console.error('[SV] localStorage 写入失败:', e.message); toast('存储空间不足，请删除旧记录或压缩图片', 'warn'); }
+}
 let entries = ld(),
   selDate = new Date().toISOString().split('T')[0],
   calY = new Date().getFullYear(),
@@ -1130,7 +1198,8 @@ let entries = ld(),
   editId = null,
   modalR = 0,
   modalTheme = 'orange',
-  pendingImgs = [];
+  pendingImgs = [],
+  pendingUploads = 0;
 
 /* ============================================================
    Image Upload
@@ -1143,23 +1212,81 @@ upZ.addEventListener('dragleave', () => { upZ.classList.remove('border-accent-50
 upZ.addEventListener('drop', e => { e.preventDefault(); upZ.classList.remove('border-accent-500', 'bg-accent-50'); handleFiles(e.dataTransfer.files); });
 function handleFiles(files) {
   if (!files || !files.length) return;
-  const ok = ['image/jpeg', 'image/png', 'image/webp'];
-  for (const f of files) {
-    if (pendingImgs.length >= 9) { toast('最多9张', 'warn'); break; }
-    if (!ok.includes(f.type)) { toast('不支持 ' + f.type, 'warn'); continue; }
-    if (f.size > 5 * 1024 * 1024) { toast('单图≤5MB', 'warn'); continue; }
-    const r = new FileReader();
-    r.onload = e => { pendingImgs.push({ dataUrl: e.target.result }); renderThumbs(); };
-    r.readAsDataURL(f);
+  var ok = ['image/jpeg', 'image/png', 'image/webp'];
+  for (var fi = 0; fi < files.length; fi++) {
+    var f = files[fi];
+    if (pendingImgs.length + pendingUploads >= 9) { toast('最多9张', 'warn'); break; }
+    if (ok.indexOf(f.type) === -1) { toast('不支持 ' + f.type, 'warn'); continue; }
+    if (f.size > 20 * 1024 * 1024) { toast('单图≤20MB', 'warn'); continue; }
+    pendingUploads++;
+    pendingImgs.push({ dataUrl: null, uploading: true });
+    renderThumbs();
+    var idx = pendingImgs.length - 1;
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      // Canvas 压缩：最大 1200px，JPEG 0.7 品质
+      compressImage(e.target.result, 1200, 0.7, function(compressed) {
+        pendingImgs[idx] = { dataUrl: compressed };
+        pendingUploads--;
+        renderThumbs();
+      }, function() {
+        // 压缩失败，回退到原始 dataUrl（适用于小图/GIF）
+        pendingImgs[idx] = { dataUrl: e.target.result };
+        pendingUploads--;
+        renderThumbs();
+      });
+    };
+    reader.onerror = function() {
+      pendingImgs.splice(idx, 1);
+      pendingUploads--;
+      renderThumbs();
+      toast('图片读取失败', 'warn');
+    };
+    reader.readAsDataURL(f);
   }
   upI.value = '';
 }
-function renderThumbs() {
-  tL.innerHTML = pendingImgs.map((x, i) =>
-    `<div class="relative w-[62px] h-[62px] rounded-lg overflow-hidden border border-gray-200"><img src="${x.dataUrl}" class="w-full h-full object-cover"><button class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-400 border-none text-white text-[10px] cursor-pointer flex items-center justify-center" onclick="removeImg(${i})">✕</button></div>`
-  ).join('');
+
+/* Canvas 图片压缩 */
+function compressImage(dataUrl, maxSize, quality, onSuccess, onFallback) {
+  var img = new Image();
+  img.onload = function() {
+    var w = img.width, h = img.height;
+    if (w <= maxSize && h <= maxSize) {
+      // 尺寸已足够小，直接回退（不压缩）
+      onFallback();
+      return;
+    }
+    // 等比缩放
+    if (w > h) { h = Math.round(h * maxSize / w); w = maxSize; }
+    else       { w = Math.round(w * maxSize / h); h = maxSize; }
+    var canvas = document.createElement('canvas');
+    canvas.width = w; canvas.height = h;
+    var ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, w, h);
+    try {
+      var compressed = canvas.toDataURL('image/jpeg', quality);
+      onSuccess(compressed);
+    } catch (e) {
+      onFallback();
+    }
+  };
+  img.onerror = function() { onFallback(); };
+  img.src = dataUrl;
 }
-function removeImg(i) { pendingImgs.splice(i, 1); renderThumbs(); }
+function renderThumbs() {
+  tL.innerHTML = pendingImgs.map((x, i) => {
+    if (x.uploading) {
+      return `<div class="relative w-[62px] h-[62px] rounded-lg overflow-hidden border border-dashed border-accent-400 bg-accent-50 flex items-center justify-center"><div class="w-5 h-5 border-2 border-accent-400 border-t-transparent rounded-full animate-spin"></div></div>`;
+    }
+    return `<div class="relative w-[62px] h-[62px] rounded-lg overflow-hidden border border-gray-200"><img src="${x.dataUrl}" class="w-full h-full object-cover"><button class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-400 border-none text-white text-[10px] cursor-pointer flex items-center justify-center" onclick="removeImg(${i})">✕</button></div>`;
+  }).join('');
+}
+function removeImg(i) {
+  if (pendingImgs[i] && pendingImgs[i].uploading) pendingUploads--;
+  pendingImgs.splice(i, 1);
+  renderThumbs();
+}
 
 /* ============================================================
    Modal — Milk Tea
@@ -1185,18 +1312,13 @@ function setRating(v) { modalR = v; renderStars(v); }
 function openModal() {
   const today = new Date().toISOString().split('T')[0];
   if (selDate !== today) { toast('只能为今天添加记录哦 ~', 'warn'); return; }
-  editId = null; modalTheme = 'orange'; modalR = 0; pendingImgs = [];
+  editId = null; modalTheme = 'orange'; modalR = 0; pendingImgs = []; pendingUploads = 0;
   document.getElementById('modal-title').textContent = '添加奶茶记录';
   ['modal-name', 'modal-brand', 'modal-comment'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('modal-price').value = '';
   document.getElementById('modal-date').value = selDate;
   document.getElementById('modal-name').classList.remove('border-red-400', 'ring-4', 'ring-red-100');
-  // 重置保存按钮文字为"添加记录"
-  const saveBtn = document.querySelector('#modal-overlay .metal-btn[onclick="saveEntry()"]');
-  if (saveBtn) {
-    const textNode = saveBtn.lastChild;
-    if (textNode && textNode.nodeType === 3) textNode.textContent = '添加记录';
-  }
+  document.getElementById('modal-save-text').textContent = '添加记录';
   document.querySelectorAll('#theme-selector .tdot').forEach(d => {
     d.classList.remove('selected');
     d.style.borderColor = 'transparent';
@@ -1222,7 +1344,7 @@ function editEntry(id) {
   if (!e) { console.warn('[EDIT] 未找到记录, id:', numId); return; }
   console.log('[EDIT] 打开编辑 Modal, entry:', e.name, 'id:', numId);
   editId = numId; modalR = e.rating || 0; modalTheme = e.theme || 'orange';
-  pendingImgs = (e.images || []).map(d => ({ dataUrl: d }));
+  pendingImgs = (e.images || []).map(d => ({ dataUrl: d })); pendingUploads = 0;
   document.getElementById('modal-title').textContent = '编辑奶茶记录';
   document.getElementById('modal-name').value = e.name;
   document.getElementById('modal-brand').value = e.brand || '';
@@ -1230,14 +1352,7 @@ function editEntry(id) {
   document.getElementById('modal-comment').value = e.comment || '';
   document.getElementById('modal-price').value = e.price !== null && e.price !== undefined ? e.price : '';
   document.getElementById('modal-name').classList.remove('border-red-400', 'ring-4', 'ring-red-100');
-  // 更新保存按钮文字
-  const saveBtn = document.querySelector('#modal-overlay .metal-btn[onclick="saveEntry()"]');
-  if (saveBtn) {
-    // 按钮内容是文本节点在 span 之后，用 childNodes 定位
-    const textNode = saveBtn.lastChild;
-    if (textNode && textNode.nodeType === 3) textNode.textContent = '保存修改';
-    else saveBtn.appendChild(document.createTextNode('保存修改'));
-  }
+  document.getElementById('modal-save-text').textContent = '保存修改';
   document.querySelectorAll('#theme-selector .tdot').forEach(d => {
     d.classList.remove('selected');
     d.style.borderColor = 'transparent';
@@ -1262,7 +1377,8 @@ function saveEntry() {
     priceVal = document.getElementById('modal-price').value,
     price = priceVal !== '' ? +priceVal : null,
     comment = document.getElementById('modal-comment').value.trim() || null,
-    images = pendingImgs.map(i => i.dataUrl);
+    // 只收集已完成上传的图片（dataUrl 不为 null），正在上传的自动跳过
+    images = pendingImgs.map(function(i) { return i.dataUrl; }).filter(function(url) { return url != null; });
   if (!THEMES.includes(modalTheme)) modalTheme = randTheme();
   if (editId) {
     const numId = Number(editId);
@@ -1282,12 +1398,7 @@ function saveEntry() {
     console.log('[SAVE] 已新增记录:', name);
   }
   selDate = date; closeModal(); renderAll(); editId = null;
-  // 重置保存按钮文字
-  const saveBtn = document.querySelector('#modal-overlay .metal-btn[onclick="saveEntry()"]');
-  if (saveBtn) {
-    const textNode = saveBtn.lastChild;
-    if (textNode && textNode.nodeType === 3) textNode.textContent = '添加记录';
-  }
+  document.getElementById('modal-save-text').textContent = '添加记录';
 }
 
 /* ============================================================
@@ -1678,7 +1789,10 @@ function toast(msg, type) {
    ============================================================ */
 const DB_JOURNAL = 'journal_v1';
 function ldJournal() { try { return JSON.parse(localStorage.getItem(DB_JOURNAL) || '[]'); } catch (e) { return []; } }
-function svJournal(a) { localStorage.setItem(DB_JOURNAL, JSON.stringify(a)); }
+function svJournal(a) {
+  try { localStorage.setItem(DB_JOURNAL, JSON.stringify(a)); }
+  catch (e) { console.error('[SV-JOURNAL] localStorage 写入失败:', e.message); toast('存储空间不足', 'warn'); }
+}
 
 const MOODS = [
   { key: 'happy', emoji: '😊', label: '开心' },
@@ -1847,7 +1961,9 @@ function renderJournal() {
       const moodDisplay = isCustom
         ? `<span class="text-sm text-gray-400 bg-white/60 px-3 py-1 rounded-full">${esc(e.customMood || '自定义')}</span>`
         : `<span class="text-sm text-gray-400 bg-white/60 px-3 py-1 rounded-full">${(mood || MOODS[0]).emoji} ${(mood || MOODS[0]).label}</span>`;
-      const moodEmoji = isCustom ? '' : `<span class="text-lg">${(mood || MOODS[0]).emoji}</span>`;
+      const moodEmoji = isCustom
+        ? `<span class="text-sm text-gray-500 font-boba">${esc(e.customMood || '自定义')}</span>`
+        : `<span class="text-lg">${(mood || MOODS[0]).emoji}</span>`;
       const card = document.createElement('div');
       card.className = `journal-card paper-${e.paper} rounded-2xl shadow-card p-5 flex flex-col gap-3 relative overflow-hidden hover:shadow-card-hover transition-shadow duration-200 cursor-default`;
       card.style.minHeight = '180px';
@@ -1873,8 +1989,9 @@ function renderJournal() {
 /* ============================================================
    Auth — Local Account + Animated Characters
    ============================================================ */
-const DB_AUTH = 'auth_v1';
+const DB_AUTH = 'auth_v1', DB_REMEMBER = 'auth_remember';
 let authMouseX = 0, authMouseY = 0, authTyping = false, authBlinkTimers = [];
+let resetCode = null, resetEmail = '';  // 密码重置流程状态
 let authFocusTarget = 'none'; // 'none' | 'email' | 'password'
 let isPurplePeeking = false, purplePeekTimer = null;
 let isLookingAtEachOther = false, lookEachOtherTimer = null;
@@ -2146,10 +2263,10 @@ function onAuthInputBlur() {
 }
 
 // ── Password Toggle ──
-function toggleAuthPassword() {
-  const input = document.getElementById('auth-login-password');
-  const eyeOn = document.getElementById('auth-eye-on');
-  const eyeOff = document.getElementById('auth-eye-off');
+function togglePwVisibility(btn) {
+  const input = btn.parentElement.querySelector('input');
+  const eyeOn = btn.querySelector('.auth-eye-on');
+  const eyeOff = btn.querySelector('.auth-eye-off');
   if (!input) return;
   if (input.type === 'password') {
     // Show password
@@ -2159,9 +2276,15 @@ function toggleAuthPassword() {
   } else {
     // Hide password
     input.type = 'password'; if (eyeOn) eyeOn.classList.remove('hidden'); if (eyeOff) eyeOff.classList.add('hidden');
-    // Stop peeking
-    cancelPurplePeek();
+    // Stop peeking if no other password is visible
+    if (!isAnyPasswordVisible()) cancelPurplePeek();
   }
+}
+
+function isAnyPasswordVisible() {
+  return Array.from(document.querySelectorAll('#auth-login-password, #auth-register-password, #auth-register-confirm')).some(
+    input => input.type === 'text' && input.value.length > 0
+  );
 }
 
 function schedulePurplePeek() {
@@ -2170,9 +2293,8 @@ function schedulePurplePeek() {
     isPurplePeeking = true;
     setTimeout(() => {
       isPurplePeeking = false;
-      // Only re-schedule if password is still visible
-      const pwInput = document.getElementById('auth-login-password');
-      if (pwInput && pwInput.type === 'text' && pwInput.value.length > 0) {
+      // Re-schedule if ANY password field is still visible and has content
+      if (isAnyPasswordVisible()) {
         schedulePurplePeek();
       }
     }, 800);
@@ -2185,12 +2307,13 @@ function cancelPurplePeek() {
 }
 
 function resetPasswordField() {
-  const input = document.getElementById('auth-login-password');
-  const eyeOn = document.getElementById('auth-eye-on');
-  const eyeOff = document.getElementById('auth-eye-off');
-  if (input) input.type = 'password';
-  if (eyeOn) eyeOn.classList.remove('hidden');
-  if (eyeOff) eyeOff.classList.add('hidden');
+  // Reset all password inputs to hidden
+  document.querySelectorAll('#auth-login-password, #auth-register-password, #auth-register-confirm').forEach(input => {
+    input.type = 'password';
+  });
+  // Reset all eye icons to "eye-on" state
+  document.querySelectorAll('.auth-eye-on').forEach(el => el.classList.remove('hidden'));
+  document.querySelectorAll('.auth-eye-off').forEach(el => el.classList.add('hidden'));
   cancelPurplePeek();
 }
 
@@ -2210,22 +2333,45 @@ function checkAuth() {
 
 function showAuthPanel(mode) {
   const isLogin = mode === 'login';
+  const isRegister = mode === 'register';
+  const isReset = mode === 'reset';
   document.getElementById('auth-panel-login').classList.toggle('hidden', !isLogin);
-  document.getElementById('auth-panel-register').classList.toggle('hidden', isLogin);
-  document.getElementById('auth-title').textContent = isLogin ? '欢迎回来' : '创建账户';
+  document.getElementById('auth-panel-register').classList.toggle('hidden', !isRegister);
+  document.getElementById('auth-panel-reset').classList.toggle('hidden', !isReset);
+  document.getElementById('auth-title').textContent = isLogin ? '欢迎回来' : isRegister ? '创建账户' : '重置密码';
   // Reset password field to hidden + eye icon
   resetPasswordField();
   // Clear all inputs and errors
-  ['auth-login-email','auth-login-password','auth-register-email','auth-register-password','auth-register-confirm'].forEach(id => {
+  ['auth-login-email','auth-login-password','auth-register-email','auth-register-password','auth-register-confirm','auth-reset-email','auth-reset-code','auth-reset-new-pw','auth-reset-confirm-pw'].forEach(id => {
     const el = document.getElementById(id); if (el) el.value = '';
     if (el) { el.classList.remove('border-red-400','ring-4','ring-red-100'); }
   });
   document.getElementById('auth-login-error').classList.add('hidden');
   document.getElementById('auth-register-error').classList.add('hidden');
+  const resetErr = document.getElementById('auth-reset-error'); if (resetErr) resetErr.classList.add('hidden');
   // Reset button state
   resetAuthBtn();
+  // Pre-fill remembered credentials when showing login
+  if (isLogin) {
+    try {
+      const remembered = JSON.parse(localStorage.getItem(DB_REMEMBER) || 'null');
+      if (remembered && remembered.email) {
+        document.getElementById('auth-login-email').value = remembered.email;
+        document.getElementById('auth-login-password').value = remembered.password || '';
+        document.getElementById('auth-remember').checked = true;
+      }
+    } catch(e) {}
+  }
+  // Reset password form: show step 1, hide steps 2/3
+  if (isReset) {
+    document.getElementById('reset-step-1').classList.remove('hidden');
+    document.getElementById('reset-step-2').classList.add('hidden');
+    document.getElementById('reset-step-3').classList.add('hidden');
+    resetCode = null; resetEmail = '';
+  }
   // Play animation on the newly visible panel
-  const panel = document.getElementById(isLogin ? 'auth-panel-login' : 'auth-panel-register');
+  const panelId = isLogin ? 'auth-panel-login' : isRegister ? 'auth-panel-register' : 'auth-panel-reset';
+  const panel = document.getElementById(panelId);
   panel.classList.add('animate-auth-panel-in');
   panel.addEventListener('animationend', () => panel.classList.remove('animate-auth-panel-in'), { once: true });
 }
@@ -2272,10 +2418,12 @@ function handleLogin() {
       setAuthLoading(false);
       return;
     }
-    // Remember me
+    // Remember me: save credentials for pre-fill
     const remember = document.getElementById('auth-remember');
     if (remember && remember.checked) {
-      a.remember = true;
+      localStorage.setItem(DB_REMEMBER, JSON.stringify({ email: email, password: pw }));
+    } else {
+      localStorage.removeItem(DB_REMEMBER);
     }
     a.isLoggedIn = true; saveAuth(a); onAuthSuccess();
   }, 600);
@@ -2290,11 +2438,19 @@ function handleRegister() {
   ['auth-register-email','auth-register-password','auth-register-confirm'].forEach(id => {
     document.getElementById(id).classList.remove('border-red-400','ring-4','ring-red-100');
   });
-  if (!email || !email.includes('@') || !email.includes('.')) {
-    err.textContent = '请输入有效的邮箱地址'; err.classList.remove('hidden');
+  if (!email) {
+    err.textContent = '请输入邮箱地址'; err.classList.remove('hidden');
     document.getElementById('auth-register-email').classList.add('border-red-400','ring-4','ring-red-100');
     return;
   }
+  if (!/^\S+@\S+\.\S+$/.test(email)) {
+    err.textContent = '邮箱格式不正确，请输入有效的邮箱地址（如 example@mail.com）'; err.classList.remove('hidden');
+    document.getElementById('auth-register-email').classList.add('border-red-400','ring-4','ring-red-100');
+    return;
+  }
+  // 邮箱格式正确，清除错误状态
+  err.classList.add('hidden');
+  document.getElementById('auth-register-email').classList.remove('border-red-400','ring-4','ring-red-100');
   if (!pw || pw.length < 6) {
     err.textContent = '密码至少需要6位'; err.classList.remove('hidden');
     document.getElementById('auth-register-password').classList.add('border-red-400','ring-4','ring-red-100');
@@ -2305,23 +2461,133 @@ function handleRegister() {
     document.getElementById('auth-register-confirm').classList.add('border-red-400','ring-4','ring-red-100');
     return;
   }
+  // Check if email already registered
+  const existing = loadAuth();
+  if (existing && existing.email === email) {
+    err.textContent = '该邮箱已被注册，请换个邮箱';
+    err.classList.remove('hidden');
+    document.getElementById('auth-register-email').classList.add('border-red-400','ring-4','ring-red-100');
+    return;
+  }
   // Save account (NOT auto-login — must log in manually)
   saveAuth({ email, password: pw, isLoggedIn: false });
-  // Show success and switch to login
-  const loginErr = document.getElementById('auth-login-error');
-  loginErr.textContent = '✅ 注册成功！请登录你的账户';
-  loginErr.classList.remove('hidden');
-  loginErr.classList.remove('text-red-400');
-  loginErr.classList.add('text-green-600', 'bg-green-50');
-  // Pre-fill email
-  document.getElementById('auth-login-email').value = email;
-  showAuthPanel('login');
-  // Reset error style after 5s
+  // Show success dialog
+  const dialog = document.getElementById('reg-success-dialog');
+  dialog.classList.remove('hidden');
+  dialog.style.display = 'flex';
+  // After 1s, hide dialog and switch to login
   setTimeout(() => {
-    loginErr.classList.add('hidden', 'text-red-400');
-    loginErr.classList.remove('text-green-600', 'bg-green-50');
-    loginErr.textContent = '';
-  }, 5000);
+    dialog.style.display = 'none';
+    dialog.classList.add('hidden');
+    // Pre-fill email (after showAuthPanel which clears inputs)
+    showAuthPanel('login');
+    document.getElementById('auth-login-email').value = email;
+  }, 1000);
+}
+
+// ── Forgot Password ──
+function handleSendCode() {
+  const email = document.getElementById('auth-reset-email').value.trim(),
+    err = document.getElementById('auth-reset-error');
+  err.classList.add('hidden');
+  document.getElementById('auth-reset-email').classList.remove('border-red-400','ring-4','ring-red-100');
+  if (!email) {
+    err.textContent = '请输入邮箱地址'; err.classList.remove('hidden');
+    document.getElementById('auth-reset-email').classList.add('border-red-400','ring-4','ring-red-100');
+    return;
+  }
+  const a = loadAuth();
+  if (!a || a.email !== email) {
+    err.textContent = '该邮箱未注册'; err.classList.remove('hidden');
+    document.getElementById('auth-reset-email').classList.add('border-red-400','ring-4','ring-red-100');
+    return;
+  }
+  // Generate 6-digit code and show via toast (simulate email sending)
+  resetCode = String(Math.floor(100000 + Math.random() * 900000));
+  resetEmail = email;
+  toast('验证码：' + resetCode + '（模拟邮件发送）', 'info');
+  document.getElementById('reset-step-1').classList.add('hidden');
+  document.getElementById('reset-step-2').classList.remove('hidden');
+}
+
+function handleVerifyCode() {
+  const code = document.getElementById('auth-reset-code').value.trim(),
+    err = document.getElementById('auth-reset-error');
+  err.classList.add('hidden');
+  if (!code || code !== resetCode) {
+    err.textContent = '验证码错误'; err.classList.remove('hidden');
+    document.getElementById('auth-reset-code').classList.add('border-red-400','ring-4','ring-red-100');
+    return;
+  }
+  document.getElementById('reset-step-2').classList.add('hidden');
+  document.getElementById('reset-step-3').classList.remove('hidden');
+}
+
+function handleDoResetPassword() {
+  const pw = document.getElementById('auth-reset-new-pw').value,
+    confirm = document.getElementById('auth-reset-confirm-pw').value,
+    err = document.getElementById('auth-reset-error');
+  err.classList.add('hidden');
+  if (!pw || pw.length < 6) {
+    err.textContent = '新密码至少需要6位'; err.classList.remove('hidden');
+    document.getElementById('auth-reset-new-pw').classList.add('border-red-400','ring-4','ring-red-100');
+    return;
+  }
+  if (pw !== confirm) {
+    err.textContent = '两次密码不一致'; err.classList.remove('hidden');
+    document.getElementById('auth-reset-confirm-pw').classList.add('border-red-400','ring-4','ring-red-100');
+    return;
+  }
+  const a = loadAuth();
+  if (a && a.email === resetEmail) {
+    a.password = pw;
+    saveAuth(a);
+  }
+  toast('密码已重置，请登录', 'info');
+  showAuthPanel('login');
+}
+
+// ── Google OAuth Login ──
+function handleGoogleLogin() {
+  var params = new URLSearchParams({
+    client_id: '608523136689-ghost.apps.googleusercontent.com',
+    redirect_uri: window.location.href.split(/[?#]/)[0],
+    response_type: 'token',
+    scope: 'email profile',
+    prompt: 'select_account',
+  });
+  window.location.href = 'https://accounts.google.com/o/oauth2/v2/auth?' + params.toString();
+}
+
+function handleGoogleCallback() {
+  var hash = window.location.hash;
+  if (!hash || hash.indexOf('access_token') === -1) return;
+  var params = new URLSearchParams(hash.substring(1));
+  var token = params.get('access_token');
+  if (!token) return;
+  // Fetch user info from Google
+  fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+    headers: { Authorization: 'Bearer ' + token }
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data.email) {
+      var a = loadAuth();
+      if (!a || a.email !== data.email) {
+        saveAuth({ email: data.email, password: '', isLoggedIn: true });
+      } else {
+        a.isLoggedIn = true; saveAuth(a);
+      }
+      onAuthSuccess();
+    }
+  })
+  .catch(function() {
+    toast('Google 登录失败，请重试', 'warn');
+  });
+  // Clean URL
+  if (window.history && window.history.replaceState) {
+    window.history.replaceState(null, '', window.location.pathname);
+  }
 }
 
 function onAuthSuccess() {
@@ -2348,12 +2614,21 @@ function handleLogout() {
 
 // Enter key support for auth inputs
 document.addEventListener('DOMContentLoaded', () => {
+  // Handle Google OAuth callback
+  handleGoogleCallback();
   setTimeout(() => {
     document.querySelectorAll('#auth-overlay input').forEach(input => {
       input.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
           const inRegister = !document.getElementById('auth-panel-register').classList.contains('hidden');
-          if (inRegister) handleRegister(); else handleLogin();
+          const inReset = !document.getElementById('auth-panel-reset').classList.contains('hidden');
+          if (inRegister) handleRegister();
+          else if (inReset) {
+            if (!document.getElementById('reset-step-1').classList.contains('hidden')) handleSendCode();
+            else if (!document.getElementById('reset-step-2').classList.contains('hidden')) handleVerifyCode();
+            else if (!document.getElementById('reset-step-3').classList.contains('hidden')) handleDoResetPassword();
+          }
+          else handleLogin();
         }
       });
     });
