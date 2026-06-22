@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🧋 wxh的记录册</title>
+<title>📦 人间小事档案馆</title>
 <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
@@ -70,6 +70,9 @@ tailwind.config = {
   /* Star styling */
   .star-filled { fill: #C86A4B; color: #C86A4B; }
   .star-empty { fill: none; color: #d1d5db; }
+
+  @keyframes star-glow { 0%,100%{filter:drop-shadow(0 0 2px rgba(245,158,11,0.3))} 50%{filter:drop-shadow(0 0 6px rgba(245,158,11,0.5))} }
+  .star-glow { animation: star-glow 1.5s ease-in-out infinite; }
 
   /* Custom thin scrollbar */
   .thin-scroll::-webkit-scrollbar { width: 5px; }
@@ -425,8 +428,13 @@ tailwind.config = {
       <!-- Brand -->
       <div class="relative z-30 p-4 sm:p-10">
         <div class="flex items-center gap-2 text-lg font-semibold text-white/90">
-          <span class="text-2xl">🧋</span>
-          <span class="font-boba">wxh的记录册</span>
+          <svg class="w-7 h-7" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="6" width="22" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M3 11h22" stroke="currentColor" stroke-width="1.8"/>
+            <circle cx="14" cy="16" r="2.5" fill="currentColor" opacity="0.7"/>
+            <path d="M10 9V4a1 1 0 011-1h6a1 1 0 011 1v5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
+          <span class="font-boba">人间小事档案馆</span>
         </div>
       </div>
 
@@ -477,12 +485,6 @@ tailwind.config = {
       <div class="sm:hidden relative z-30 flex items-center justify-center pb-6 swipe-hint" id="swipe-hint">
         <span class="text-white/60 text-xs font-boba animate-pulse">← 滑动查看登录 →</span>
       </div>
-
-      <!-- Footer links -->
-      <div class="hidden sm:flex relative z-20 p-4 sm:p-10 items-center gap-6 text-xs text-white/40">
-        <a href="#" class="hover:text-white/70 transition-colors">Privacy</a>
-        <a href="#" class="hover:text-white/70 transition-colors">Terms</a>
-      </div>
     </div>
 
     <!-- Right: Login / Register Form -->
@@ -490,8 +492,13 @@ tailwind.config = {
       <div class="w-full max-w-[400px] flex-1 flex flex-col justify-center">
         <!-- Mobile Logo -->
         <div class="sm:hidden flex items-center justify-center gap-2 text-lg font-semibold mb-10">
-          <span class="text-2xl">🧋</span>
-          <span class="font-boba text-gray-800">wxh的记录册</span>
+          <svg class="w-7 h-7 text-gray-800" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="6" width="22" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M3 11h22" stroke="currentColor" stroke-width="1.8"/>
+            <circle cx="14" cy="16" r="2.5" fill="currentColor" opacity="0.7"/>
+            <path d="M10 9V4a1 1 0 011-1h6a1 1 0 011 1v5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
+          <span class="font-boba text-gray-800">人间小事档案馆</span>
         </div>
 
         <!-- Title -->
@@ -611,37 +618,9 @@ tailwind.config = {
      ============================================================ -->
 <header class="sticky top-0 z-30 bg-white/60 backdrop-blur-xl border-b border-white/50 shadow-sm">
   <div class="w-full px-6 sm:px-10 py-3 flex items-center gap-3">
-    <!-- Cute Boy SVG -->
-    <svg class="w-10 h-10 flex-shrink-0" viewBox="0 0 100 100" fill="none">
-      <g class="animate-boba-bounce" style="transform-origin:center center;">
-        <!-- Hair (messy/curly) -->
-        <ellipse cx="50" cy="30" rx="30" ry="24" fill="#5C3D2E"/>
-        <ellipse cx="50" cy="26" rx="26" ry="20" fill="#6B4533"/>
-        <!-- Hair tufts -->
-        <path d="M24 26 Q20 14 28 12 Q24 20 28 26" fill="#5C3D2E"/>
-        <path d="M42 18 Q38 6 46 4 Q42 14 46 20" fill="#6B4533"/>
-        <path d="M58 18 Q56 5 62 3 Q60 15 62 20" fill="#5C3D2E"/>
-        <path d="M76 26 Q82 12 74 10 Q78 20 73 26" fill="#6B4533"/>
-        <!-- Face -->
-        <ellipse cx="50" cy="46" rx="25" ry="23" fill="#FCE4D6"/>
-        <!-- Blush -->
-        <ellipse cx="34" cy="50" rx="6" ry="3.5" fill="#F2B8A0" opacity="0.5" class="animate-blush-pulse"/>
-        <ellipse cx="66" cy="50" rx="6" ry="3.5" fill="#F2B8A0" opacity="0.5" class="animate-blush-pulse"/>
-        <!-- Eyes (happy curved) -->
-        <path d="M36 43 Q40 38 44 43" fill="none" stroke="#3D2B1F" stroke-width="2.5" stroke-linecap="round"/>
-        <path d="M56 43 Q60 38 64 43" fill="none" stroke="#3D2B1F" stroke-width="2.5" stroke-linecap="round"/>
-        <!-- Eye shine -->
-        <circle cx="41" cy="41" r="1.8" fill="white" opacity="0.8"/>
-        <circle cx="61" cy="41" r="1.8" fill="white" opacity="0.8"/>
-        <!-- Mouth (smile) -->
-        <path d="M43 54 Q50 61 57 54" fill="none" stroke="#D4896A" stroke-width="2" stroke-linecap="round"/>
-        <!-- Body/torso -->
-        <rect x="36" y="67" width="28" height="22" rx="10" fill="#4A90D9" stroke="#3A7BC8" stroke-width="2"/>
-        <!-- Collar -->
-        <path d="M40 67 L50 75 L60 67" fill="none" stroke="#3A7BC8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </g>
-    </svg>
-    <h1 class="text-xl sm:text-2xl font-boba font-bold text-gray-800 tracking-wide whitespace-nowrap">wxh的记录册</h1>
+    <h1 class="text-xl sm:text-2xl font-boba font-bold text-gray-800 tracking-wide whitespace-nowrap">
+      人间小事档案馆
+    </h1>
     <!-- Background Theme Switcher — 5 pastel dots -->
     <div class="flex items-center gap-1.5 ml-2 sm:ml-4" id="bg-theme-switcher">
       <button class="bg-dot w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 cursor-pointer hover:scale-125 active:scale-90 transition-all duration-200" data-bg="warm" title="暖橘" style="background:linear-gradient(135deg,#FDE8DB,#F5C9A5);border-color:#C86A4B;box-shadow:0 0 0 3px rgba(200,106,75,0.15)"></button>
@@ -771,11 +750,11 @@ tailwind.config = {
 
       <!-- ============================================================
            ③ 记录核心区 (Recording) — 最大
-           左列: 日历 + 我的最爱 | 右列: 语录 + 今日奶茶 + 昨日
+           左列: 日历 + 我的收藏 | 右列: 语录 + 今日奶茶 + 昨日
            ============================================================ -->
       <div id="content-grid" class="grid grid-cols-1 lg:grid-cols-12 gap-3">
 
-        <!-- LEFT COLUMN: 日历 + 我的最爱 -->
+        <!-- LEFT COLUMN: 日历 + 我的收藏 -->
         <div id="left-col" class="lg:col-span-8 space-y-3">
 
           <!-- 日历 -->
@@ -785,9 +764,9 @@ tailwind.config = {
             </div>
           </div>
 
-          <!-- 我的最爱 -->
+          <!-- 我的收藏 -->
           <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-3 sm:p-4 flex flex-col" style="min-height:100px">
-            <div class="flex items-center gap-2 font-bold text-gray-800 text-xs mb-1.5">📌 我的最爱</div>
+            <div class="flex items-center gap-2 font-bold text-gray-800 text-xs mb-1.5">⭐ 我的收藏</div>
             <div id="pinned-list" class="flex-1"></div>
             <div id="pinned-empty" class="flex-1 flex flex-col items-center justify-center text-center py-1">
               <svg width="36" height="36" viewBox="0 0 100 100" fill="none" stroke="#C86A4B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.2">
@@ -800,7 +779,7 @@ tailwind.config = {
                 <circle cx="50" cy="24.5" r="1.8"/>
                 <circle cx="66" cy="24.5" r="1.8"/>
               </svg>
-              <p class="text-xs text-gray-400 mt-1">快去标记最爱 🧋</p>
+              <p class="text-xs text-gray-400 mt-1">点击卡片中的 ⭐ 收藏你最喜欢的奶茶</p>
             </div>
           </div>
         </div>
@@ -811,7 +790,6 @@ tailwind.config = {
           <!-- 每日奶茶语录 (缩短) -->
           <div class="bg-white/20 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-2 text-center cursor-pointer hover:shadow-[0_12px_36px_rgba(200,106,75,0.1)] transition-all duration-300 relative overflow-hidden flex items-center justify-center gap-2 flex-shrink-0"
                id="quote-w" onclick="nextQuote()" style="min-height:38px;background:linear-gradient(135deg,rgba(254,246,240,0.6),rgba(253,242,248,0.5),rgba(254,249,240,0.5))">
-            <span class="text-lg animate-float flex-shrink-0" id="quote-emoji">💫</span>
             <div class="text-xs sm:text-sm text-gray-800 font-boba font-medium relative z-10" id="quote-text">生活苦短，全糖加满</div>
             <div class="text-[10px] text-gray-400 font-boba flex-shrink-0" id="quote-author">— 每日奶茶语录</div>
           </div>
@@ -998,6 +976,7 @@ tailwind.config = {
      JavaScript — Core Logic
      ============================================================ -->
 <script>
+console.log('🧋 preview.html v2 — cardHTML 已更新: 星标右上角 + 编辑按钮在日期旁');
 /* ============================================================
    Tab Switching
    ============================================================ */
@@ -1092,7 +1071,6 @@ let quoteIdx = Math.floor(Date.now() / 86400000) % QUOTES.length;
 function nextQuote() { quoteIdx = (quoteIdx + 1) % QUOTES.length; updateQuote(); }
 function updateQuote() {
   const q = QUOTES[quoteIdx];
-  document.getElementById('quote-emoji').textContent = q.emoji;
   document.getElementById('quote-text').textContent = q.text;
 }
 updateQuote();
@@ -1213,6 +1191,12 @@ function openModal() {
   document.getElementById('modal-price').value = '';
   document.getElementById('modal-date').value = selDate;
   document.getElementById('modal-name').classList.remove('border-red-400', 'ring-4', 'ring-red-100');
+  // 重置保存按钮文字为"添加记录"
+  const saveBtn = document.querySelector('#modal-overlay .metal-btn[onclick="saveEntry()"]');
+  if (saveBtn) {
+    const textNode = saveBtn.lastChild;
+    if (textNode && textNode.nodeType === 3) textNode.textContent = '添加记录';
+  }
   document.querySelectorAll('#theme-selector .tdot').forEach(d => {
     d.classList.remove('selected');
     d.style.borderColor = 'transparent';
@@ -1223,6 +1207,7 @@ function openModal() {
   renderStars(0); renderThumbs();
   document.getElementById('modal-overlay').classList.add('flex');
   document.getElementById('modal-overlay').classList.remove('hidden');
+  console.log('[MODAL] 打开新增 Modal');
 }
 function closeModal() {
   document.getElementById('modal-overlay').classList.add('hidden');
@@ -1230,17 +1215,29 @@ function closeModal() {
   editId = null;
 }
 function editEntry(id) {
-  const e = entries.find(x => x.id === id);
-  if (!e) return;
-  editId = id; modalR = e.rating || 0; modalTheme = e.theme || 'orange';
+  // 类型安全：确保 id 是数字进行比较
+  const numId = Number(id);
+  if (Number.isNaN(numId)) { console.error('[EDIT] 无效 id:', id); return; }
+  const e = entries.find(x => x.id === numId);
+  if (!e) { console.warn('[EDIT] 未找到记录, id:', numId); return; }
+  console.log('[EDIT] 打开编辑 Modal, entry:', e.name, 'id:', numId);
+  editId = numId; modalR = e.rating || 0; modalTheme = e.theme || 'orange';
   pendingImgs = (e.images || []).map(d => ({ dataUrl: d }));
   document.getElementById('modal-title').textContent = '编辑奶茶记录';
   document.getElementById('modal-name').value = e.name;
   document.getElementById('modal-brand').value = e.brand || '';
   document.getElementById('modal-date').value = e.date;
   document.getElementById('modal-comment').value = e.comment || '';
-  document.getElementById('modal-price').value = e.price || '';
+  document.getElementById('modal-price').value = e.price !== null && e.price !== undefined ? e.price : '';
   document.getElementById('modal-name').classList.remove('border-red-400', 'ring-4', 'ring-red-100');
+  // 更新保存按钮文字
+  const saveBtn = document.querySelector('#modal-overlay .metal-btn[onclick="saveEntry()"]');
+  if (saveBtn) {
+    // 按钮内容是文本节点在 span 之后，用 childNodes 定位
+    const textNode = saveBtn.lastChild;
+    if (textNode && textNode.nodeType === 3) textNode.textContent = '保存修改';
+    else saveBtn.appendChild(document.createTextNode('保存修改'));
+  }
   document.querySelectorAll('#theme-selector .tdot').forEach(d => {
     d.classList.remove('selected');
     d.style.borderColor = 'transparent';
@@ -1262,16 +1259,19 @@ function saveEntry() {
   nm.classList.remove('border-red-400', 'ring-4', 'ring-red-100');
   const brand = document.getElementById('modal-brand').value.trim() || null,
     date = document.getElementById('modal-date').value,
-    price = +document.getElementById('modal-price').value || null,
+    priceVal = document.getElementById('modal-price').value,
+    price = priceVal !== '' ? +priceVal : null,
     comment = document.getElementById('modal-comment').value.trim() || null,
     images = pendingImgs.map(i => i.dataUrl);
   if (!THEMES.includes(modalTheme)) modalTheme = randTheme();
   if (editId) {
-    const e = entries.find(x => x.id === editId);
-    if (!e) return;
+    const numId = Number(editId);
+    const e = entries.find(x => x.id === numId);
+    if (!e) { console.error('[SAVE] 未找到待编辑记录, editId:', editId); return; }
     e.name = name; e.brand = brand; e.date = date; e.price = price; e.rating = modalR || null;
     e.comment = comment; e.theme = modalTheme; e.images = images; e.updatedAt = Date.now();
     sv(entries); toast('记录已更新', 'info');
+    console.log('[SAVE] 已更新记录:', e.name, 'id:', e.id);
   } else {
     entries.push({
       id: Date.now(), name, brand, date, price, rating: modalR || null,
@@ -1279,8 +1279,15 @@ function saveEntry() {
       createdAt: Date.now(), updatedAt: Date.now()
     });
     sv(entries); toast('🧋 新奶茶记录已添加！', 'info');
+    console.log('[SAVE] 已新增记录:', name);
   }
   selDate = date; closeModal(); renderAll(); editId = null;
+  // 重置保存按钮文字
+  const saveBtn = document.querySelector('#modal-overlay .metal-btn[onclick="saveEntry()"]');
+  if (saveBtn) {
+    const textNode = saveBtn.lastChild;
+    if (textNode && textNode.nodeType === 3) textNode.textContent = '添加记录';
+  }
 }
 
 /* ============================================================
@@ -1378,23 +1385,30 @@ function renderCal() {
 
   for (let d = 1; d <= tot; d++) {
     const ds = `${calY}-${String(calM + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`,
-      de = byD[ds];
+      de = byD[ds],
+      hasRecords = de && de.length;
     let cls = 'h-11 flex flex-col items-center justify-center rounded-xl border-2 cursor-pointer transition-all duration-200 font-medium relative';
-    if (ds === selDate) cls += ' border-accent-500 bg-accent-50 text-accent-700 shadow-[0_4px_16px_rgba(200,106,75,0.18)]';
-    else cls += ' border-transparent text-gray-700 hover:bg-accent-50 hover:border-accent-300';
+    if (ds === selDate) {
+      cls += ' border-accent-500 bg-accent-50 text-accent-700 shadow-[0_4px_16px_rgba(200,106,75,0.18)]';
+    } else if (hasRecords) {
+      cls += ' border-accent-300 bg-accent-50/60 text-accent-700 hover:bg-accent-100 hover:border-accent-400';
+    } else {
+      cls += ' border-transparent text-gray-700 hover:bg-accent-50 hover:border-accent-300';
+    }
     if (ds === today) cls += ' font-bold';
-    if (dayDiff(ds) < 0) cls += ' opacity-25';
-    if (ds !== selDate && dayDiff(ds) > 0) cls += ' opacity-25 pointer-events-none';
+    // 无记录的过去日期：置灰但可点击
+    if (!hasRecords && dayDiff(ds) < 0) cls += ' opacity-25';
+    // 无记录的未来日期：亮色但可点击
 
     const isToday = ds === today;
     const isSel = ds === selDate;
 
     h += `<div class="${cls}" onclick="selDay('${ds}')">`;
     h += `<span class="text-sm sm:text-base">${d}</span>`;
-    if (isToday && !isSel) h += `<span class="absolute top-0.5 right-0.5 text-[9px] text-accent-500 font-bold">今</span>`;
-    if (de && de.length) {
+    if (hasRecords) {
       h += DRINK_ICONS[pickIcon(de[0].name)].replace('<svg', '<svg class="w-4 h-4 mt-0.5"');
     }
+    if (isToday && !isSel) h += `<span class="absolute top-0.5 right-0.5 text-[9px] text-accent-500 font-bold">今</span>`;
     h += `</div>`;
   }
   h += `</div>`;
@@ -1441,9 +1455,10 @@ function renderEntries() {
     ct.setAttribute('data-empty', 'false');
     if (emptyDiv) emptyDiv.style.display = 'none';
     fl.forEach(e => {
-      const el = document.createElement('div');
-      el.innerHTML = cardHTML(e);
-      ct.appendChild(el.firstElementChild);
+      const card = document.createElement('div');
+      card.className = 'tilt-card mb-2';
+      card.innerHTML = cardHTML(e);
+      ct.appendChild(card);
     });
     initTiltCards();
   }
@@ -1458,26 +1473,34 @@ function cardHTML(e) {
     thumbs = imgs.length ? `<div class="flex gap-1.5 flex-wrap mb-1">${imgs.map(u => `<img class="w-[52px] aspect-[4/3] rounded-lg object-cover border border-gray-200 cursor-pointer hover:scale-110 transition-transform duration-200" src="${u}" loading="lazy" onerror="this.style.display='none'">`).join('')}</div>` : '';
   const bh = e.brand ? `<span class="font-semibold text-accent-500">${esc(e.brand)} · </span>` : '',
     ch = e.comment ? `<div class="text-xs text-gray-400 px-3 py-1 rounded-lg bg-gray-50 mt-1">💬 ${esc(e.comment)}</div>` : '';
-  return `<div class="tilt-card mb-2">
-    <div class="tilt-card-inner rounded-2xl">
-      <div class="tilt-card-glow rounded-2xl"></div>
-      <article class="entry-card tilt-card-content grid grid-cols-[48px_1fr] gap-3 p-3 bg-white/60 backdrop-blur-sm border border-white/60 rounded-2xl transition-shadow duration-300">
-        <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-gray-50">${DRINK_ICONS[icon]}</div>
-        <div class="flex flex-col gap-1 min-w-0">
-          ${thumbs}
-          <div class="text-sm font-bold text-gray-800 flex items-center gap-1.5">${bh}${esc(e.name)}</div>
-          <div class="flex items-center gap-2"><div class="flex gap-0.5">${stars}</div>${e.price ? `<span class="text-xs text-gray-400">¥${e.price}</span>` : ''}</div>
-          ${ch}
-          <div class="flex items-center justify-end gap-2 mt-2 pt-2 border-t border-gray-100">
-            <button class="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-gray-200 text-xs font-medium cursor-pointer font-boba bg-white text-gray-400 hover:bg-white hover:text-gray-700 active:scale-95 transition-all duration-200 ${e.isPinned ? '!border-accent-300 !bg-accent-50 !text-accent-500' : ''}" onclick="togPin(${e.id})">📌 ${e.isPinned ? '已收藏' : '我的最爱'}</button>
-            <button class="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-gray-200 text-xs font-medium cursor-pointer font-boba bg-white text-gray-400 hover:bg-white hover:text-gray-700 active:scale-95 transition-all duration-200" onclick="editEntry(${e.id})">编辑</button>
-            <button class="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-gray-200 text-xs font-medium cursor-pointer font-boba bg-white text-gray-400 hover:bg-red-50 hover:text-red-400 active:scale-95 transition-all duration-200" onclick="delEntry(${e.id})">删除</button>
-            <span class="text-[10px] text-gray-400 bg-gray-100 px-2.5 py-0.5 rounded-full ml-auto">${fmtDate(e.date)}</span>
+  const pinIcon = `<svg viewBox="0 0 24 24" fill="${e.isPinned ? '#f59e0b' : 'none'}" stroke="${e.isPinned ? '#f59e0b' : '#9ca3af'}" stroke-width="2" class="w-4 h-4 ${e.isPinned ? 'star-glow' : ''}"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+  const delIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2M19 6l-.867 12.142A2 2 0 0116.138 20H7.862a2 2 0 01-1.995-1.858L5 6h14z"/></svg>`;
+  const pinnedStar = e.isPinned ? `<svg viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" stroke-width="2" class="w-3 h-3 star-glow flex-shrink-0"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>` : '';
+  return `<div style="position:relative">
+      <!-- ★ v2: 按钮在 tilt 变换范围外，确保可点击 -->
+      <div class="absolute top-3 right-3 flex items-center gap-1.5" style="z-index:50">
+        <button class="p-1 rounded-lg transition-colors duration-200 hover:bg-amber-50" style="cursor:pointer" onclick="event.stopPropagation();togPin(${e.id})" title="${e.isPinned ? '取消收藏' : '收藏'}">${pinIcon}</button>
+        <button class="p-1 rounded-lg transition-colors duration-200 text-gray-400 hover:text-red-400 hover:bg-red-50" style="cursor:pointer" onclick="event.stopPropagation();delEntry(${e.id})" title="删除">${delIcon}</button>
+      </div>
+      <div class="absolute bottom-3 right-3" style="z-index:50">
+        <button class="text-xs text-accent-500 hover:text-accent-700 hover:underline font-boba bg-transparent border-none px-1" style="cursor:pointer" onclick="event.stopPropagation();editEntry(${e.id})">编辑</button>
+      </div>
+      <div class="tilt-card-inner rounded-2xl">
+        <div class="tilt-card-glow rounded-2xl"></div>
+        <article class="entry-card tilt-card-content grid grid-cols-[48px_1fr] gap-3 p-3 bg-white/60 backdrop-blur-sm border border-white/60 rounded-2xl transition-shadow duration-300" data-version="2">
+          <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-gray-50">${DRINK_ICONS[icon]}</div>
+          <div class="flex flex-col gap-1 min-w-0">
+            ${thumbs}
+            <div class="text-sm font-bold text-gray-800 flex items-center gap-1.5">${bh}${esc(e.name)}${pinnedStar}</div>
+            <div class="flex items-center gap-2"><div class="flex gap-0.5">${stars}</div>${e.price ? `<span class="text-xs text-gray-400">¥${e.price}</span>` : ''}</div>
+            ${ch}
+            <div class="flex items-center mt-2 pt-2 border-t border-gray-100">
+              <span class="text-[10px] text-gray-400 bg-gray-100 px-2.5 py-0.5 rounded-full">${fmtDate(e.date)}</span>
+            </div>
           </div>
-        </div>
-      </article>
-    </div>
-  </div>`;
+        </article>
+      </div>
+    </div>`;
 }
 
 function renderYesterday() {
@@ -1560,13 +1583,26 @@ function chM(d) {
 
 /* ---- Pin / Delete ---- */
 function togPin(id) {
-  const e = entries.find(x => x.id === id);
-  if (e) { e.isPinned = !e.isPinned; e.updatedAt = Date.now(); sv(entries); renderAll(); toast(e.isPinned ? '已收藏' : '已取消收藏', 'info'); }
+  const numId = Number(id);
+  if (Number.isNaN(numId)) { console.error('[PIN] 无效 id:', id); return; }
+  const e = entries.find(x => x.id === numId);
+  if (!e) { console.warn('[PIN] 未找到记录, id:', numId); return; }
+  e.isPinned = !e.isPinned; e.updatedAt = Date.now();
+  sv(entries); renderAll();
+  toast(e.isPinned ? '已收藏' : '已取消收藏', 'info');
+  console.log('[PIN]', e.name, e.isPinned ? '→ 已收藏' : '→ 已取消收藏');
 }
 function delEntry(id) {
-  if (!confirm('确定删除吗？')) return;
-  entries = entries.filter(e => e.id !== id);
-  sv(entries); renderAll(); toast('已删除', 'info');
+  const numId = Number(id);
+  if (Number.isNaN(numId)) { console.error('[DELETE] 无效 id:', id); return; }
+  const e = entries.find(x => x.id === numId);
+  if (!e) { console.warn('[DELETE] 未找到记录, id:', numId); return; }
+  console.log('[DELETE] 确认删除:', e.name, 'id:', numId);
+  if (!confirm('确定删除「' + e.name + '」吗？')) { console.log('[DELETE] 用户取消'); return; }
+  entries = entries.filter(x => x.id !== numId);
+  sv(entries); renderAll();
+  toast('已删除「' + e.name + '」', 'info');
+  console.log('[DELETE] 已删除:', e.name);
 }
 
 /* ---- Search / Filter ---- */
@@ -1602,9 +1638,9 @@ function showResults(r, term) {
     ct.setAttribute('data-empty', 'false');
     ct.querySelector('.flex.flex-col.items-center').style.display = 'none';
     r.sort((a, b) => b.createdAt - a.createdAt).forEach(e => {
-      const el = document.createElement('div');
-      el.innerHTML = cardHTML(e);
-      ct.appendChild(el.firstElementChild);
+      const card = document.createElement('div');
+      card.className = 'tilt-card mb-2'; card.innerHTML = cardHTML(e);
+      ct.appendChild(card);
     });
     initTiltCards();
   }
@@ -1813,7 +1849,7 @@ function renderJournal() {
         : `<span class="text-sm text-gray-400 bg-white/60 px-3 py-1 rounded-full">${(mood || MOODS[0]).emoji} ${(mood || MOODS[0]).label}</span>`;
       const moodEmoji = isCustom ? '' : `<span class="text-lg">${(mood || MOODS[0]).emoji}</span>`;
       const card = document.createElement('div');
-      card.className = `journal-card paper-${e.paper} rounded-2xl shadow-card p-5 flex flex-col gap-3 relative overflow-hidden hover:-translate-y-1 hover:shadow-card-hover transition-all duration-200 cursor-default`;
+      card.className = `journal-card paper-${e.paper} rounded-2xl shadow-card p-5 flex flex-col gap-3 relative overflow-hidden hover:shadow-card-hover transition-shadow duration-200 cursor-default`;
       card.style.minHeight = '180px';
       card.innerHTML = `
         <div class="flex items-start justify-between gap-2">
@@ -1825,8 +1861,8 @@ function renderJournal() {
         <div class="flex items-center justify-between pt-2 border-t border-gray-100">
           ${moodDisplay}
           <div class="flex gap-1.5">
-            <button class="text-xs px-2.5 py-1 rounded-lg border border-gray-200 bg-white/60 text-gray-400 cursor-pointer font-boba hover:bg-white hover:text-gray-700 transition-all duration-200" onclick="event.stopPropagation();editJournalEntry(${e.id})">编辑</button>
-            <button class="text-xs px-2.5 py-1 rounded-lg border border-gray-200 bg-white/60 text-gray-400 cursor-pointer font-boba hover:bg-red-50 hover:text-red-400 transition-all duration-200" onclick="event.stopPropagation();delJournalEntry(${e.id})">删除</button>
+            <button class="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-gray-200 text-xs font-medium cursor-pointer font-boba bg-white text-gray-400 hover:bg-white hover:text-gray-700 active:scale-95 transition-colors duration-200" onclick="event.stopPropagation();editJournalEntry(${e.id})">编辑</button>
+            <button class="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-gray-200 text-xs font-medium cursor-pointer font-boba bg-white text-gray-400 hover:bg-red-50 hover:text-red-400 active:scale-95 transition-colors duration-200" onclick="event.stopPropagation();delJournalEntry(${e.id})">删除</button>
           </div>
         </div>`;
       list.appendChild(card);
@@ -2323,6 +2359,26 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }, 200);
 });
+
+/* ============================================================
+   Event Delegation — 收藏 / 编辑 / 删除
+   ============================================================ */
+console.log('[DELEGATION] 正在注册点击监听...');
+document.addEventListener('click', function(e) {
+  // 防止文本节点没有 closest 方法
+  var el = e.target && e.target.nodeType === 1 ? e.target : e.target.parentElement;
+  if (!el) return;
+  var btn = el.closest('button[data-action]');
+  if (!btn) return;
+  console.log('[DELEGATION] 捕获按钮点击:', btn.dataset.action, btn.dataset.id);
+  e.stopPropagation();
+  var id = Number(btn.dataset.id);
+  var act = btn.dataset.action;
+  if (act === 'pin')    { console.log('[DELEGATION] → togPin');    togPin(id); }
+  if (act === 'edit')   { console.log('[DELEGATION] → editEntry'); editEntry(id); }
+  if (act === 'delete') { console.log('[DELEGATION] → delEntry');  delEntry(id); }
+});
+console.log('[DELEGATION] 注册完成');
 
 /* ============================================================
    Init
