@@ -890,7 +890,7 @@ tailwind.config = {
     <label class="block text-sm font-semibold text-gray-400 mb-1">日期</label>
     <input type="date" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-base text-gray-800 bg-white font-boba mb-4 focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200" id="modal-date">
 
-    <label class="block text-sm font-semibold text-gray-400 mb-1">照片 <span class="font-normal text-xs">（可选,≤9张,单图≤5MB）</span></label>
+    <label class="block text-sm font-semibold text-gray-400 mb-1">照片 <span class="font-normal text-xs">（可选,≤9张,单图≤20MB）</span></label>
     <div class="border-2 border-dashed border-gray-200 rounded-xl p-5 text-center cursor-pointer mb-4 hover:border-accent-500 hover:bg-accent-50 transition-all duration-200" id="upload-zone" onclick="document.getElementById('upload-input').click()">
       <svg class="w-9 h-9 text-gray-400 mx-auto mb-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
       <p class="text-sm text-gray-400">点击/拖拽上传照片</p>
@@ -1147,7 +1147,7 @@ function handleFiles(files) {
   for (const f of files) {
     if (pendingImgs.length >= 9) { toast('最多9张', 'warn'); break; }
     if (!ok.includes(f.type)) { toast('不支持 ' + f.type, 'warn'); continue; }
-    if (f.size > 5 * 1024 * 1024) { toast('单图≤5MB', 'warn'); continue; }
+    if (f.size > 20 * 1024 * 1024) { toast('单图≤20MB', 'warn'); continue; }
     const r = new FileReader();
     r.onload = e => { pendingImgs.push({ dataUrl: e.target.result }); renderThumbs(); };
     r.readAsDataURL(f);
