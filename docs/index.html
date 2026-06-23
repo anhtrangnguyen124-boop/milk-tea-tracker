@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📦 人间小事档案馆</title>
+<title>🧋 人间小事档案馆</title>
 <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
@@ -16,16 +16,16 @@ tailwind.config = {
       },
       colors: {
         accent: {
-          50: '#fef6f0',
-          100: '#fde8db',
-          200: '#f9c9a5',
-          300: '#f5aa6f',
-          400: '#f09a5a',
-          500: '#C86A4B',
-          600: '#A0523A',
-          700: '#8A4530',
-          800: '#6E3726',
-          900: '#52291C',
+          50: '#FFF5F6',
+          100: '#FFE8EB',
+          200: '#F8C4CC',
+          300: '#F09AA6',
+          400: '#E87888',
+          500: '#D4687A',
+          600: '#B85263',
+          700: '#943E4E',
+          800: '#702E3C',
+          900: '#4A1E28',
         }
       },
       borderRadius: {
@@ -33,16 +33,32 @@ tailwind.config = {
         '3xl': '1.5rem',
       },
       boxShadow: {
-        'card': '0 8px 32px rgba(200,106,75,0.06)',
-        'card-hover': '0 12px 40px rgba(200,106,75,0.12)',
-        'btn': '0 4px 14px rgba(200,106,75,0.28)',
-        'btn-hover': '0 6px 20px rgba(200,106,75,0.38)',
+        'card': '0 8px 32px rgba(180,82,99,0.06)',
+        'card-hover': '0 12px 40px rgba(180,82,99,0.12)',
+        'btn': '0 4px 14px rgba(212,104,122,0.28)',
+        'btn-hover': '0 6px 20px rgba(212,104,122,0.38)',
       }
     }
   }
 }
 </script>
 <style>
+
+	  /* ============================================================
+	     CSS Custom Properties for Theme Switching
+	     ============================================================ */
+	  :root {
+	    --accent-50: #FFF5F6;
+	    --accent-100: #FFE8EB;
+	    --accent-400: #E87888;
+	    --accent-500: #D4687A;
+	    --accent-600: #B85263;
+	    --accent-700: #943E4E;
+	    --accent-900: #4A1E28;
+	    --glow-color: #FFB8C4;
+	    --shadow-rgb: 212,104,122;
+	    --btn-text-shadow: rgb(120,60,70);
+	  }
   /* ============================================================
      Animations
      ============================================================ */
@@ -68,7 +84,7 @@ tailwind.config = {
   .animate-paper-flip { animation: paper-flip 4s ease-in-out infinite; transform-origin: 100% 0%; }
 
   /* Star styling */
-  .star-filled { fill: #C86A4B; color: #C86A4B; }
+  .star-filled { fill: var(--accent-500); color: var(--accent-500); }
   .star-empty { fill: none; color: #d1d5db; }
 
   @keyframes star-glow { 0%,100%{filter:drop-shadow(0 0 2px rgba(245,158,11,0.3))} 50%{filter:drop-shadow(0 0 6px rgba(245,158,11,0.5))} }
@@ -88,7 +104,7 @@ tailwind.config = {
   body { transition: background 0.6s ease; }
 
   /* Focus ring override */
-  *:focus-visible { outline: 2px solid #C86A4B; outline-offset: 2px; }
+  *:focus-visible { outline: 2px solid var(--accent-500); outline-offset: 2px; }
 
   /* Glass card base — subtle floating effect */
   .glass-card {
@@ -96,7 +112,7 @@ tailwind.config = {
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border: 1px solid rgba(255,255,255,0.6);
-    box-shadow: 0 8px 32px rgba(200,106,75,0.06);
+    box-shadow: 0 8px 32px rgba(212,104,122,0.06);
   }
 
   /* ============================================================
@@ -185,9 +201,9 @@ tailwind.config = {
   }
   .paper-blank {
     background-color: #faf8f5;
-    background-image: radial-gradient(ellipse at 20% 50%, rgba(200,106,75,0.04) 0%, transparent 50%),
-                      radial-gradient(ellipse at 80% 50%, rgba(200,106,75,0.03) 0%, transparent 50%);
-    box-shadow: inset 0 0 60px rgba(200,106,75,0.05);
+    background-image: radial-gradient(ellipse at 20% 50%, rgba(212,104,122,0.04) 0%, transparent 50%),
+                      radial-gradient(ellipse at 80% 50%, rgba(212,104,122,0.03) 0%, transparent 50%);
+    box-shadow: inset 0 0 60px rgba(212,104,122,0.05);
   }
 
   /* ============================================================
@@ -215,7 +231,7 @@ tailwind.config = {
   }
   /* Accent variant — warm brown gradient border */
   .metal-btn-wrap.accent {
-    background: linear-gradient(to bottom, #52291C, #F09A5A);
+    background: linear-gradient(to bottom, #4A1E28, #F0A0B0);
   }
   /* Inner gradient layer */
   .metal-btn-inner {
@@ -227,7 +243,7 @@ tailwind.config = {
     z-index: 0;
   }
   .metal-btn-wrap.accent .metal-btn-inner {
-    background: linear-gradient(to bottom, #fef6f0, #8A4530, #fde8db);
+    background: linear-gradient(to bottom, var(--accent-50), var(--accent-600), var(--accent-100));
   }
   .metal-btn-wrap:hover .metal-btn-inner {
     filter: brightness(1.05);
@@ -257,8 +273,8 @@ tailwind.config = {
     overflow: hidden;
   }
   .metal-btn-wrap.accent .metal-btn {
-    background: linear-gradient(to bottom, #C86A4B, #A0523A);
-    text-shadow: 0 -1px 0 rgb(120, 50, 30);
+    background: linear-gradient(to bottom, var(--accent-500), var(--accent-600));
+    text-shadow: 0 -1px 0 rgb(100, 70, 10);
   }
   .metal-btn-wrap:has(.metal-btn:active) .metal-btn {
     transform: scale(0.97);
@@ -396,6 +412,23 @@ tailwind.config = {
     }
   }
 
+  /* ============================================================
+     Title Gradient Effects
+     ============================================================ */
+  .title-gradient {
+    background: linear-gradient(135deg, var(--accent-500) 0%, var(--accent-600) 40%, var(--accent-700) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .title-gradient-light {
+    background: linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(255,245,235,1) 50%, rgba(255,220,200,1) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.15));
+  }
+
   /* Auth loading spinner */
   @keyframes authSpin {
     to { transform: rotate(360deg); }
@@ -408,6 +441,30 @@ tailwind.config = {
     animation: authSpin 0.6s linear infinite;
     display: inline-block;
   }
+
+	  /* ============================================================
+	     Theme-Aware Tailwind Overrides
+	     ============================================================ */
+	  .text-accent-500 { color: var(--accent-500) !important; }
+	  .text-accent-600 { color: var(--accent-600) !important; }
+	  .text-accent-700 { color: var(--accent-700) !important; }
+	  .bg-accent-50 { background-color: var(--accent-50) !important; }
+	  .bg-accent-100 { background-color: var(--accent-100) !important; }
+	  .bg-accent-500 { background-color: var(--accent-500) !important; }
+	  .border-accent-300 { border-color: var(--accent-300) !important; }
+	  .border-accent-400 { border-color: var(--accent-400) !important; }
+	  .border-accent-500 { border-color: var(--accent-500) !important; }
+	  .accent-accent-500 { accent-color: var(--accent-500) !important; }
+	  .ring-accent-100 { --tw-ring-color: var(--accent-100) !important; }
+	  .ring-accent-500 { --tw-ring-color: var(--accent-500) !important; }
+	  .focus\:border-accent-500:focus { border-color: var(--accent-500) !important; }
+	  .focus\:ring-accent-100:focus { --tw-ring-color: var(--accent-100) !important; }
+	  .focus\:ring-accent-500:focus { --tw-ring-color: var(--accent-500) !important; }
+	  .hover\:bg-accent-50:hover { background-color: var(--accent-50) !important; }
+	  .hover\:bg-accent-100:hover { background-color: var(--accent-100) !important; }
+	  .hover\:bg-accent-600:hover { background-color: var(--accent-600) !important; }
+	  .hover\:text-accent-500:hover { color: var(--accent-500) !important; }
+	  .hover\:text-accent-700:hover { color: var(--accent-700) !important; }
 </style>
 </head>
 <body class="min-h-screen font-boba text-gray-800 antialiased leading-relaxed"
@@ -419,22 +476,20 @@ tailwind.config = {
 <div id="auth-overlay" class="fixed inset-0 z-[100] transition-opacity duration-500 bg-white">
   <div class="h-full flex overflow-x-auto sm:grid sm:grid-cols-2 snap-x snap-mandatory scroll-smooth hide-scrollbar">
     <!-- Left: Brand + Animated Characters -->
-    <div class="flex-shrink-0 w-full sm:w-auto snap-start flex flex-col justify-between relative overflow-hidden" style="background:linear-gradient(160deg,#C86A4B 0%,#A0523A 30%,#8A4530 60%,#6E3726 100%)">
-      <!-- Decorative bg elements -->
-      <div class="absolute inset-0 opacity-10" style="background-image:radial-gradient(circle,rgba(255,255,255,0.3) 1px,transparent 1px);background-size:24px 24px"></div>
-      <div class="absolute top-1/4 right-1/4 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
-      <div class="absolute bottom-1/4 left-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
+    <div class="flex-shrink-0 w-full sm:w-auto snap-start flex flex-col justify-between relative overflow-hidden" style="background:#ffffff">
+      <!-- Soft Pink Glow -->
+      <div id="auth-glow" class="absolute inset-0 z-0" style="background-image:radial-gradient(circle at center,var(--glow-color) 0%,transparent 100%);opacity:0.7;mixBlendMode:multiply"></div>
 
       <!-- Brand -->
       <div class="relative z-30 p-4 sm:p-10">
-        <div class="flex items-center gap-2 text-lg font-semibold text-white/90">
+        <div class="flex items-center gap-2 text-lg font-semibold text-[var(--accent-500)]">
           <svg class="w-7 h-7" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="3" y="6" width="22" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/>
             <path d="M3 11h22" stroke="currentColor" stroke-width="1.8"/>
             <circle cx="14" cy="16" r="2.5" fill="currentColor" opacity="0.7"/>
             <path d="M10 9V4a1 1 0 011-1h6a1 1 0 011 1v5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
           </svg>
-          <span class="font-boba">人间小事档案馆</span>
+          <span class="font-boba title-gradient text-xl">人间小事档案馆</span>
         </div>
       </div>
 
@@ -483,7 +538,7 @@ tailwind.config = {
 
       <!-- Swipe hint (mobile only) -->
       <div class="sm:hidden relative z-30 flex items-center justify-center pb-6 swipe-hint" id="swipe-hint">
-        <span class="text-white/60 text-xs font-boba animate-pulse">← 滑动查看登录 →</span>
+        <span class="text-gray-400 text-xs font-boba animate-pulse">← 滑动查看登录 →</span>
       </div>
     </div>
 
@@ -498,7 +553,7 @@ tailwind.config = {
             <circle cx="14" cy="16" r="2.5" fill="currentColor" opacity="0.7"/>
             <path d="M10 9V4a1 1 0 011-1h6a1 1 0 011 1v5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
           </svg>
-          <span class="font-boba text-gray-800">人间小事档案馆</span>
+          <span class="font-boba title-gradient text-xl">人间小事档案馆</span>
         </div>
 
         <!-- Title -->
@@ -609,43 +664,85 @@ tailwind.config = {
         </div>
 
         <!-- Reset Password Panel (hidden by default) -->
-        <div id="auth-panel-reset" class="flex flex-col gap-4 hidden">
-          <p class="text-sm text-gray-500 mb-1">验证注册邮箱以重置密码</p>
+        <div id="auth-panel-reset" class="flex flex-col gap-5 hidden">
+          <p class="text-sm text-gray-400 text-center">验证注册邮箱以重置密码</p>
+
+          <!-- Step Progress Dots -->
+          <div class="flex items-center justify-center">
+            <span id="reset-dot-1" class="w-2.5 h-2.5 rounded-full bg-accent-500 transition-colors duration-300"></span>
+            <span id="reset-line-1" class="w-8 h-0.5 bg-gray-200 mx-1 transition-colors duration-300"></span>
+            <span id="reset-dot-2" class="w-2.5 h-2.5 rounded-full bg-gray-200 transition-colors duration-300"></span>
+            <span id="reset-line-2" class="w-8 h-0.5 bg-gray-200 mx-1 transition-colors duration-300"></span>
+            <span id="reset-dot-3" class="w-2.5 h-2.5 rounded-full bg-gray-200 transition-colors duration-300"></span>
+          </div>
+
           <!-- Step 1: Email -->
-          <div id="reset-step-1">
-            <label class="block text-sm font-medium text-gray-600 mb-1.5">注册邮箱</label>
-            <input id="auth-reset-email" type="email" placeholder="your@email.com" autocomplete="email"
-              class="w-full px-4 py-3 rounded-xl border border-gray-200 text-base text-gray-800 bg-white font-boba focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200">
-            <button class="metal-btn-wrap accent w-full mt-3" onclick="handleSendCode()" style="display:block">
-              <span class="metal-btn-shine"></span><span class="metal-btn-hover-glow"></span>
-              <span class="metal-btn-inner block text-center py-3 rounded-xl text-white font-boba font-bold text-base">发送验证码</span>
-            </button>
+          <div id="reset-step-1" class="space-y-4">
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-600">注册邮箱</label>
+              <input id="auth-reset-email" type="email" placeholder="your@email.com" autocomplete="email"
+                class="w-full px-4 py-3 rounded-xl border border-gray-200 text-base text-gray-800 bg-white font-boba focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200"
+                onkeydown="if(event.key==='Enter')handleSendCode()">
+            </div>
+            <div class="metal-btn-wrap accent w-full">
+              <div class="metal-btn-inner"></div>
+              <button class="metal-btn text-base font-boba" onclick="handleSendCode()" style="padding-top:0.75rem;padding-bottom:0.75rem">
+                <span class="metal-btn-shine"></span><span class="metal-btn-hover-glow"></span>
+                发送验证码
+              </button>
+            </div>
           </div>
-          <!-- Step 2: Code verification -->
-          <div id="reset-step-2" class="hidden">
-            <label class="block text-sm font-medium text-gray-600 mb-1.5">6位验证码</label>
-            <input id="auth-reset-code" type="text" placeholder="000000" maxlength="6" inputmode="numeric"
-              class="w-full px-4 py-3 rounded-xl border border-gray-200 text-base text-gray-800 bg-white font-boba tracking-[0.3em] text-center focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200">
-            <button class="metal-btn-wrap accent w-full mt-3" onclick="handleVerifyCode()" style="display:block">
-              <span class="metal-btn-shine"></span><span class="metal-btn-hover-glow"></span>
-              <span class="metal-btn-inner block text-center py-3 rounded-xl text-white font-boba font-bold text-base">验证</span>
-            </button>
+
+          <!-- Step 2: Verification Code -->
+          <div id="reset-step-2" class="hidden space-y-4">
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-600">6位验证码</label>
+              <input id="auth-reset-code" type="text" placeholder="000000" maxlength="6" inputmode="numeric"
+                class="w-full px-4 py-3 rounded-xl border border-gray-200 text-base text-gray-800 bg-white font-boba tracking-[0.3em] text-center focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200"
+                onkeydown="if(event.key==='Enter')handleVerifyCode()">
+              <p class="text-xs text-gray-400 text-center">验证码已通过弹窗显示
+                <button class="text-accent-500 hover:underline cursor-pointer bg-transparent border-none p-0 text-xs font-boba" onclick="handleSendCode()">重新发送</button>
+              </p>
+            </div>
+            <div class="metal-btn-wrap accent w-full">
+              <div class="metal-btn-inner"></div>
+              <button class="metal-btn text-base font-boba" onclick="handleVerifyCode()" style="padding-top:0.75rem;padding-bottom:0.75rem">
+                <span class="metal-btn-shine"></span><span class="metal-btn-hover-glow"></span>
+                验证
+              </button>
+            </div>
           </div>
-          <!-- Step 3: New password -->
-          <div id="reset-step-3" class="hidden">
-            <label class="block text-sm font-medium text-gray-600 mb-1.5">新密码</label>
-            <input id="auth-reset-new-pw" type="password" placeholder="新密码（至少6位）" autocomplete="new-password"
-              class="w-full px-4 py-3 rounded-xl border border-gray-200 text-base text-gray-800 bg-white font-boba focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200">
-            <label class="block text-sm font-medium text-gray-600 mb-1.5 mt-3">确认新密码</label>
-            <input id="auth-reset-confirm-pw" type="password" placeholder="再次输入新密码" autocomplete="new-password"
-              class="w-full px-4 py-3 rounded-xl border border-gray-200 text-base text-gray-800 bg-white font-boba focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200">
-            <button class="metal-btn-wrap accent w-full mt-3" onclick="handleDoResetPassword()" style="display:block">
-              <span class="metal-btn-shine"></span><span class="metal-btn-hover-glow"></span>
-              <span class="metal-btn-inner block text-center py-3 rounded-xl text-white font-boba font-bold text-base">重置密码</span>
-            </button>
+
+          <!-- Step 3: New Password -->
+          <div id="reset-step-3" class="hidden space-y-4">
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-600">新密码</label>
+              <input id="auth-reset-new-pw" type="password" placeholder="新密码（至少6位）" autocomplete="new-password"
+                class="w-full px-4 py-3 rounded-xl border border-gray-200 text-base text-gray-800 bg-white font-boba focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200"
+                onkeydown="if(event.key==='Enter')handleDoResetPassword()">
+            </div>
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-600">确认新密码</label>
+              <input id="auth-reset-confirm-pw" type="password" placeholder="再次输入新密码" autocomplete="new-password"
+                class="w-full px-4 py-3 rounded-xl border border-gray-200 text-base text-gray-800 bg-white font-boba focus:border-accent-500 focus:ring-4 focus:ring-accent-100 outline-none transition-all duration-200"
+                onkeydown="if(event.key==='Enter')handleDoResetPassword()">
+            </div>
+            <div class="metal-btn-wrap accent w-full">
+              <div class="metal-btn-inner"></div>
+              <button class="metal-btn text-base font-boba" onclick="handleDoResetPassword()" style="padding-top:0.75rem;padding-bottom:0.75rem">
+                <span class="metal-btn-shine"></span><span class="metal-btn-hover-glow"></span>
+                重置密码
+              </button>
+            </div>
           </div>
+
+          <!-- Error -->
           <div id="auth-reset-error" class="text-xs text-red-400 hidden p-2.5 bg-red-50 rounded-lg"></div>
-          <p class="text-sm text-gray-400 text-center"><button class="text-accent-500 hover:underline cursor-pointer bg-transparent border-none font-boba font-bold p-0" onclick="showAuthPanel('login')">返回登录</button></p>
+
+          <!-- Back to login -->
+          <p class="text-sm text-gray-400 text-center">
+            <button class="text-accent-500 hover:underline cursor-pointer bg-transparent border-none font-boba font-bold p-0" onclick="showAuthPanel('login')">← 返回登录</button>
+          </p>
         </div>
       </div>
       <!-- Back-swipe hint (mobile only) -->
@@ -683,20 +780,20 @@ tailwind.config = {
      ============================================================ -->
 <header class="sticky top-0 z-30 bg-white/60 backdrop-blur-xl border-b border-white/50 shadow-sm">
   <div class="w-full px-6 sm:px-10 py-3 flex items-center gap-3">
-    <h1 class="text-xl sm:text-2xl font-boba font-bold text-gray-800 tracking-wide whitespace-nowrap">
+    <h1 class="text-xl sm:text-2xl font-boba font-bold title-gradient tracking-wide whitespace-nowrap">
       人间小事档案馆
     </h1>
     <!-- Background Theme Switcher — 5 pastel dots -->
     <div class="flex items-center gap-1.5 ml-2 sm:ml-4" id="bg-theme-switcher">
-      <button class="bg-dot w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 cursor-pointer hover:scale-125 active:scale-90 transition-all duration-200" data-bg="warm" title="暖橘" style="background:linear-gradient(135deg,#FDE8DB,#F5C9A5);border-color:#C86A4B;box-shadow:0 0 0 3px rgba(200,106,75,0.15)"></button>
+      <button class="bg-dot w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 cursor-pointer hover:scale-125 active:scale-90 transition-all duration-200" data-bg="warm" title="暖橘" style="background:linear-gradient(135deg,#FFE8EB,#F8C4CC);border-color:var(--accent-500);box-shadow:0 0 0 3px rgba(212,104,122,0.15)"></button>
       <button class="bg-dot w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 cursor-pointer hover:scale-125 active:scale-90 transition-all duration-200" data-bg="mint" title="薄荷" style="background:linear-gradient(135deg,#D4EDDA,#A8DFC8);border-color:transparent"></button>
       <button class="bg-dot w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 cursor-pointer hover:scale-125 active:scale-90 transition-all duration-200" data-bg="lavender" title="薰衣草" style="background:linear-gradient(135deg,#E8DCF0,#D4C4E8);border-color:transparent"></button>
       <button class="bg-dot w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 cursor-pointer hover:scale-125 active:scale-90 transition-all duration-200" data-bg="sky" title="天空" style="background:linear-gradient(135deg,#D6ECFB,#B8DCF8);border-color:transparent"></button>
-      <button class="bg-dot w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 cursor-pointer hover:scale-125 active:scale-90 transition-all duration-200" data-bg="rose" title="玫瑰" style="background:linear-gradient(135deg,#FCE4EC,#F8D0D8);border-color:transparent"></button>
+      <button class="bg-dot w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 cursor-pointer hover:scale-125 active:scale-90 transition-all duration-200" data-bg="sunshine" title="暖阳" style="background:linear-gradient(135deg,#FFF9D4,#F0D060);border-color:transparent"></button>
     </div>
     <!-- Logout Button -->
     <button id="logout-btn" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-gray-200 bg-white/60 flex items-center justify-center cursor-pointer hover:border-accent-500 hover:bg-accent-50 active:scale-90 transition-all duration-200 ml-1.5" title="退出登录" onclick="handleLogout()" style="display:none;">
-      <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" viewBox="0 0 24 24" fill="none" stroke="#C86A4B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" viewBox="0 0 24 24" fill="none" stroke="var(--accent-500)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
         <polyline points="16 17 21 12 16 7"/>
         <line x1="21" y1="12" x2="9" y2="12"/>
@@ -704,7 +801,7 @@ tailwind.config = {
     </button>
     <!-- Tab Switcher — text only -->
     <nav class="ml-auto flex items-center gap-4">
-      <button data-tab="tracker" class="tab-btn text-sm font-bold transition-all duration-200 cursor-pointer border-none bg-transparent px-1 py-1 border-b-2 rounded-none tracking-wide" style="color:#C86A4B;border-color:#C86A4B;" onclick="switchTab('tracker')">奶茶记录</button>
+      <button data-tab="tracker" class="tab-btn text-sm font-bold transition-all duration-200 cursor-pointer border-none bg-transparent px-1 py-1 border-b-2 rounded-none tracking-wide" style="color:var(--accent-500);border-color:var(--accent-500);" onclick="switchTab('tracker')">奶茶记录</button>
       <button data-tab="journal" class="tab-btn text-sm font-bold transition-all duration-200 cursor-pointer border-none bg-transparent px-1 py-1 border-b-2 rounded-none tracking-wide" style="color:#B5A59A;border-color:transparent;" onclick="switchTab('journal')">随想记录</button>
     </nav>
   </div>
@@ -727,10 +824,10 @@ tailwind.config = {
           <h2 class="text-lg sm:text-xl font-bold text-gray-800 flex items-center gap-2">
             <svg class="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none">
               <g class="animate-boba-bounce" style="transform-origin:center center;">
-                <path d="M5 8 L6 20 C6 21 7 22 8 22 L16 22 C17 22 18 21 18 20 L19 8 Z" fill="#FFF8F0" stroke="#C86A4B" stroke-width="1.6" stroke-linejoin="round"/>
-                <path d="M4 8 Q12 4 20 8" fill="#FFFDF8" stroke="#C86A4B" stroke-width="1.6"/>
-                <ellipse cx="12" cy="8" rx="8" ry="1.6" fill="#FFFDF8" stroke="#C86A4B" stroke-width="1.6"/>
-                <line x1="15" y1="2" x2="15" y2="16" stroke="#C86A4B" stroke-width="2.2" stroke-linecap="round"/>
+                <path d="M5 8 L6 20 C6 21 7 22 8 22 L16 22 C17 22 18 21 18 20 L19 8 Z" fill="#FFF8F0" stroke="var(--accent-500)" stroke-width="1.6" stroke-linejoin="round"/>
+                <path d="M4 8 Q12 4 20 8" fill="#FFFDF8" stroke="var(--accent-500)" stroke-width="1.6"/>
+                <ellipse cx="12" cy="8" rx="8" ry="1.6" fill="#FFFDF8" stroke="var(--accent-500)" stroke-width="1.6"/>
+                <line x1="15" y1="2" x2="15" y2="16" stroke="var(--accent-500)" stroke-width="2.2" stroke-linecap="round"/>
                 <circle cx="9" cy="14" r="1.3" fill="#3D2B1F" opacity="0.75"/>
                 <circle cx="13" cy="15.5" r="1.3" fill="#3D2B1F" opacity="0.75"/>
                 <circle cx="15.5" cy="13" r="1.1" fill="#3D2B1F" opacity="0.65"/>
@@ -754,26 +851,26 @@ tailwind.config = {
       <!-- ============================================================
            ① 搜索工具区 (Search) — 最轻量
            ============================================================ -->
-      <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-2.5 sm:p-3">
-        <div class="flex items-center border border-white/40 rounded-full overflow-hidden bg-white/50 focus-within:border-[#C86A4B] focus-within:ring-4 focus-within:ring-[rgba(200,106,75,0.1)] transition-all duration-200">
+      <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(212,104,122,0.06)] border border-white/60 p-2.5 sm:p-3">
+        <div class="flex items-center border border-white/40 rounded-full overflow-hidden bg-white/50 focus-within:border-[var(--accent-500)] focus-within:ring-4 focus-within:ring-[rgba(212,104,122,0.1)] transition-all duration-200">
           <input class="flex-1 border-none bg-transparent text-sm text-gray-800 py-2 pl-4 pr-1 font-boba outline-none placeholder:text-gray-400" id="search-input" placeholder="搜索奶茶..." onfocus="openFilter()" oninput="doSearch()">
           <button class="w-7 h-7 rounded-full border-none bg-gray-200/60 text-gray-400 cursor-pointer hidden items-center justify-center text-xs hover:bg-gray-300/60 transition-all duration-200 font-boba" id="search-clear" onclick="clearSearch()">✕</button>
-          <div class="w-10 h-10 flex items-center justify-center flex-shrink-0 text-gray-400 cursor-pointer hover:text-[#C86A4B] transition-colors duration-200" onclick="doSearch()">
+          <div class="w-10 h-10 flex items-center justify-center flex-shrink-0 text-gray-400 cursor-pointer hover:text-[var(--accent-500)] transition-colors duration-200" onclick="doSearch()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="w-4 h-4"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           </div>
         </div>
         <div class="mt-1.5 hidden flex-wrap gap-2 p-1.5 bg-white/40 rounded-xl text-xs" id="filter-panel">
           <div class="flex-1 min-w-[60px]">
             <label class="block text-[10px] font-semibold text-gray-400 mb-0.5">品牌</label>
-            <input class="w-full px-2 py-1 rounded-lg border border-white/40 text-xs text-gray-800 bg-white/60 font-boba focus:border-[#C86A4B] outline-none" placeholder="品牌..." oninput="doSearch()" id="filter-brand">
+            <input class="w-full px-2 py-1 rounded-lg border border-white/40 text-xs text-gray-800 bg-white/60 font-boba focus:border-[var(--accent-500)] outline-none" placeholder="品牌..." oninput="doSearch()" id="filter-brand">
           </div>
           <div class="flex-1 min-w-[60px]">
             <label class="block text-[10px] font-semibold text-gray-400 mb-0.5">开始</label>
-            <input class="w-full px-2 py-1 rounded-lg border border-white/40 text-xs text-gray-800 bg-white/60 font-boba focus:border-[#C86A4B] outline-none" type="date" onchange="doSearch()" id="filter-from">
+            <input class="w-full px-2 py-1 rounded-lg border border-white/40 text-xs text-gray-800 bg-white/60 font-boba focus:border-[var(--accent-500)] outline-none" type="date" onchange="doSearch()" id="filter-from">
           </div>
           <div class="flex-1 min-w-[60px]">
             <label class="block text-[10px] font-semibold text-gray-400 mb-0.5">结束</label>
-            <input class="w-full px-2 py-1 rounded-lg border border-white/40 text-xs text-gray-800 bg-white/60 font-boba focus:border-[#C86A4B] outline-none" type="date" onchange="doSearch()" id="filter-to">
+            <input class="w-full px-2 py-1 rounded-lg border border-white/40 text-xs text-gray-800 bg-white/60 font-boba focus:border-[var(--accent-500)] outline-none" type="date" onchange="doSearch()" id="filter-to">
           </div>
           <button class="text-[10px] px-2 py-1 border-none bg-transparent text-gray-400 cursor-pointer font-boba hover:text-gray-600" onclick="clearFilters()">清除</button>
         </div>
@@ -782,32 +879,32 @@ tailwind.config = {
       <!-- ============================================================
            ② 统计数据区 (Analytics) — 次之, 80%高度, 去SVG
            ============================================================ -->
-      <div id="stats-bar" class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-2">
+      <div id="stats-bar" class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(212,104,122,0.06)] border border-white/60 p-2">
         <div class="flex items-center justify-between mb-0.5">
           <span class="text-[10px] font-bold text-gray-800 flex items-center gap-1.5">
             <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" id="stats-chart">
               <style>#stats-chart rect{transition:y 0.4s ease,height 0.4s ease}</style>
               <rect x="1" y="14" width="3.5" height="3" rx="0.7" fill="#E8B8A2" id="chart-bar1"/>
-              <rect x="7" y="11" width="3.5" height="6" rx="0.7" fill="#C86A4B" id="chart-bar2"/>
-              <rect x="13" y="8" width="3.5" height="8" rx="0.7" fill="#A0523A" id="chart-bar3"/>
+              <rect x="7" y="11" width="3.5" height="6" rx="0.7" fill="var(--accent-500)" id="chart-bar2"/>
+              <rect x="13" y="8" width="3.5" height="8" rx="0.7" fill="var(--accent-600)" id="chart-bar3"/>
             </svg>
             本月统计
           </span>
-          <button onclick="goToday()" class="px-3 py-0.5 rounded-full bg-[#C86A4B] text-white text-xs font-bold shadow-[0_4px_14px_rgba(200,106,75,0.28)] hover:bg-[#A0523A] hover:shadow-[0_6px_20px_rgba(200,106,75,0.38)] active:scale-95 transition-all duration-200">
+          <button onclick="goToday()" class="px-3 py-0.5 rounded-full bg-[var(--accent-500)] text-white text-xs font-bold shadow-[0_4px_14px_rgba(212,104,122,0.28)] hover:bg-[var(--accent-600)] hover:shadow-[0_6px_20px_rgba(212,104,122,0.38)] active:scale-95 transition-all duration-200">
             今天
           </button>
         </div>
         <div class="grid grid-cols-3 gap-1.5">
           <div class="text-center p-1">
-            <div class="text-lg sm:text-xl font-bold text-[#C86A4B] leading-tight" id="month-total">0</div>
+            <div class="text-lg sm:text-xl font-bold text-[var(--accent-500)] leading-tight" id="month-total">0</div>
             <div class="text-[10px] text-gray-400 mt-0">杯数</div>
           </div>
           <div class="text-center p-1">
-            <div class="text-lg sm:text-xl font-bold text-[#C86A4B] leading-tight" id="week-avg">0</div>
+            <div class="text-lg sm:text-xl font-bold text-[var(--accent-500)] leading-tight" id="week-avg">0</div>
             <div class="text-[10px] text-gray-400 mt-0">周均消费</div>
           </div>
           <div class="text-center p-1">
-            <div class="text-lg sm:text-xl font-bold text-[#C86A4B] leading-tight" id="total-spend">¥0</div>
+            <div class="text-lg sm:text-xl font-bold text-[var(--accent-500)] leading-tight" id="total-spend">¥0</div>
             <div class="text-[10px] text-gray-400 mt-0">消费</div>
           </div>
         </div>
@@ -830,11 +927,11 @@ tailwind.config = {
           </div>
 
           <!-- 我的收藏 -->
-          <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-3 sm:p-4 flex flex-col" style="min-height:100px">
+          <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(212,104,122,0.06)] border border-white/60 p-3 sm:p-4 flex flex-col" style="min-height:100px">
             <div class="flex items-center gap-2 font-bold text-gray-800 text-xs mb-1.5">⭐ 我的收藏</div>
             <div id="pinned-list" class="flex-1"></div>
             <div id="pinned-empty" class="flex-1 flex flex-col items-center justify-center text-center py-1">
-              <svg width="36" height="36" viewBox="0 0 100 100" fill="none" stroke="#C86A4B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.2">
+              <svg width="36" height="36" viewBox="0 0 100 100" fill="none" stroke="var(--accent-500)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.2">
                 <ellipse cx="50" cy="55" rx="24" ry="3.5"/>
                 <path d="M32 32 L35 66 C35 69 37 71 40 71 L60 71 C63 71 65 69 65 66 L68 32 Z"/>
                 <path d="M28 32 Q50 18 72 32"/>
@@ -853,14 +950,14 @@ tailwind.config = {
         <div id="right-col" class="lg:col-span-4 flex flex-col gap-3">
 
           <!-- 每日奶茶语录 (缩短) -->
-          <div class="bg-white/20 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-2 text-center cursor-pointer hover:shadow-[0_12px_36px_rgba(200,106,75,0.1)] transition-all duration-300 relative overflow-hidden flex items-center justify-center gap-2 flex-shrink-0"
+          <div class="bg-white/20 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(212,104,122,0.06)] border border-white/60 p-2 text-center cursor-pointer hover:shadow-[0_12px_36px_rgba(212,104,122,0.1)] transition-all duration-300 relative overflow-hidden flex items-center justify-center gap-2 flex-shrink-0"
                id="quote-w" onclick="nextQuote()" style="min-height:38px;background:linear-gradient(135deg,rgba(254,246,240,0.6),rgba(253,242,248,0.5),rgba(254,249,240,0.5))">
             <div class="text-xs sm:text-sm text-gray-800 font-boba font-medium relative z-10" id="quote-text">生活苦短，全糖加满</div>
             <div class="text-[10px] text-gray-400 font-boba flex-shrink-0" id="quote-author">— 每日奶茶语录</div>
           </div>
 
           <!-- 今日奶茶 (撑开) -->
-          <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-3 sm:p-4 flex flex-col flex-1 min-h-0">
+          <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(212,104,122,0.06)] border border-white/60 p-3 sm:p-4 flex flex-col flex-1 min-h-0">
             <div class="flex items-center justify-between mb-2">
               <h2 class="text-sm sm:text-base font-bold text-gray-800 flex-shrink-0" id="entry-date-label">今日奶茶</h2>
               <span class="text-xs text-gray-400 bg-white/60 px-2 py-0.5 rounded-full font-medium flex-shrink-0" id="entry-count">0 杯</span>
@@ -875,7 +972,7 @@ tailwind.config = {
           </div>
 
           <!-- 昨日好心情 (撑开) -->
-          <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(200,106,75,0.06)] border border-white/60 p-3 sm:p-4 flex flex-col flex-1 min-h-0" style="background:linear-gradient(135deg,rgba(254,246,240,0.7),rgba(253,242,248,0.6),rgba(254,249,240,0.6))">
+          <div class="bg-white/40 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_rgba(212,104,122,0.06)] border border-white/60 p-3 sm:p-4 flex flex-col flex-1 min-h-0" style="background:linear-gradient(135deg,rgba(254,246,240,0.7),rgba(253,242,248,0.6),rgba(254,249,240,0.6))">
             <div class="flex items-center justify-between mb-2 flex-shrink-0">
               <h2 class="text-sm sm:text-base font-bold text-gray-800">🥤 近期好心情</h2>
               <span class="text-xs text-gray-400 bg-white/60 px-2 py-0.5 rounded-full font-medium" id="yesterday-count">0 杯</span>
@@ -897,7 +994,7 @@ tailwind.config = {
       <div class="flex items-center justify-between">
         <div>
           <h2 class="text-lg font-boba font-bold text-gray-800 flex items-center gap-2">
-            <svg class="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" stroke="#C86A4B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <svg class="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" stroke="var(--accent-500)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
               <g class="animate-pen-write" style="transform-origin:50% 70%;">
                 <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
               </g>
@@ -966,7 +1063,7 @@ tailwind.config = {
 
     <label class="block text-sm font-semibold text-gray-400 mb-1">主题色</label>
     <div class="flex gap-2.5 mb-4" id="theme-selector">
-      <div class="tdot w-8 h-8 rounded-full border-[3px] border-transparent cursor-pointer hover:scale-110 active:scale-90 transition-all duration-200 selected" data-theme="orange" onclick="selectTheme('orange',this)" style="background:linear-gradient(135deg,#E8C0A0,#C86A4B);border-color:#C86A4B;box-shadow:0 0 0 5px rgba(200,106,75,0.12)"></div>
+      <div class="tdot w-8 h-8 rounded-full border-[3px] border-transparent cursor-pointer hover:scale-110 active:scale-90 transition-all duration-200 selected" data-theme="orange" onclick="selectTheme('orange',this)" style="background:linear-gradient(135deg,#F0B8C0,#D4687A);border-color:var(--accent-500);box-shadow:0 0 0 5px rgba(var(--shadow-rgb),0.12)"></div>
       <div class="tdot w-8 h-8 rounded-full border-[3px] border-transparent cursor-pointer hover:scale-110 active:scale-90 transition-all duration-200" data-theme="peach" onclick="selectTheme('peach',this)" style="background:linear-gradient(135deg,#F8C0B8,#F2A8A0)"></div>
       <div class="tdot w-8 h-8 rounded-full border-[3px] border-transparent cursor-pointer hover:scale-110 active:scale-90 transition-all duration-200" data-theme="matcha" onclick="selectTheme('matcha',this)" style="background:linear-gradient(135deg,#A8D8A8,#8FC48F)"></div>
       <div class="tdot w-8 h-8 rounded-full border-[3px] border-transparent cursor-pointer hover:scale-110 active:scale-90 transition-all duration-200" data-theme="taro" onclick="selectTheme('taro',this)" style="background:linear-gradient(135deg,#D8C8F0,#C9B8E8)"></div>
@@ -1056,8 +1153,8 @@ function switchTab(tab) {
   // Toggle tab buttons — text-only underline style
   document.querySelectorAll('.tab-btn').forEach(b => {
     if (b.dataset.tab === tab) {
-      b.style.color = '#C86A4B';
-      b.style.borderColor = '#C86A4B';
+      b.style.color = 'var(--accent-500)';
+      b.style.borderColor = 'var(--accent-500)';
     } else {
       b.style.color = '#B5A59A';
       b.style.borderColor = 'transparent';
@@ -1075,7 +1172,7 @@ const DRINK_ICONS = {
   lime_tea: `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="30" y="30" width="40" height="55" rx="5" fill="#B8E6A0" stroke="#1f2937" stroke-width="3.5" stroke-linejoin="round"/><circle cx="72" cy="35" r="10" fill="#D4F5C0" stroke="#1f2937" stroke-width="3"/></svg>`,
   coffee_cup: `<svg viewBox="0 0 100 100" class="w-full h-full"><path d="M28 30 L34 70 L66 70 L72 30 Z" fill="#1f2937" stroke="#1f2937" stroke-width="3.5" stroke-linejoin="round"/><rect x="24" y="22" width="52" height="12" rx="6" fill="#374151" stroke="#1f2937" stroke-width="3.5"/></svg>`,
   milktea: `<svg viewBox="0 0 100 100" class="w-full h-full"><path d="M26 38 L30 78 C30 82 31 84 34 84 L66 84 C69 84 70 82 70 78 L74 38 Z" fill="#F5E6D3" stroke="#1f2937" stroke-width="3.5" stroke-linejoin="round"/><path d="M24 38 Q50 20 76 38" fill="#E8D5C0" stroke="#1f2937" stroke-width="3.5"/><ellipse cx="50" cy="38" rx="26" ry="4" fill="#EDDCC8" stroke="#1f2937" stroke-width="3"/><line x1="54" y1="10" x2="54" y2="68" stroke="#1f2937" stroke-width="3.5" stroke-linecap="round"/><circle cx="36" cy="76" r="4" fill="#1f2937"/><circle cx="52" cy="77" r="3.8" fill="#1f2937"/></svg>`,
-  americano: `<svg viewBox="0 0 100 100" class="w-full h-full"><path d="M32 30 L28 72 L72 72 L68 30 Z" fill="#FDF5E6" stroke="#1f2937" stroke-width="3.5" stroke-linejoin="round"/><ellipse cx="50" cy="30" rx="20" ry="4" fill="#FFFDF5" stroke="#1f2937" stroke-width="3"/><rect x="30" y="18" width="40" height="16" rx="4" fill="#374151" stroke="#1f2937" stroke-width="3"/><ellipse cx="50" cy="50" rx="14" ry="10" fill="#C86A4B" stroke="#1f2937" stroke-width="2.5"/></svg>`,
+  americano: `<svg viewBox="0 0 100 100" class="w-full h-full"><path d="M32 30 L28 72 L72 72 L68 30 Z" fill="#FDF5E6" stroke="#1f2937" stroke-width="3.5" stroke-linejoin="round"/><ellipse cx="50" cy="30" rx="20" ry="4" fill="#FFFDF5" stroke="#1f2937" stroke-width="3"/><rect x="30" y="18" width="40" height="16" rx="4" fill="#374151" stroke="#1f2937" stroke-width="3"/><ellipse cx="50" cy="50" rx="14" ry="10" fill="#D4687A" stroke="#1f2937" stroke-width="2.5"/></svg>`,
   beer: `<svg viewBox="0 0 100 100" class="w-full h-full"><path d="M22 25 L26 80 L74 80 L78 25 Z" fill="#F5C842" stroke="#1f2937" stroke-width="3.5" stroke-linejoin="round"/><path d="M78 35 Q92 35 92 50 Q92 65 78 65" fill="none" stroke="#1f2937" stroke-width="4" stroke-linecap="round"/></svg>`,
   matcha: `<svg viewBox="0 0 100 100" class="w-full h-full"><path d="M25 35 L28 75 C28 78 30 80 33 80 L67 80 C70 80 72 78 72 75 L75 35 Z" fill="#8B9E6B" stroke="#1f2937" stroke-width="3.5" stroke-linejoin="round"/><path d="M75 42 Q90 42 90 55 Q90 68 75 65" fill="none" stroke="#1f2937" stroke-width="4" stroke-linecap="round"/></svg>`,
   sundae: `<svg viewBox="0 0 100 100" class="w-full h-full"><path d="M28 50 L30 86 L70 86 L72 50 Z" fill="#F4A3A8" stroke="#1f2937" stroke-width="3.5" stroke-linejoin="round"/><circle cx="50" cy="42" r="14" fill="#FFF8E7" stroke="#1f2937" stroke-width="3.5"/><circle cx="50" cy="28" r="11" fill="#FDE0C8" stroke="#1f2937" stroke-width="3.5"/></svg>`,
@@ -1084,7 +1181,7 @@ const DRINK_ICONS = {
 const DRINK_TYPES = Object.keys(DRINK_ICONS);
 function pickIcon(n) { let h = 0; for (let i = 0; i < n.length; i++) { h = ((h << 5) - h) + n.charCodeAt(i); h |= 0; } return DRINK_TYPES[Math.abs(h) % DRINK_TYPES.length]; }
 const THEMES = ['orange', 'peach', 'matcha', 'taro', 'sea'];
-const TCOLORS = { orange: '#C86A4B', peach: '#E8A0A0', matcha: '#8FB88F', taro: '#C0B0E0', sea: '#90C0D8' };
+const TCOLORS = { orange: '#D4687A', peach: '#E8A0A0', matcha: '#8FB88F', taro: '#C0B0E0', sea: '#90C0D8' };
 function randTheme() { return THEMES[Math.floor(Math.random() * THEMES.length)]; }
 
 /* ============================================================
@@ -1141,40 +1238,81 @@ function updateQuote() {
 updateQuote();
 
 /* ============================================================
-   Background Theme Switcher — 5 Pastel Colors
+   Theme System — 5 Complete Palettes
    ============================================================ */
-const BG_THEMES = {
-  warm:    'linear-gradient(160deg, #FDF6F0 0%, #FEF9F4 30%, #FDF3F0 60%, #FFF8F4 100%)',
-  mint:    'linear-gradient(160deg, #F0FAF4 0%, #F4FCF8 30%, #EDF7F2 60%, #F8FCF9 100%)',
-  lavender:'linear-gradient(160deg, #F6F2FA 0%, #F9F7FC 30%, #F4F0F8 60%, #FAF8FC 100%)',
-  sky:     'linear-gradient(160deg, #F0F6FA 0%, #F5F9FC 30%, #EEF4F8 60%, #F8FAFC 100%)',
-  rose:    'linear-gradient(160deg, #FCF0F4 0%, #FDF6F8 30%, #FAF0F4 60%, #FEF8F9 100%)',
+const PALETTES = {
+  warm: {
+    body: 'linear-gradient(160deg, #FDF6F0 0%, #FEF9F4 30%, #FDF3F0 60%, #FFF8F4 100%)',
+    dot: '#D4687A',
+    '--accent-50': '#FFF5F6', '--accent-100': '#FFE8EB', '--accent-400': '#E87888',
+    '--accent-500': '#D4687A', '--accent-600': '#B85263', '--accent-700': '#943E4E',
+    '--accent-900': '#4A1E28', '--glow-color': '#FFB8C4',
+    '--shadow-rgb': '212,104,122', '--btn-text-shadow': 'rgb(120,60,70)',
+  },
+  mint: {
+    body: 'linear-gradient(160deg, #F0FAF4 0%, #F4FCF8 30%, #EDF7F2 60%, #F8FCF9 100%)',
+    dot: '#5BA88C',
+    '--accent-50': '#F0FAF5', '--accent-100': '#D4F0E4', '--accent-400': '#6BC4A0',
+    '--accent-500': '#5BA88C', '--accent-600': '#3D8B6E', '--accent-700': '#2B6B52',
+    '--accent-900': '#1A4532', '--glow-color': '#A8E0C8',
+    '--shadow-rgb': '91,168,140', '--btn-text-shadow': 'rgb(40,100,70)',
+  },
+  lavender: {
+    body: 'linear-gradient(160deg, #F6F2FA 0%, #F9F7FC 30%, #F4F0F8 60%, #FAF8FC 100%)',
+    dot: '#9B7EC4',
+    '--accent-50': '#F8F5FC', '--accent-100': '#ECE0F8', '--accent-400': '#A88CD8',
+    '--accent-500': '#9B7EC4', '--accent-600': '#7B5EA8', '--accent-700': '#5E3F8C',
+    '--accent-900': '#3A2060', '--glow-color': '#D4C4F0',
+    '--shadow-rgb': '155,126,196', '--btn-text-shadow': 'rgb(70,45,100)',
+  },
+  sky: {
+    body: 'linear-gradient(160deg, #F0F6FA 0%, #F5F9FC 30%, #EEF4F8 60%, #F8FAFC 100%)',
+    dot: '#6BA8D8',
+    '--accent-50': '#F2F8FC', '--accent-100': '#D8ECF8', '--accent-400': '#7CB8E0',
+    '--accent-500': '#6BA8D8', '--accent-600': '#4A8ABF', '--accent-700': '#326DA0',
+    '--accent-900': '#1A4070', '--glow-color': '#B8D8F0',
+    '--shadow-rgb': '107,168,216', '--btn-text-shadow': 'rgb(40,70,110)',
+  },
+  sunshine: {
+    body: 'linear-gradient(160deg, #FFFEF5 0%, #FFFDF0 30%, #FFF9E0 60%, #FFFEF8 100%)',
+    dot: '#D4A830',
+    '--accent-50': '#FFFEF5', '--accent-100': '#FFF9D4', '--accent-400': '#F0D060',
+    '--accent-500': '#D4A830', '--accent-600': '#B8891E', '--accent-700': '#946F15',
+    '--accent-900': '#5A4008', '--glow-color': '#FFF1A0',
+    '--shadow-rgb': '212,168,48', '--btn-text-shadow': 'rgb(100,75,10)',
+  },
 };
-const BG_COLORS = { warm: '#C86A4B', mint: '#7FB87F', lavender: '#B8A8D8', sky: '#8CB8D0', rose: '#E0A8B0' };
 
-function switchBgTheme(theme, el) {
-  document.body.style.background = BG_THEMES[theme];
+function applyTheme(theme) {
+  const p = PALETTES[theme];
+  if (!p) return;
+  // Apply body background
+  document.body.style.background = p.body;
   document.body.style.backgroundAttachment = 'fixed';
+  // Apply CSS custom properties
+  const root = document.documentElement;
+  Object.keys(p).forEach(k => {
+    if (k.startsWith('--')) root.style.setProperty(k, p[k]);
+  });
   // Update dot borders
   document.querySelectorAll('#bg-theme-switcher .bg-dot').forEach(d => {
     d.style.borderColor = 'transparent';
     d.style.boxShadow = 'none';
   });
-  el.style.borderColor = BG_COLORS[theme];
-  el.style.boxShadow = `0 0 0 3px ${BG_COLORS[theme]}26`;
+  const dot = document.querySelector(`#bg-theme-switcher .bg-dot[data-bg="${theme}"]`);
+  if (dot) {
+    dot.style.borderColor = p.dot;
+    dot.style.boxShadow = `0 0 0 3px ${p.dot}26`;
+  }
   localStorage.setItem('bg_theme', theme);
 }
 
-// Init bg theme from localStorage
-(function initBgTheme() {
+function switchBgTheme(theme, el) { applyTheme(theme); }
+
+// Init theme from localStorage
+(function initTheme() {
   const saved = localStorage.getItem('bg_theme') || 'warm';
-  document.body.style.background = BG_THEMES[saved];
-  document.body.style.backgroundAttachment = 'fixed';
-  const dot = document.querySelector(`#bg-theme-switcher .bg-dot[data-bg="${saved}"]`);
-  if (dot) {
-    dot.style.borderColor = BG_COLORS[saved];
-    dot.style.boxShadow = `0 0 0 3px ${BG_COLORS[saved]}26`;
-  }
+  applyTheme(saved);
 })();
 
 // Attach click handlers
@@ -1191,8 +1329,9 @@ function sv(a) {
   try { localStorage.setItem(DB, JSON.stringify(a)); }
   catch (e) { console.error('[SV] localStorage 写入失败:', e.message); toast('存储空间不足，请删除旧记录或压缩图片', 'warn'); }
 }
+function localDateStr(d) { d = d || new Date(); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
 let entries = ld(),
-  selDate = new Date().toISOString().split('T')[0],
+  selDate = localDateStr(),
   calY = new Date().getFullYear(),
   calM = new Date().getMonth(),
   editId = null,
@@ -1299,8 +1438,8 @@ function selectTheme(t, el) {
     d.style.boxShadow = 'none';
   });
   el.classList.add('selected');
-  el.style.borderColor = '#C86A4B';
-  el.style.boxShadow = '0 0 0 5px rgba(200,106,75,0.12)';
+  el.style.borderColor = 'var(--accent-500)';
+  el.style.boxShadow = '0 0 0 5px rgba(var(--shadow-rgb),0.12)';
 }
 function renderStars(v) {
   modalR = v;
@@ -1310,7 +1449,7 @@ function renderStars(v) {
 }
 function setRating(v) { modalR = v; renderStars(v); }
 function openModal() {
-  const today = new Date().toISOString().split('T')[0];
+  const today = localDateStr();
   if (selDate !== today) { toast('只能为今天添加记录哦 ~', 'warn'); return; }
   editId = null; modalTheme = 'orange'; modalR = 0; pendingImgs = []; pendingUploads = 0;
   document.getElementById('modal-title').textContent = '添加奶茶记录';
@@ -1325,7 +1464,7 @@ function openModal() {
     d.style.boxShadow = 'none';
   });
   const firstDot = document.querySelector('#theme-selector .tdot[data-theme="orange"]');
-  if (firstDot) { firstDot.classList.add('selected'); firstDot.style.borderColor = '#C86A4B'; firstDot.style.boxShadow = '0 0 0 5px rgba(200,106,75,0.12)'; }
+  if (firstDot) { firstDot.classList.add('selected'); firstDot.style.borderColor = 'var(--accent-500)'; firstDot.style.boxShadow = '0 0 0 5px rgba(var(--shadow-rgb),0.12)'; }
   renderStars(0); renderThumbs();
   document.getElementById('modal-overlay').classList.add('flex');
   document.getElementById('modal-overlay').classList.remove('hidden');
@@ -1359,7 +1498,7 @@ function editEntry(id) {
     d.style.boxShadow = 'none';
   });
   const dot = document.querySelector(`#theme-selector .tdot[data-theme="${modalTheme}"]`);
-  if (dot) { dot.classList.add('selected'); dot.style.borderColor = '#C86A4B'; dot.style.boxShadow = '0 0 0 5px rgba(200,106,75,0.12)'; }
+  if (dot) { dot.classList.add('selected'); dot.style.borderColor = 'var(--accent-500)'; dot.style.boxShadow = '0 0 0 5px rgba(var(--shadow-rgb),0.12)'; }
   renderStars(modalR); renderThumbs();
   document.getElementById('modal-overlay').classList.add('flex');
   document.getElementById('modal-overlay').classList.remove('hidden');
@@ -1434,7 +1573,7 @@ function initTiltCards() {
       if (glow) {
         const gx = (x / w) * 100;
         const gy = (y / h) * 100;
-        glow.style.background = `radial-gradient(circle 100px at ${gx}% ${gy}%, rgba(200,106,75,0.13), transparent 50%)`;
+        glow.style.background = `radial-gradient(circle 100px at ${gx}% ${gy}%, rgba(var(--shadow-rgb),0.13), transparent 50%)`;
         glow.classList.add('active');
       }
     });
@@ -1472,7 +1611,7 @@ function renderStats() {
 
 function renderCal() {
   const c = document.getElementById('calendar'),
-    today = new Date().toISOString().split('T')[0],
+    today = localDateStr(),
     fd = new Date(calY, calM, 1),
     ld2 = new Date(calY, calM + 1, 0),
     off = (fd.getDay() + 6) % 7,
@@ -1500,7 +1639,7 @@ function renderCal() {
       hasRecords = de && de.length;
     let cls = 'h-11 flex flex-col items-center justify-center rounded-xl border-2 cursor-pointer transition-all duration-200 font-medium relative';
     if (ds === selDate) {
-      cls += ' border-accent-500 bg-accent-50 text-accent-700 shadow-[0_4px_16px_rgba(200,106,75,0.18)]';
+      cls += ' border-accent-500 bg-accent-50 text-accent-700 shadow-[0_4px_16px_rgba(var(--shadow-rgb),0.18)]';
     } else if (hasRecords) {
       cls += ' border-accent-300 bg-accent-50/60 text-accent-700 hover:bg-accent-100 hover:border-accent-400';
     } else {
@@ -1527,7 +1666,7 @@ function renderCal() {
 }
 
 function dayDiff(ds) {
-  const today = new Date().toISOString().split('T')[0];
+  const today = localDateStr();
   return new Date(ds) - new Date(today);
 }
 
@@ -1535,7 +1674,7 @@ function renderEntries() {
   const fl = entries.filter(e => e.date === selDate).sort((a, b) => b.createdAt - a.createdAt),
     ct = document.getElementById('entries-container');
   const [, m, d] = selDate.split('-');
-  const today = new Date().toISOString().split('T')[0];
+  const today = localDateStr();
   const isToday = selDate === today;
   const isPast = selDate < today;
   // Dynamic label
@@ -1615,8 +1754,8 @@ function cardHTML(e) {
 }
 
 function renderYesterday() {
-  const today = new Date().toISOString().split('T')[0];
-  const threeDaysAgo = new Date(Date.now() - 3 * 86400000).toISOString().split('T')[0];
+  const today = localDateStr();
+  const threeDaysAgo = localDateStr(new Date(Date.now() - 3 * 86400000));
   const fl = entries
     .filter(e => e.date >= threeDaysAgo && e.date <= today)
     .sort((a, b) => b.date.localeCompare(a.date) || b.createdAt - a.createdAt),
@@ -1680,7 +1819,7 @@ function renderPinned() {
 function selDay(d) { selDate = d; renderAll(); }
 function goToday() {
   const n = new Date();
-  selDate = n.toISOString().split('T')[0];
+  selDate = localDateStr(n);
   calY = n.getFullYear();
   calM = n.getMonth();
   renderAll();
@@ -1780,7 +1919,7 @@ function toast(msg, type) {
   const el = document.getElementById('toast');
   el.textContent = msg;
   el.className = 'fixed bottom-8 left-1/2 -translate-x-1/2 px-7 py-3.5 rounded-full text-sm font-medium z-[300] pointer-events-none text-white shadow-lg backdrop-blur-md transition-all duration-300 font-boba toast-in';
-  el.style.background = type === 'warn' ? 'rgba(200,106,75,0.92)' : 'rgba(55,65,81,0.9)';
+  el.style.background = type === 'warn' ? 'rgba(var(--shadow-rgb),0.92)' : 'rgba(55,65,81,0.9)';
   setTimeout(() => { el.classList.remove('toast-in'); el.classList.add('toast-out'); }, 2200);
 }
 
@@ -1847,8 +1986,8 @@ function selectJournalPaper(paper, el) {
     o.style.borderColor = '#EDE4DB';
     o.style.boxShadow = 'none';
   });
-  el.style.borderColor = '#C86A4B';
-  el.style.boxShadow = '0 0 0 3px rgba(200,106,75,0.12)';
+  el.style.borderColor = 'var(--accent-500)';
+  el.style.boxShadow = '0 0 0 3px rgba(var(--shadow-rgb),0.12)';
 }
 
 function openJournalModal() {
@@ -1859,7 +1998,7 @@ function openJournalModal() {
   document.getElementById('journal-modal-title').textContent = '写想法';
   document.getElementById('journal-modal-title-input').value = '';
   document.getElementById('journal-modal-content').value = '';
-  document.getElementById('journal-modal-date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('journal-modal-date').value = localDateStr();
   document.getElementById('journal-modal-content').classList.remove('border-red-400', 'ring-4', 'ring-red-100');
   renderMoodSelector();
   // Reset paper options
@@ -1868,7 +2007,7 @@ function openJournalModal() {
     o.style.boxShadow = 'none';
   });
   const paperEl = document.querySelector(`#journal-modal-papers .paper-option[data-paper="${journalPaper}"]`);
-  if (paperEl) { paperEl.style.borderColor = '#C86A4B'; paperEl.style.boxShadow = '0 0 0 3px rgba(200,106,75,0.12)'; }
+  if (paperEl) { paperEl.style.borderColor = '#D4687A'; paperEl.style.boxShadow = '0 0 0 3px rgba(var(--shadow-rgb),0.12)'; }
   document.getElementById('journal-modal-overlay').classList.add('flex');
   document.getElementById('journal-modal-overlay').classList.remove('hidden');
 }
@@ -1897,7 +2036,7 @@ function editJournalEntry(id) {
     o.style.boxShadow = 'none';
   });
   const paperEl = document.querySelector(`#journal-modal-papers .paper-option[data-paper="${journalPaper}"]`);
-  if (paperEl) { paperEl.style.borderColor = '#C86A4B'; paperEl.style.boxShadow = '0 0 0 3px rgba(200,106,75,0.12)'; }
+  if (paperEl) { paperEl.style.borderColor = '#D4687A'; paperEl.style.boxShadow = '0 0 0 3px rgba(var(--shadow-rgb),0.12)'; }
   document.getElementById('journal-modal-overlay').classList.add('flex');
   document.getElementById('journal-modal-overlay').classList.remove('hidden');
 }
@@ -2362,11 +2501,12 @@ function showAuthPanel(mode) {
       }
     } catch(e) {}
   }
-  // Reset password form: show step 1, hide steps 2/3
+  // Reset password form: show step 1, hide steps 2/3, reset dots
   if (isReset) {
     document.getElementById('reset-step-1').classList.remove('hidden');
     document.getElementById('reset-step-2').classList.add('hidden');
     document.getElementById('reset-step-3').classList.add('hidden');
+    updateResetStepDots(1);
     resetCode = null; resetEmail = '';
   }
   // Play animation on the newly visible panel
@@ -2508,6 +2648,7 @@ function handleSendCode() {
   toast('验证码：' + resetCode + '（模拟邮件发送）', 'info');
   document.getElementById('reset-step-1').classList.add('hidden');
   document.getElementById('reset-step-2').classList.remove('hidden');
+  updateResetStepDots(2);
 }
 
 function handleVerifyCode() {
@@ -2521,6 +2662,7 @@ function handleVerifyCode() {
   }
   document.getElementById('reset-step-2').classList.add('hidden');
   document.getElementById('reset-step-3').classList.remove('hidden');
+  updateResetStepDots(3);
 }
 
 function handleDoResetPassword() {
@@ -2545,6 +2687,21 @@ function handleDoResetPassword() {
   }
   toast('密码已重置，请登录', 'info');
   showAuthPanel('login');
+}
+
+function updateResetStepDots(step) {
+  for (var i = 1; i <= 3; i++) {
+    var dot = document.getElementById('reset-dot-' + i);
+    var line = i < 3 ? document.getElementById('reset-line-' + i) : null;
+    if (dot) {
+      dot.classList.toggle('bg-accent-500', i <= step);
+      dot.classList.toggle('bg-gray-200', i > step);
+    }
+    if (line) {
+      line.classList.toggle('bg-accent-500', i < step);
+      line.classList.toggle('bg-gray-200', i >= step);
+    }
+  }
 }
 
 // ── Google OAuth Login ──
