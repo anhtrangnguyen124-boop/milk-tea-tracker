@@ -1,0 +1,404 @@
+/* components.css — reference copy from index.html */
+
+  /* ============================================================
+     Unified Module Card
+     ============================================================ */
+  .module-card {
+    background: rgba(255,255,255,0.48);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.65);
+    box-shadow: 0 10px 30px rgba(var(--shadow-rgb),0.06);
+    border-radius: 28px;
+    padding: 20px;
+  }
+  @media (max-width: 767px) {
+    .module-card { padding: 16px; border-radius: 24px; }
+  }
+
+  /* ============================================================
+     Animations
+     ============================================================ */
+  @keyframes breathe { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+  @keyframes boba-bounce { 0%,100%{transform:translateY(0)} 30%{transform:translateY(-5px)} 60%{transform:translateY(1px)} }
+  @keyframes sip { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-2px)} }
+  @keyframes blush-pulse { 0%,100%{opacity:0.3} 50%{opacity:0.55} }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+  @keyframes modalIn { from{transform:translateY(30px) scale(0.95);opacity:0} to{transform:translateY(0) scale(1);opacity:1} }
+  /* Memo character animations */
+  @keyframes pen-write { 0%,100%{transform:rotate(-3deg)} 50%{transform:rotate(8deg)} }
+  @keyframes paper-flip { 0%,100%{transform:rotate(0deg)} 30%{transform:rotate(-4deg)} 70%{transform:rotate(3deg)} }
+
+  .animate-breathe { animation: breathe 3s ease-in-out infinite; }
+  .animate-boba-bounce { animation: boba-bounce 0.75s ease-in-out infinite; }
+  .animate-sip { animation: sip 0.75s ease-in-out infinite; }
+  .animate-blush-pulse { animation: blush-pulse 3s ease-in-out infinite; }
+  .animate-float { animation: float 3s ease-in-out infinite; }
+  .animate-fade-in { animation: fadeIn 0.2s ease-out; }
+  .animate-modal-in { animation: modalIn 0.35s cubic-bezier(0.34,1.56,0.64,1); }
+  .animate-pen-write { animation: pen-write 1.5s ease-in-out infinite; transform-origin: 50% 70%; }
+  .empty-subtitle { font-size: 11px; }
+  .animate-paper-flip { animation: paper-flip 4s ease-in-out infinite; transform-origin: 100% 0%; }
+
+  /* Star styling */
+  .star-filled { fill: var(--accent-500); color: var(--accent-500); }
+  .star-empty { fill: none; color: #d1d5db; }
+
+  @keyframes star-glow { 0%,100%{filter:drop-shadow(0 0 2px rgba(245,158,11,0.3))} 50%{filter:drop-shadow(0 0 6px rgba(245,158,11,0.5))} }
+  .star-glow { animation: star-glow 1.5s ease-in-out infinite; }
+
+  /* Custom thin scrollbar */
+  .thin-scroll::-webkit-scrollbar { width: 5px; }
+  .thin-scroll::-webkit-scrollbar-track { background: transparent; }
+  .thin-scroll::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.08); border-radius: 10px; }
+  .thin-scroll::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.14); }
+
+  /* Toast transition */
+  .toast-in { opacity: 1; transform: translateX(-50%) translateY(-6px); }
+  .toast-out { opacity: 0; transform: translateX(-50%) translateY(0); }
+
+  /* Body background transition */
+  body { transition: background 0.6s ease; }
+
+  /* Focus ring override */
+  *:focus-visible { outline: 2px solid var(--accent-500); outline-offset: 2px; }
+
+  /* Glass card base — subtle floating effect */
+  .glass-card {
+    background: rgba(255,255,255,0.4);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.6);
+    box-shadow: 0 8px 32px rgba(212,104,122,0.06);
+  }
+
+  /* ============================================================
+     Liquid Glass Card — multi-layer distortion + specular
+     ============================================================ */
+  @keyframes glassShimmer {
+    0%, 100% { opacity: 0.35; }
+    50% { opacity: 0.55; }
+  }
+  @keyframes glassFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-2px); }
+  }
+
+  .liquid-glass {
+    position: relative;
+    overflow: hidden;
+    background: rgba(255,255,255,0.3);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.5);
+    box-shadow:
+      0 6px 6px rgba(0,0,0,0.06),
+      0 0 20px rgba(0,0,0,0.04);
+    transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .liquid-glass::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    filter: url(#glass-distortion);
+    border-radius: inherit;
+    pointer-events: none;
+  }
+  .liquid-glass::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: rgba(255,255,255,0.18);
+    border-radius: inherit;
+    box-shadow:
+      inset 2px 2px 1px 0 rgba(255,255,255,0.45),
+      inset -1px -1px 1px 1px rgba(255,255,255,0.4);
+    pointer-events: none;
+  }
+  .liquid-glass > .liquid-glass-content {
+    position: relative;
+    z-index: 10;
+  }
+
+  /* Hover — intensify glass */
+  .liquid-glass:hover {
+    box-shadow:
+      0 8px 12px rgba(0,0,0,0.08),
+      0 0 28px rgba(0,0,0,0.06);
+  }
+  .liquid-glass:hover::after {
+    background: rgba(255,255,255,0.28);
+    box-shadow:
+      inset 3px 3px 2px 0 rgba(255,255,255,0.55),
+      inset -1px -1px 2px 1px rgba(255,255,255,0.5);
+  }
+
+  /* ============================================================
+     Paper Textures for Journal Cards
+     ============================================================ */
+  .paper-grid {
+    background-color: #FFFDFA;
+    background-image: linear-gradient(#EDE4DB 1px, transparent 1px), linear-gradient(90deg, #EDE4DB 1px, transparent 1px);
+    background-size: 24px 24px;
+    background-position: -1px -1px;
+  }
+  .paper-lined {
+    background-color: #FFFDFA;
+    background-image: repeating-linear-gradient(transparent, transparent 29px, #EDE4DB 29px, #EDE4DB 30px);
+  }
+  .paper-dot {
+    background-color: #FFFDFA;
+    background-image: radial-gradient(#D4CEC7 1.2px, transparent 1.2px);
+    background-size: 20px 20px;
+    background-position: -2px -2px;
+  }
+  .paper-blank {
+    background-color: #faf8f5;
+    background-image: radial-gradient(ellipse at 20% 50%, rgba(212,104,122,0.04) 0%, transparent 50%),
+                      radial-gradient(ellipse at 80% 50%, rgba(212,104,122,0.03) 0%, transparent 50%);
+    box-shadow: inset 0 0 60px rgba(212,104,122,0.05);
+  }
+
+  /* ============================================================
+     Timeline Layout for Journal
+     ============================================================ */
+  /* Content line-clamp */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  /* Timeline card */
+  .timeline-card {
+    transition: all 0.25s ease;
+    cursor: pointer;
+  }
+  .timeline-card:hover {
+    box-shadow: 0 4px 16px rgba(212,104,122,0.06);
+  }
+  /* Month section collapse animation */
+  .month-section-body {
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+  }
+  .month-section-body.collapsed {
+    max-height: 0 !important;
+    opacity: 0;
+  }
+
+  /* ============================================================
+     Metal Button — gradient border + inner layer + press animation
+     ============================================================ */
+  /* ============================================================
+     Soft Button — lighter, journal-friendly alternative to metal
+     ============================================================ */
+  .soft-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+    padding: 0.55rem 1.5rem; border-radius: 0.85rem;
+    border: 1.5px solid rgba(255,255,255,0.5);
+    background: linear-gradient(135deg, var(--accent-100), var(--accent-50));
+    color: var(--accent-600); font-family: inherit; font-size: 0.875rem; font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(var(--shadow-rgb),0.12), inset 0 1px 0 rgba(255,255,255,0.6);
+    transition: all 0.25s ease;
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  }
+  .soft-btn:hover {
+    background: linear-gradient(135deg, var(--accent-200), var(--accent-100));
+    border-color: var(--accent-300);
+    box-shadow: 0 4px 14px rgba(var(--shadow-rgb),0.2), inset 0 1px 0 rgba(255,255,255,0.7);
+    transform: translateY(-1px);
+  }
+  .soft-btn:active { transform: translateY(1px) scale(0.98); box-shadow: 0 1px 4px rgba(var(--shadow-rgb),0.1); }
+  .soft-btn.primary {
+    background: linear-gradient(135deg, var(--accent-500), var(--accent-400));
+    color: #fff; border-color: transparent;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    box-shadow: 0 3px 12px rgba(var(--shadow-rgb),0.25);
+  }
+  .soft-btn.primary:hover {
+    background: linear-gradient(135deg, var(--accent-600), var(--accent-500));
+    box-shadow: 0 5px 18px rgba(var(--shadow-rgb),0.32);
+  }
+  /* Pill selectors (sweetness, ice, toppings) */
+  .pill-group { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .pill-option {
+    padding: 0.35rem 0.75rem; border-radius: 2rem; border: 1.5px solid #e5e7eb;
+    background: #fff; color: #6b7280; font-size: 0.8rem; font-family: inherit;
+    cursor: pointer; transition: all 0.2s ease; white-space: nowrap;
+  }
+  .pill-option:hover { border-color: var(--accent-300); color: var(--accent-500); }
+  .pill-option.selected {
+    border-color: var(--accent-500); background: var(--accent-50);
+    color: var(--accent-600); font-weight: 600;
+    box-shadow: 0 0 0 2px rgba(var(--shadow-rgb),0.10);
+  }
+  /* Tags for card display */
+  .attr-tag {
+    display: inline-flex; align-items: center; padding: 0.15rem 0.45rem;
+    border-radius: 1rem; font-size: 0.65rem; font-weight: 500; line-height: 1.4;
+    white-space: nowrap;
+  }
+
+  .metal-btn-wrap {
+    position: relative;
+    display: inline-flex;
+    transform: translateY(0) scale(1);
+    border-radius: 0.75rem;
+    padding: 1.25px;
+    background: linear-gradient(to bottom, #000, #A0A0A0);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+    transition: all 250ms cubic-bezier(0.1, 0.4, 0.2, 1);
+    cursor: pointer;
+    transform-origin: center center;
+    will-change: transform;
+  }
+  .metal-btn-wrap:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  }
+  .metal-btn-wrap:has(.metal-btn:active) {
+    transform: translateY(2.5px) scale(0.99);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+  }
+  /* Accent variant — warm brown gradient border */
+  .metal-btn-wrap.accent {
+    background: linear-gradient(to bottom, #4A1E28, #F0A0B0);
+  }
+  /* Inner gradient layer */
+  .metal-btn-inner {
+    position: absolute;
+    inset: 1px;
+    border-radius: 0.65rem;
+    background: linear-gradient(to bottom, #FAFAFA, #3E3E3E, #E5E5E5);
+    transition: all 250ms cubic-bezier(0.1, 0.4, 0.2, 1);
+    z-index: 0;
+  }
+  .metal-btn-wrap.accent .metal-btn-inner {
+    background: linear-gradient(to bottom, var(--accent-50), var(--accent-600), var(--accent-100));
+  }
+  .metal-btn-wrap:hover .metal-btn-inner {
+    filter: brightness(1.05);
+  }
+  /* The button element */
+  .metal-btn {
+    position: relative;
+    z-index: 10;
+    margin: 1px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.65rem;
+    padding: 0.5rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    font-family: inherit;
+    color: #FFF7F0;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(to bottom, #B9B9B9, #969696);
+    text-shadow: 0 -1px 0 rgb(80,80,80);
+    transform: scale(1);
+    transition: all 250ms cubic-bezier(0.1, 0.4, 0.2, 1);
+    transform-origin: center center;
+    outline: none;
+    overflow: hidden;
+  }
+  .metal-btn-wrap.accent .metal-btn {
+    background: linear-gradient(to bottom, var(--accent-500), var(--accent-600));
+    text-shadow: 0 -1px 0 rgb(100, 70, 10);
+  }
+  .metal-btn-wrap:has(.metal-btn:active) .metal-btn {
+    transform: scale(0.97);
+  }
+  .metal-btn-wrap:has(.metal-btn:active) .metal-btn-shine {
+    opacity: 0.25;
+  }
+  .metal-btn-wrap:hover .metal-btn {
+    filter: brightness(1.03);
+  }
+  /* Shine flash on click */
+  .metal-btn-shine {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    border-radius: inherit;
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent);
+    opacity: 0;
+    transition: opacity 300ms ease;
+    pointer-events: none;
+  }
+  /* Hover glow overlay */
+  .metal-btn-hover-glow {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    border-radius: inherit;
+    background: linear-gradient(to top, transparent, rgba(255,255,255,0.08));
+    opacity: 0;
+    transition: opacity 200ms ease;
+    pointer-events: none;
+  }
+  .metal-btn-wrap:hover .metal-btn-hover-glow {
+    opacity: 1;
+  }
+  /* Full-width variant */
+  .metal-btn-wrap.w-full {
+    display: flex;
+    width: 100%;
+  }
+  .metal-btn-wrap.w-full .metal-btn {
+    width: 100%;
+  }
+
+  /* ============================================================
+     3D Tilt Card — framer-motion ProductHighlightCard inspired
+     ============================================================ */
+  .tilt-card {
+    perspective: 800px;
+    transform-style: preserve-3d;
+  }
+  .tilt-card-inner {
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.15s ease-out;
+    will-change: transform;
+  }
+  /* Diagonal line texture */
+  .tilt-card-inner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    background:
+      linear-gradient(to right, rgba(128,128,128,0.02) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(128,128,128,0.02) 1px, transparent 1px);
+    background-size: 32px 32px;
+    mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, #000 60%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, #000 60%, transparent 100%);
+    pointer-events: none;
+  }
+  /* Glow overlay — follows mouse */
+  .tilt-card-glow {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .tilt-card-glow.active {
+    opacity: 1;
+  }
+  /* Content layer above texture + glow */
+  .tilt-card-content {
+    position: relative;
+    z-index: 10;
+  }
