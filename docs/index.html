@@ -1359,6 +1359,9 @@ tailwind.config = {
         <line x1="21" y1="12" x2="9" y2="12"/>
       </svg>
     </button>
+    <button id="archive-export-btn" class="hidden text-[11px] sm:text-xs font-bold px-2.5 py-1.5 rounded-full border border-[#eaded3] bg-white/75 text-[#8c6f5f] cursor-pointer hover:border-[var(--accent-400)] hover:text-[var(--accent-500)]" onclick="exportArchiveBackup()">导出档案</button>
+    <button id="archive-import-btn" class="hidden text-[11px] sm:text-xs font-bold px-2.5 py-1.5 rounded-full border border-[var(--accent-300)] bg-[var(--accent-50)] text-[var(--accent-500)] cursor-pointer hover:bg-[var(--accent-100)]" onclick="selectArchiveImport()">导入档案</button>
+    <input id="archive-import-input" type="file" accept="application/json,.json" class="hidden" onchange="importArchiveBackup(this.files[0]);this.value=''">
     <!-- Tab Switcher — text only -->
     <nav class="ml-auto flex items-center gap-4">
       <button data-tab="tracker" class="tab-btn text-sm font-bold transition-all duration-200 cursor-pointer border-none bg-transparent px-1 py-1 border-b-2 rounded-none tracking-wide" style="color:var(--accent-500);border-color:var(--accent-500);" onclick="switchTab('tracker')">饮品记录</button>
@@ -2281,6 +2284,54 @@ function _cloudSnapshot() {
   var payload = {};
   _cloudSyncModules.forEach(function(module) { payload[module] = _idbCache[module] || []; });
   return payload;
+}
+function updateArchiveMigrationTools() {
+  var exportButton = document.getElementById('archive-export-btn');
+  var importButton = document.getElementById('archive-import-btn');
+  if (!exportButton || !importButton) return;
+  var isLocalFile = location.protocol === 'file:';
+  exportButton.classList.toggle('hidden', !isLocalFile);
+  importButton.classList.toggle('hidden', isLocalFile);
+}
+function exportArchiveBackup() {
+  var owner = getActiveUser();
+  if (!owner) { toast('请先登录后再导出档案', 'warn'); return; }
+  var backup = { format: 'life-archive-backup', version: 1, exportedAt: new Date().toISOString(), owner: owner, payload: _cloudSnapshot() };
+  var blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json;charset=utf-8' });
+  var url = URL.createObjectURL(blob); var link = document.createElement('a');
+  link.href = url; link.download = '人间小事档案馆备份-' + localDateStr() + '.json';
+  document.body.appendChild(link); link.click(); link.remove(); URL.revokeObjectURL(url);
+  toast('档案已导出，请到正式网址导入', 'info');
+}
+function selectArchiveImport() { document.getElementById('archive-import-input').click(); }
+function importArchiveBackup(file) {
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = async function() {
+    try {
+      var backup = JSON.parse(String(reader.result || ''));
+      if (!backup || backup.format !== 'life-archive-backup' || !backup.payload || typeof backup.payload !== 'object') throw new Error('invalid');
+      var importedCount = 0;
+      _cloudSyncSuspended = true;
+      for (var i = 0; i < _cloudSyncModules.length; i++) {
+        var module = _cloudSyncModules[i], records = backup.payload[module];
+        if (Array.isArray(records)) { _idbCache[module] = records; await _idbPut(userKey(module), records); importedCount += records.length; }
+      }
+      _cloudSyncSuspended = false;
+      entries = ld(); journalEntries = ldJournal();
+      if (typeof jobEntries !== 'undefined') jobEntries = loadJobs();
+      if (typeof reviewEntries !== 'undefined') reviewEntries = loadReviews();
+      if (typeof foodmapEntries !== 'undefined') foodmapEntries = loadFoodmap();
+      if (typeof travelEntries !== 'undefined') travelEntries = loadTravel();
+      renderAll();
+      await _pushCloudSnapshot();
+      toast('已导入 ' + importedCount + ' 条档案，并同步到云端', 'info');
+    } catch (error) {
+      _cloudSyncSuspended = false;
+      toast('导入失败：请选择从本档案馆导出的备份文件', 'warn');
+    }
+  };
+  reader.readAsText(file, 'utf-8');
 }
 function _scheduleCloudSync() {
   if (_cloudSyncSuspended || !_cloudSyncReady || location.protocol === 'file:') return;
@@ -5868,6 +5919,7 @@ function onAuthSuccess(email) {
   var overlay = document.getElementById('auth-overlay');
   overlay.classList.add('auth-overlay-hidden');
   document.getElementById('logout-btn').style.display = '';
+  updateArchiveMigrationTools();
   authBlinkTimers.forEach(function(t) { clearTimeout(t); });
   authBlinkTimers = [];
   setTimeout(function() { overlay.classList.add('hidden'); }, 500);
@@ -5917,6 +5969,7 @@ async function handleLogout() {
   var overlay = document.getElementById('auth-overlay');
   overlay.classList.remove('hidden','auth-overlay-hidden');
   document.getElementById('logout-btn').style.display = 'none';
+  updateArchiveMigrationTools();
   resetPasswordField();
   showAuthPanel('login');
   initCharacters();
