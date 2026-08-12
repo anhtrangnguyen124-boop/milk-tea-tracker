@@ -2290,7 +2290,8 @@ function updateArchiveMigrationTools() {
   var importButton = document.getElementById('archive-import-btn');
   if (!exportButton || !importButton) return;
   var isLocalFile = location.protocol === 'file:';
-  exportButton.classList.toggle('hidden', !isLocalFile);
+  // 本地页与正式网页都可以导出；正式网页额外提供导入以完成跨设备迁移。
+  exportButton.classList.remove('hidden');
   importButton.classList.toggle('hidden', isLocalFile);
 }
 function exportArchiveBackup() {
