@@ -1,4 +1,5 @@
 {
+  "outputDirectory": "docs",
   "functions": {
     "api/parse-travel.js": {
       "maxDuration": 30
