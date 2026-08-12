@@ -1,5 +1,6 @@
 {
-  "outputDirectory": "docs",
+  "buildCommand": "npm run vercel-build",
+  "outputDirectory": ".vercel-output",
   "functions": {
     "api/parse-travel.js": {
       "maxDuration": 30

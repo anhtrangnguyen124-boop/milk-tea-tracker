@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "vercel-build": "rm -rf .vercel-output && mkdir -p .vercel-output && cp -R docs/. .vercel-output/",
     "preview": "vite preview",
     "electron:dev": "vite",
     "electron:build": "vite build && electron-builder",
