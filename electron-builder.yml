@@ -1,5 +1,5 @@
-appId: com.milktea.tracker
-productName: "奶茶记录册"
+appId: com.wenxianghong.little-things-archive
+productName: "人间小事档案馆"
 copyright: "Copyright © 2026"
 directories:
   output: release
@@ -7,14 +7,16 @@ directories:
 files:
   - dist
   - dist-electron
+  - docs/index.html
+  - docs/supabase.min.js
 mac:
-  category: public.app-category.food-and-drink
+  category: public.app-category.lifestyle
   target:
     - dmg
-  artifactName: "奶茶记录册-${version}.${ext}"
+  artifactName: "人间小事档案馆-${version}.${ext}"
   icon: build/icon.png
 dmg:
-  title: "🧋 奶茶记录册"
+  title: "人间小事档案馆"
   contents:
     - x: 130
       y: 220
@@ -26,8 +28,8 @@ win:
   target:
     - nsis
 nsis:
-  artifactName: "奶茶记录册-Setup-${version}.${ext}"
+  artifactName: "人间小事档案馆-Setup-${version}.${ext}"
 linux:
   target:
     - AppImage
-  artifactName: "奶茶记录册-${version}.${ext}"
+  artifactName: "人间小事档案馆-${version}.${ext}"

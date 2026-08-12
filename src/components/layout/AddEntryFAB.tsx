@@ -1,12 +1,10 @@
 import { Plus } from 'lucide-react'
 import { useUIStore } from '@/store/uiStore'
-import { useEntries } from '@/hooks/useEntries'
 import { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 export function AddEntryFAB() {
-  const { timeRange, openEntryForm, activeTab } = useUIStore()
-  const { data: entries } = useEntries(timeRange)
+  const { openEntryForm, activeTab, selectedDate } = useUIStore()
 
   useEffect(() => {
     const cleanup = window.electronAPI?.onNewEntry(() => openEntryForm())
@@ -24,8 +22,7 @@ export function AddEntryFAB() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [openEntryForm])
 
-  const hasEntries = entries && entries.length > 0
-  const show = activeTab === 'calendar' && hasEntries
+  const show = activeTab === 'calendar'
 
   return (
     <AnimatePresence>
@@ -41,7 +38,7 @@ export function AddEntryFAB() {
                      bg-gradient-to-br from-milk-primary to-milk-primary-dark text-white
                      shadow-lg shadow-milk-primary/20 hover:shadow-xl hover:shadow-milk-primary/30
                      transition-shadow duration-300 flex items-center justify-center z-40"
-          title="添加奶茶记录 (Cmd+N)"
+          title={`为 ${selectedDate} 添加记录 (Cmd+N)`}
         >
           <Plus className="w-6 h-6" strokeWidth={2.5} />
         </motion.button>

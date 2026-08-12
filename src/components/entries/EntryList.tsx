@@ -4,9 +4,13 @@ import type { Entry } from '@/types'
 import { useUIStore } from '@/store/uiStore'
 import { DrinkIcon } from '@/components/icons/DrinkIcon'
 
-interface Props { entries: Entry[]; isLoading: boolean }
+interface Props {
+  entries: Entry[]
+  isLoading: boolean
+  selectedDate?: string
+}
 
-export function EntryList({ entries, isLoading }: Props) {
+export function EntryList({ entries, isLoading, selectedDate }: Props) {
   const openEntryForm = useUIStore((s) => s.openEntryForm)
 
   if (isLoading) {
@@ -44,9 +48,9 @@ export function EntryList({ entries, isLoading }: Props) {
           <DrinkIcon type="milktea" size={72} />
         </motion.div>
 
-        <h3 className="text-xl font-bold text-milk-text mb-2">还没有奶茶记录</h3>
+        <h3 className="text-xl font-bold text-milk-text mb-2">这一天还没有饮品记录</h3>
         <p className="text-sm text-milk-text-secondary mb-10 max-w-xs leading-relaxed">
-          记录下今天喝的第一杯奶茶吧，每一杯都值得被记住 ✨
+          {selectedDate ? `补记 ${selectedDate} 喝过的饮品吧，每一杯都值得被记住 ✨` : '记录下喝过的饮品吧，每一杯都值得被记住 ✨'}
         </p>
 
         <button
@@ -56,7 +60,7 @@ export function EntryList({ entries, isLoading }: Props) {
                      hover:scale-[1.02] active:scale-95 transition-all duration-300
                      flex items-center gap-2.5"
         >
-          添加第一杯奶茶
+          为这一天添加记录
         </button>
         <p className="text-xs text-milk-text-muted mt-5">或按 Cmd+N 快速添加</p>
       </motion.div>

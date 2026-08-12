@@ -1,9 +1,8 @@
 import { useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Calendar, Search } from 'lucide-react'
+import { Calendar, Search, PenLine, BriefcaseBusiness, Sparkles } from 'lucide-react'
 import { useUIStore } from '@/store/uiStore'
-import type { ActiveTab } from '@/store/uiStore'
-import { useEntries, useSearchEntries } from '@/hooks/useEntries'
+import { useEntriesByDate, useSearchEntries } from '@/hooks/useEntries'
 import { CalendarView } from '@/components/calendar/CalendarView'
 import { EntryList } from '@/components/entries/EntryList'
 import { EntryFormModal } from '@/components/entries/EntryFormModal'
@@ -12,7 +11,13 @@ import { ImageViewer } from '@/components/entries/ImageViewer'
 import { DeleteConfirmDialog } from '@/components/entries/DeleteConfirmDialog'
 import { SearchBar } from '@/components/search/SearchBar'
 import { PinnedSection } from '@/components/pinned/PinnedSection'
+import { ThemeSwitcher } from '@/components/theme/ThemeSwitcher'
+import { StatsDashboard } from '@/components/stats/StatsDashboard'
+import { DailyQuote } from '@/components/stats/DailyQuote'
+import { JournalTimeline } from '@/components/journal/JournalTimeline'
+import { JournalFormModal } from '@/components/journal/JournalFormModal'
 import { ToastContainer } from './ToastContainer'
+import { JobStation } from '@/components/jobs/JobStation'
 
 // Glass card
 function GlassCard({ children, className = '' }: { children: React.ReactNode; className?: string }) {
@@ -38,40 +43,10 @@ function PageContainer({ main, sidebar }: { main: React.ReactNode; sidebar: Reac
   )
 }
 
-// Floating tab switch
-function TabSwitch() {
-  const { activeTab, setActiveTab } = useUIStore()
-
-  return (
-    <div className="fixed bottom-6 right-1/2 translate-x-1/2 z-50
-                    bg-white/30 backdrop-blur-xl rounded-2xl border border-white/40
-                    shadow-[0_12px_40px_rgba(51,34,27,0.08)] p-1.5 flex gap-1">
-      {([
-        { key: 'calendar' as ActiveTab, icon: Calendar, label: '打卡' },
-        { key: 'explore' as ActiveTab, icon: Search, label: '探索' },
-      ]).map(({ key, icon: Icon, label }) => (
-        <button
-          key={key}
-          onClick={() => setActiveTab(key)}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold tracking-wide
-            transition-all duration-200
-            ${activeTab === key
-              ? 'bg-milk-primary text-white shadow-md shadow-milk-primary/20'
-              : 'text-milk-text-secondary hover:text-milk-text hover:bg-white/60'
-            }`}
-        >
-          <Icon className="w-4 h-4" />
-          {label}
-        </button>
-      ))}
-    </div>
-  )
-}
-
 // Tab 1: Calendar + Entry List
 function CalendarTab() {
-  const { timeRange, selectedDate, searchTerm } = useUIStore()
-  const { data: entries, isLoading } = useEntries(timeRange)
+  const { selectedDate, searchTerm, openEntryForm } = useUIStore()
+  const { data: entries, isLoading } = useEntriesByDate(selectedDate)
   const { data: searchResults } = useSearchEntries(searchTerm)
 
   const displayEntries = useMemo(() => {
@@ -82,7 +57,12 @@ function CalendarTab() {
 
   return (
     <PageContainer
-      main={<CalendarView />}
+      main={
+        <div className="space-y-5 h-full overflow-y-auto">
+          <CalendarView />
+          <StatsDashboard />
+        </div>
+      }
       sidebar={
         <GlassCard className="p-5 h-full overflow-y-auto">
           {searchTerm.trim() && (
@@ -96,12 +76,25 @@ function CalendarTab() {
               <h3 className="text-sm font-bold text-milk-text-secondary tracking-wide">
                 {selectedDate} 的记录
               </h3>
-              <span className="text-xs text-milk-text-muted bg-milk-bg/60 px-2.5 py-1 rounded-full font-medium">
-                {displayEntries.length} 杯
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-milk-text-muted bg-milk-bg/60 px-2.5 py-1 rounded-full font-medium">
+                  {displayEntries.length} 杯
+                </span>
+                <button
+                  type="button"
+                  onClick={() => openEntryForm()}
+                  className="rounded-xl bg-milk-primary/8 px-2.5 py-1 text-xs font-semibold text-milk-primary
+                             transition-colors hover:bg-milk-primary hover:text-white"
+                >
+                  为这一天补记
+                </button>
+              </div>
             </div>
           )}
-          <EntryList entries={displayEntries} isLoading={isLoading} />
+          <EntryList entries={displayEntries} isLoading={isLoading} selectedDate={selectedDate} />
+          <div className="mt-4">
+            <DailyQuote />
+          </div>
         </GlassCard>
       }
     />
@@ -127,29 +120,79 @@ function ExploreTab() {
   )
 }
 
+// Tab 3: Journal
+function JournalTab() {
+  return (
+    <div className="h-full overflow-y-auto">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-lg font-bold text-milk-text tracking-wide">随想记录册</h2>
+        <button
+          onClick={() => useUIStore.getState().openJournalForm()}
+          className="flex items-center gap-1.5 px-4 py-2 rounded-2xl
+                     bg-milk-primary text-white font-semibold text-sm
+                     hover:bg-milk-primary-dark active:scale-[0.98] transition-all
+                     shadow-md shadow-milk-primary/10"
+        >
+          <PenLine className="w-4 h-4" />
+          写想法
+        </button>
+      </div>
+      <JournalTimeline />
+    </div>
+  )
+}
+
 export function MainLayout() {
-  const { activeTab } = useUIStore()
+  const { activeTab, setActiveTab } = useUIStore()
+  const navigation = [
+    { key: 'calendar' as const, label: '饮品记录', icon: Calendar },
+    { key: 'journal' as const, label: '随想记录', icon: PenLine },
+    { key: 'jobs' as const, label: '投递驿站', icon: BriefcaseBusiness },
+    { key: 'explore' as const, label: '收藏与搜索', icon: Search },
+  ]
 
   return (
-    <div className="h-screen flex flex-col bg-milk-bg">
-      {/* Header - glass */}
-      <header className="h-14 flex items-center justify-between px-10 drag-region
-                        border-b border-white/30 bg-white/20 backdrop-blur-xl flex-shrink-0">
-        <div className="flex items-center gap-3 no-drag">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-milk-primary to-milk-primary-dark
-                          flex items-center justify-center shadow-sm">
-            <span className="text-base">🧋</span>
+    <div className="h-screen flex flex-col bg-milk-bg overflow-hidden">
+      <header className="flex-shrink-0 border-b border-milk-border/70 bg-white/75 backdrop-blur-xl">
+        <div className="h-16 max-w-[1440px] mx-auto px-6 flex items-center justify-between gap-6 drag-region">
+          <div className="flex items-center gap-3 min-w-max no-drag">
+            <div className="w-9 h-9 rounded-2xl bg-gradient-to-br from-[#1E7CC1] to-[#0E5596] text-white flex items-center justify-center shadow-sm">
+              <Sparkles className="w-4 h-4" />
+            </div>
+            <div>
+              <h1 className="text-lg font-bold tracking-wide text-[#124F86]">人间小事档案馆</h1>
+              <p className="text-[10px] text-milk-text-muted tracking-wide">把日常认真收藏起来</p>
+            </div>
           </div>
-          <h1 className="text-base font-bold text-milk-text tracking-wide">奶茶记录册</h1>
+
+          <nav className="flex items-center gap-1 no-drag overflow-x-auto" aria-label="主要功能">
+            {navigation.map(({ key, label, icon: Icon }) => (
+              <button
+                key={key}
+                type="button"
+                onClick={() => setActiveTab(key)}
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-xl whitespace-nowrap text-sm font-semibold transition-colors
+                  ${activeTab === key
+                    ? 'bg-[#E8F3FC] text-[#1671B7]'
+                    : 'text-milk-text-secondary hover:bg-milk-bg hover:text-milk-text'}`}
+              >
+                <Icon className="w-4 h-4" />
+                {label}
+              </button>
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-2 min-w-max no-drag">
+            <span className="hidden sm:inline text-[11px] text-milk-text-muted bg-milk-bg px-2.5 py-1 rounded-full font-medium">本地存储</span>
+            <ThemeSwitcher />
+          </div>
         </div>
-        <span className="text-[10px] text-milk-text-muted bg-white/40 backdrop-blur-sm px-2.5 py-1
-                         rounded-full font-medium tracking-wide no-drag">本地存储</span>
       </header>
 
       {/* Content area */}
-      <div className="flex-1 px-10 py-6 overflow-hidden">
+      <main className="flex-1 w-full max-w-[1440px] mx-auto px-6 py-5 overflow-hidden">
         <AnimatePresence mode="wait">
-          {activeTab === 'calendar' ? (
+          {activeTab === 'calendar' && (
             <motion.div
               key="calendar"
               initial={{ opacity: 0, x: -20 }}
@@ -160,7 +203,8 @@ export function MainLayout() {
             >
               <CalendarTab />
             </motion.div>
-          ) : (
+          )}
+          {activeTab === 'explore' && (
             <motion.div
               key="explore"
               initial={{ opacity: 0, x: 20 }}
@@ -172,15 +216,30 @@ export function MainLayout() {
               <ExploreTab />
             </motion.div>
           )}
+          {activeTab === 'journal' && (
+            <motion.div
+              key="journal"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ duration: 0.2 }}
+              className="h-full"
+            >
+              <JournalTab />
+            </motion.div>
+          )}
+          {activeTab === 'jobs' && (
+            <motion.div key="jobs" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} transition={{ duration: 0.2 }} className="h-full">
+              <JobStation />
+            </motion.div>
+          )}
         </AnimatePresence>
-      </div>
-
-      {/* Floating Tab Switch */}
-      <TabSwitch />
+      </main>
 
       {/* Modals & overlays */}
       <AddEntryFAB />
       <EntryFormModal />
+      <JournalFormModal />
       <ImageViewer />
       <DeleteConfirmDialog />
       <ToastContainer />

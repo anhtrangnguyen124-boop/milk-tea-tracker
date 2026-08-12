@@ -1,7 +1,7 @@
 import { create } from 'zustand'
-import type { TimeRange } from '@/types'
+import type { TimeRange, Entry, BgTheme } from '@/types'
 
-export type ActiveTab = 'calendar' | 'explore'
+export type ActiveTab = 'calendar' | 'explore' | 'journal' | 'jobs'
 
 interface UIState {
   // Active tab
@@ -23,7 +23,8 @@ interface UIState {
   // Entry form modal
   isEntryFormOpen: boolean
   editingEntryId: number | null
-  openEntryForm: (entryId?: number) => void
+  editingEntryData: Entry | null
+  openEntryForm: (entryId?: number, entryData?: Entry) => void
   closeEntryForm: () => void
 
   // Search
@@ -37,6 +38,20 @@ interface UIState {
   // Delete confirmation
   deletingEntryId: number | null
   setDeletingEntryId: (id: number | null) => void
+
+  // Confetti
+  confetti: boolean
+  setConfetti: (v: boolean) => void
+
+  // Background theme
+  bgTheme: BgTheme
+  setBgTheme: (theme: BgTheme) => void
+
+  // Journal form modal
+  isJournalFormOpen: boolean
+  journalEditId: number | null
+  openJournalForm: (id?: number) => void
+  closeJournalForm: () => void
 }
 
 export const useUIStore = create<UIState>((set) => ({
@@ -54,10 +69,11 @@ export const useUIStore = create<UIState>((set) => ({
 
   isEntryFormOpen: false,
   editingEntryId: null,
-  openEntryForm: (entryId) =>
-    set({ isEntryFormOpen: true, editingEntryId: entryId ?? null }),
+  editingEntryData: null,
+  openEntryForm: (entryId, entryData) =>
+    set({ isEntryFormOpen: true, editingEntryId: entryId ?? null, editingEntryData: entryData ?? null }),
   closeEntryForm: () =>
-    set({ isEntryFormOpen: false, editingEntryId: null }),
+    set({ isEntryFormOpen: false, editingEntryId: null, editingEntryData: null }),
 
   searchTerm: '',
   setSearchTerm: (term) => set({ searchTerm: term }),
@@ -67,4 +83,22 @@ export const useUIStore = create<UIState>((set) => ({
 
   deletingEntryId: null,
   setDeletingEntryId: (id) => set({ deletingEntryId: id }),
+
+  confetti: false,
+  setConfetti: (v) => set({ confetti: v }),
+
+  bgTheme: (typeof window !== 'undefined' && localStorage.getItem('bg_theme') as BgTheme)
+    || 'warm',
+  setBgTheme: (theme) => {
+    localStorage.setItem('bg_theme', theme)
+    set({ bgTheme: theme })
+  },
+
+  // Journal form modal
+  isJournalFormOpen: false,
+  journalEditId: null,
+  openJournalForm: (id) =>
+    set({ isJournalFormOpen: true, journalEditId: id ?? null }),
+  closeJournalForm: () =>
+    set({ isJournalFormOpen: false, journalEditId: null }),
 }))

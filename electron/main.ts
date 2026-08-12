@@ -3,15 +3,13 @@ import path from 'path'
 
 let mainWindow: BrowserWindow | null = null
 
-const isDev = !app.isPackaged
-
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
     minWidth: 900,
     minHeight: 600,
-    title: '🧋 奶茶记录册',
+    title: '人间小事档案馆',
     titleBarStyle: 'hiddenInset',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -20,12 +18,9 @@ function createWindow() {
     },
   })
 
-  if (isDev) {
-    mainWindow.loadURL('http://localhost:5173')
-    mainWindow.webContents.openDevTools({ mode: 'detach' })
-  } else {
-    mainWindow.loadFile(path.join(__dirname, '../dist/index.html'))
-  }
+  // 旧版单文件档案馆已经拥有完整、可用的栏目与交互；在 React 迁移完成前，
+  // 它是桌面应用的正式入口。app.getAppPath() 同时兼容开发目录和 app.asar 包。
+  mainWindow.loadFile(path.join(app.getAppPath(), 'docs/index.html'))
 
   mainWindow.on('closed', () => {
     mainWindow = null
@@ -35,17 +30,9 @@ function createWindow() {
 // Build simple native menu
 const menuTemplate: Electron.MenuItemConstructorOptions[] = [
   {
-    label: '奶茶记录册',
+    label: '人间小事档案馆',
     submenu: [
       { role: 'about' },
-      { type: 'separator' },
-      {
-        label: '新建记录',
-        accelerator: 'CmdOrCtrl+N',
-        click: () => {
-          mainWindow?.webContents.send('menu:new-entry')
-        },
-      },
       { type: 'separator' },
       { role: 'quit' },
     ],

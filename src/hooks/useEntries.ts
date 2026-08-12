@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { db } from '@/services/db'
+import { deleteEntryImages } from '@/services/entryImages'
 import type { Entry, NewEntry, UpdateEntry, TimeRange } from '@/types'
 import { subDays } from 'date-fns'
 
@@ -50,6 +51,14 @@ export function useMonthEntries(year: number, month: number) {
   })
 }
 
+// Fetch all entries for one specific calendar day, including historical dates.
+export function useEntriesByDate(date: string) {
+  return useQuery({
+    queryKey: ['entries', 'date', date],
+    queryFn: async () => db.entries.where('date').equals(date).toArray(),
+  })
+}
+
 // Fetch pinned entries
 export function usePinnedEntries() {
   return useQuery({
@@ -87,10 +96,19 @@ export function useCreateEntry() {
       const id = await db.entries.add({
         name: entry.name,
         brand: entry.brand,
-        imageDataUrl: entry.imageDataUrl,
+        imageDataUrl: entry.imageDataUrl ?? (entry.images?.[0] ?? null),
+        images: entry.images ?? (entry.imageDataUrl ? [entry.imageDataUrl] : []),
+        imageIds: entry.imageIds ?? [],
         date: entry.date,
         rating: entry.rating,
         comment: entry.comment,
+        price: entry.price ?? null,
+        colorTheme: entry.colorTheme ?? null,
+        drinkCategory: entry.drinkCategory ?? null,
+        sweetness: entry.sweetness ?? null,
+        ice: entry.ice ?? null,
+        toppings: entry.toppings ?? [],
+        repurchase: entry.repurchase ?? null,
         isPinned: false,
         createdAt: now,
         updatedAt: now,
@@ -109,13 +127,23 @@ export function useUpdateEntry() {
 
   return useMutation({
     mutationFn: async (entry: UpdateEntry) => {
-      const updates: Record<string, unknown> = { updatedAt: new Date() }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const updates: Record<string, any> = { updatedAt: new Date() }
       if (entry.name !== undefined) updates.name = entry.name
       if (entry.brand !== undefined) updates.brand = entry.brand
       if (entry.imageDataUrl !== undefined) updates.imageDataUrl = entry.imageDataUrl
+      if (entry.images !== undefined) updates.images = entry.images
+      if (entry.imageIds !== undefined) updates.imageIds = entry.imageIds
       if (entry.date !== undefined) updates.date = entry.date
       if (entry.rating !== undefined) updates.rating = entry.rating
       if (entry.comment !== undefined) updates.comment = entry.comment
+      if (entry.price !== undefined) updates.price = entry.price
+      if (entry.colorTheme !== undefined) updates.colorTheme = entry.colorTheme
+      if (entry.drinkCategory !== undefined) updates.drinkCategory = entry.drinkCategory
+      if (entry.sweetness !== undefined) updates.sweetness = entry.sweetness
+      if (entry.ice !== undefined) updates.ice = entry.ice
+      if (entry.toppings !== undefined) updates.toppings = entry.toppings
+      if (entry.repurchase !== undefined) updates.repurchase = entry.repurchase
       if (entry.isPinned !== undefined) updates.isPinned = entry.isPinned
 
       await db.entries.update(entry.id, updates)
@@ -133,6 +161,8 @@ export function useDeleteEntry() {
 
   return useMutation({
     mutationFn: async (entryId: number) => {
+      const entry = await db.entries.get(entryId)
+      if (entry?.imageIds?.length) await deleteEntryImages(entry.imageIds)
       await db.entries.delete(entryId)
     },
     onSuccess: () => {

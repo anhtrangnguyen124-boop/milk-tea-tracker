@@ -1,7 +1,7 @@
 {
   "name": "milk-tea-tracker",
   "version": "1.0.0",
-  "description": "🧋 奶茶记录软件 - Record your milk tea journey",
+  "description": "人间小事档案馆 - 收藏日常的饮品、随想与生活记录",
   "main": "dist-electron/main.js",
   "scripts": {
     "dev": "vite",
@@ -20,7 +20,6 @@
   "license": "MIT",
   "dependencies": {
     "@heroui/react": "^3.2.1",
-    "@supabase/supabase-js": "^2.108.2",
     "@tanstack/react-query": "^5.101.0",
     "browser-image-compression": "^2.0.2",
     "clsx": "^2.1.1",

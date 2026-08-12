@@ -1,6 +1,6 @@
 import { usePinnedEntries } from '@/hooks/useEntries'
 import { PinnedEntryCard } from './PinnedEntryCard'
-import { Pin } from 'lucide-react'
+import { Star } from 'lucide-react'
 
 export function PinnedSection() {
   const { data: pinned, isLoading } = usePinnedEntries()
@@ -8,8 +8,8 @@ export function PinnedSection() {
   return (
     <div>
       <h3 className="text-[11px] font-bold text-milk-text-muted tracking-widest mb-3 pl-1 flex items-center gap-1.5">
-        <Pin className="w-3 h-3 text-milk-pin fill-milk-pin" />
-        置顶
+        <Star className="w-3 h-3 text-amber-500 fill-amber-500 star-glow" />
+        我的收藏
       </h3>
 
       {isLoading ? (
@@ -26,7 +26,7 @@ export function PinnedSection() {
         </div>
       ) : (
         <p className="text-[12px] text-milk-text-muted py-2 pl-1 leading-relaxed">
-          暂无置顶，点击卡片中的 📌 按钮置顶你最喜欢的奶茶
+          暂无收藏，点击卡片中的 ⭐ 按钮收藏你最喜欢的奶茶
         </p>
       )}
     </div>
