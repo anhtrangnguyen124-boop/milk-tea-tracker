@@ -2223,6 +2223,10 @@ console.log('人间小事档案馆 v3 — 新增: 甜度/冰量/加料/回购, �
    ============================================================ */
 var _idb = null;
 var _idbCache = {}; // 内存缓存，同步读取
+var _cloudSyncTimer = null;
+var _cloudSyncSuspended = false;
+var _cloudSyncReady = false;
+var _cloudSyncModules = ['cooking_v1', 'foodmap_v1', 'travel_v1', 'milktea_v10', 'journal_v1', 'job_v1', 'job_review_v1'];
 
 function _idbOpen() {
   return new Promise(function(resolve, reject) {
@@ -2270,6 +2274,48 @@ function _cacheGet(module) { return _idbCache[module] || []; }
 function _cacheSet(module, data) {
   _idbCache[module] = data;
   _idbPut(userKey(module), data).catch(function(e) { console.error('IndexedDB persist failed:', e); });
+  _scheduleCloudSync();
+}
+
+function _cloudSnapshot() {
+  var payload = {};
+  _cloudSyncModules.forEach(function(module) { payload[module] = _idbCache[module] || []; });
+  return payload;
+}
+function _scheduleCloudSync() {
+  if (_cloudSyncSuspended || !_cloudSyncReady || location.protocol === 'file:') return;
+  clearTimeout(_cloudSyncTimer);
+  _cloudSyncTimer = setTimeout(_pushCloudSnapshot, 900);
+}
+async function _getCloudToken() {
+  var result = await sb.auth.getSession();
+  return result.data && result.data.session ? result.data.session.access_token : null;
+}
+async function _pushCloudSnapshot() {
+  try {
+    var token = await _getCloudToken(); if (!token) return;
+    var response = await fetch('/api/sync-archive', { method: 'PUT', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token }, body: JSON.stringify({ payload: _cloudSnapshot() }) });
+    if (!response.ok) console.warn('云同步保存失败', await response.text());
+  } catch (error) { console.warn('云同步保存失败，将在下次修改时重试', error); }
+}
+async function _hydrateCloudSnapshot() {
+  if (location.protocol === 'file:') return;
+  var token = await _getCloudToken(); if (!token) return;
+  var response = await fetch('/api/sync-archive', { headers: { Authorization: 'Bearer ' + token } });
+  if (!response.ok) { console.warn('云同步读取失败', await response.text()); return; }
+  var cloud = await response.json();
+  if (cloud.found && cloud.payload) {
+    _cloudSyncSuspended = true;
+    _cloudSyncModules.forEach(function(module) {
+      if (Array.isArray(cloud.payload[module])) { _idbCache[module] = cloud.payload[module]; _idbPut(userKey(module), cloud.payload[module]); }
+    });
+    _cloudSyncSuspended = false;
+    toast('已载入云端档案', 'info');
+  } else {
+    await _pushCloudSnapshot();
+    toast('已将本机档案备份到云端', 'info');
+  }
+  _cloudSyncReady = true;
 }
 
 // 初始化：打开 DB → 加载所有模块到缓存（含 localStorage 迁移）
@@ -2295,6 +2341,7 @@ async function _initDataLayer() {
       }
     }
   }
+  await _hydrateCloudSnapshot();
   console.log('IndexedDB 数据层就绪，缓存:', Object.keys(_idbCache).map(function(k) { return k + ':' + _idbCache[k].length; }).join(', '));
 }
 /* ============================================================
