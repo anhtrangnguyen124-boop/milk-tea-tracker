@@ -2312,8 +2312,11 @@ async function _hydrateCloudSnapshot() {
     _cloudSyncSuspended = false;
     toast('已载入云端档案', 'info');
   } else {
-    await _pushCloudSnapshot();
-    toast('已将本机档案备份到云端', 'info');
+    var hasLocalEntries = _cloudSyncModules.some(function(module) { return (_idbCache[module] || []).length > 0; });
+    if (hasLocalEntries) {
+      await _pushCloudSnapshot();
+      toast('已将本机档案备份到云端', 'info');
+    }
   }
   _cloudSyncReady = true;
 }
