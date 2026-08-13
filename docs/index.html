@@ -2614,8 +2614,8 @@ function setTravelPlanStatus(message, show) { var el = document.getElementById('
 function normalizeTravelPlanData(data) {
   data = data || {};
   var itinerary = (data.itinerary || []).map(function(item, index) {
-    var activities = Array.isArray(item.activities) ? item.activities : [];
-    return 'Day ' + (item.day || index + 1) + (item.date ? '｜' + item.date : '') + '｜' + (item.title || '当日行程') + (activities.length ? '\n' + activities.join('\n') : '');
+    var activities = (Array.isArray(item.activities) ? item.activities : []).map(function(activity) { return String(activity || '').replace(/[\r\n]+/g, ' ').trim(); }).filter(Boolean);
+    return 'Day ' + (item.day || index + 1) + ' ' + String(item.title || '当日行程').replace(/[｜|\r\n]/g, ' ').trim() + (activities.length ? '｜' + activities.join(' ') : '');
   });
   return { title:data.title || '', destination:data.destination || '', start:data.startDate || '', end:data.endDate || '', days:+data.dayCount || calculateTravelDays(data.startDate || '', data.endDate || '') || itinerary.length, companions:data.companions || '', logistics:Array.isArray(data.logistics) ? data.logistics : [], itinerary:itinerary, notes:Array.isArray(data.notes) ? data.notes : [] };
 }

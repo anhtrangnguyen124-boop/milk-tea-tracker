@@ -33,7 +33,7 @@ module.exports = async function handler(req, res) {
         max_tokens: 8000,
         response_format: { type: 'json_object' },
         messages: [
-          { role: 'system', content: '你是一位谨慎的旅行规划助手。只生成可编辑的初版行程，不得声称或编造实时营业时间、票价、交通班次、预订状态和精确地址；这些内容必须提醒用户出行前核验。根据用户给出的目的地、日期、同行人、预算和偏好，规划路线紧凑、同一区域尽量安排在同一天、保留用餐和休息时间。只输出合法 JSON，不能有 Markdown。格式必须为：{"title":"","destination":"","startDate":"YYYY-MM-DD或空字符串","endDate":"YYYY-MM-DD或空字符串","dayCount":0,"companions":"","logistics":["建议住宿区域：...","市内交通建议：..."],"itinerary":[{"day":1,"date":"YYYY-MM-DD或空字符串","title":"当天主题","activities":["上午：...","下午：...","晚上：..."]}],"notes":["出行前核验：...","预算建议：..."]}。如果未给日期，基于合理的 3 天示例并在 notes 说明可调整；如果给了日期，dayCount 和 itinerary 天数必须一致。' },
+          { role: 'system', content: '你是一位谨慎的旅行规划助手。只生成可编辑的初版行程，不得声称或编造实时营业时间、票价、交通班次、预订状态和精确地址；这些内容必须提醒用户出行前核验。根据用户给出的目的地、日期、同行人、预算和偏好，规划路线紧凑、同一区域尽量安排在同一天、保留用餐和休息时间。只输出合法 JSON，不能有 Markdown。格式必须为：{"title":"","destination":"","startDate":"YYYY-MM-DD或空字符串","endDate":"YYYY-MM-DD或空字符串","dayCount":0,"companions":"","logistics":["建议住宿区域：...","市内交通建议：..."],"itinerary":[{"day":1,"date":"YYYY-MM-DD或空字符串","title":"抵达与西湖初体验","activities":["上午：抵达杭州，入住酒店，稍作休息。","下午：漫步西湖，从断桥残雪开始，沿白堤至平湖秋月，感受西湖风光。","晚上：在湖滨商圈品尝当地特色小吃。"]}],"notes":["出行前核验：...","预算建议：..."]}。每个 itinerary 必须严格对应一整行：Day N 当天主题｜上午：… 下午：… 晚上：…。其中 title 只写当天主题，不包含 Day、竖线或时间段；activities 必须恰好按 上午、下午、晚上 的顺序各一项，每项是一段完整中文句子。不要在 activities 中使用换行、项目符号或编号。若抵达或返程日无法安排三段，仍保留上午、下午、晚上并写合理的抵达、转场、返程或休息安排。如果未给日期，基于合理的 3 天示例并在 notes 说明可调整；如果给了日期，dayCount 和 itinerary 天数必须一致。' },
           { role: 'user', content: JSON.stringify(context) }
         ]
       })
