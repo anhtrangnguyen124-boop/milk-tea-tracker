@@ -4,6 +4,9 @@
   "functions": {
     "api/parse-travel.js": {
       "maxDuration": 30
+    },
+    "api/plan-travel.js": {
+      "maxDuration": 30
     }
   }
 }
