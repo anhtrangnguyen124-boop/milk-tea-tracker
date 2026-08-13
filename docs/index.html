@@ -2777,7 +2777,7 @@ function exportTravelPdfLegacy(id) {
   printWindow.document.open(); printWindow.document.write(documentHtml); printWindow.document.close();
   toast('已打开 PDF 导出页，请在系统对话框选择“存储为 PDF”', 'info');
 }
-function exportTravelPdf(id) {
+function exportTravelPdfInBrowser(id) {
   var entry = loadTravel().find(function(item) { return item.id === id; });
   if (!entry) { toast('没有找到这份旅行攻略', 'warn'); return; }
   var days = travelDayList(entry.itinerary);
@@ -2882,6 +2882,27 @@ function exportTravelPdf(id) {
     pdf.save((entry.title || '旅行攻略').replace(/[\\/:*?"<>|]/g, '-') + '.pdf');
     holder.remove(); toast('手帐 PDF 已按内容自动分页', 'info');
   }).catch(function(error) { console.error('PDF export failed', error); holder.remove(); toast('PDF 生成失败，请稍后重试', 'warn'); });
+}
+async function exportTravelPdf(id) {
+  var entry = loadTravel().find(function(item) { return item.id === id; });
+  if (!entry) { toast('没有找到这份旅行攻略', 'warn'); return; }
+  if (location.protocol === 'file:') { exportTravelPdfInBrowser(id); return; }
+  toast('正在生成高清矢量 PDF，请稍候…', 'info');
+  try {
+    var token = await _getCloudToken();
+    if (!token) throw new Error('请先登录后再导出 PDF');
+    var response = await fetch('/api/export-travel-pdf', { method:'POST', headers:{ 'Content-Type':'application/json', Authorization:'Bearer ' + token }, body:JSON.stringify({ entry:entry }) });
+    if (!response.ok) { var errorPayload = await response.json().catch(function() { return {}; }); throw new Error(errorPayload.error || 'PDF 生成失败'); }
+    var blob = await response.blob();
+    var url = URL.createObjectURL(blob), anchor = document.createElement('a');
+    anchor.href = url; anchor.download = (entry.title || '旅行攻略').replace(/[\\/:*?"<>|]/g, '-') + '.pdf';
+    document.body.appendChild(anchor); anchor.click(); anchor.remove();
+    setTimeout(function() { URL.revokeObjectURL(url); }, 1500);
+    toast('手帐版矢量 PDF 已下载', 'info');
+  } catch (error) {
+    console.error('server PDF export failed', error);
+    toast(error.message || 'PDF 生成失败，请稍后重试', 'warn');
+  }
 }
 function exportTravelWord(id) {
   var entry = loadTravel().find(function(item) { return item.id === id; });

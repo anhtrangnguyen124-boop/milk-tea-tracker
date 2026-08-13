@@ -7,6 +7,10 @@
     },
     "api/plan-travel.js": {
       "maxDuration": 30
+    },
+    "api/export-travel-pdf.js": {
+      "maxDuration": 60,
+      "memory": 1024
     }
   }
 }
