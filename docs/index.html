@@ -1673,7 +1673,7 @@ tailwind.config = {
       <!-- Sub-page: Overview -->
       <div id="job-overview" class="space-y-4">
         <div id="job-stats-row" class="grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
-        <div class="module-card p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4"><div><p class="text-sm font-bold text-gray-800 font-boba">投递总览</p><p class="text-[11px] text-gray-400 mt-1">在这里快速查看整体进度；新增投递、管理记录和面试流程请前往投递管理。</p></div><button class="soft-btn primary text-xs whitespace-nowrap" onclick="switchJobTab('applications')">进入投递管理 →</button></div>
+        <div class="module-card overflow-hidden" style="padding:0;"><div class="flex items-center justify-between gap-3 px-5 py-3 border-b border-gray-100"><div><span class="text-sm font-bold text-gray-800 font-boba">投递汇总表</span><p class="text-[10px] text-gray-400 mt-0.5">点击记录或「投递管理表」进入添加、编辑与面试流程管理</p></div><button class="soft-btn primary text-xs whitespace-nowrap" onclick="switchJobTab('applications')">投递管理表 →</button></div><div class="overflow-x-auto thin-scroll"><table class="w-full text-xs"><thead><tr class="border-b border-gray-100 bg-gray-50/50"><th class="text-left px-4 py-2.5 text-[10px] font-bold text-gray-400 whitespace-nowrap">公司</th><th class="text-left px-4 py-2.5 text-[10px] font-bold text-gray-400 whitespace-nowrap">岗位</th><th class="text-left px-4 py-2.5 text-[10px] font-bold text-gray-400 whitespace-nowrap">状态</th><th class="text-left px-4 py-2.5 text-[10px] font-bold text-gray-400 whitespace-nowrap">投递日期</th><th class="text-left px-4 py-2.5 text-[10px] font-bold text-gray-400 whitespace-nowrap">面试进度</th></tr></thead><tbody id="job-overview-table-body"><tr><td colspan="5" class="text-center py-10 text-xs text-gray-400">暂无投递记录</td></tr></tbody></table></div></div>
       </div>
 
       <!-- Sub-page: Applications / workflow management -->
@@ -6757,7 +6757,7 @@ function renderJobAll() {
 // ── Render: Overview ────────────────────────────────────
 function renderJobOverview() {
   renderJobStats();
-  renderJobTable();
+  renderJobOverviewTable();
 }
 
 function renderJobStats() {
@@ -6790,6 +6790,21 @@ function renderJobStats() {
       '</div>' +
       '<div class="flex items-center gap-2"><span class="text-2xl font-bold text-gray-800 font-boba">' + c.value + '</span></div>' +
     '</div>';
+  }).join('');
+}
+
+function renderJobOverviewTable() {
+  var tbody = document.getElementById('job-overview-table-body');
+  if (!tbody) return;
+  var allJobs = jobEntries.slice().sort(function(a,b) { return b.updatedAt - a.updatedAt; });
+  if (!allJobs.length) { tbody.innerHTML = '<tr><td colspan="5" class="text-center py-10 text-xs text-gray-400">暂无投递记录，前往投递管理添加第一条记录吧</td></tr>'; return; }
+  var statusColors = { wishlist:'#9CA3AF', applied:'#6BA8D8', assessment:'#E8927C', interview:'#D4687A', offer:'#5BA88C', rejected:'#9CA3AF' };
+  tbody.innerHTML = allJobs.map(function(j) {
+    var status = JOB_STATUSES.find(function(s) { return s.key === j.status; });
+    var displayDate = j.date || '-';
+    if (j.date) { var parts = j.date.split('-'); displayDate = parts[1] + '月' + parts[2] + '日'; }
+    var hint = getInterviewProgressHint(j) || '暂未安排';
+    return '<tr class="border-b border-gray-50 hover:bg-[var(--accent-50)]/35 transition-colors cursor-pointer" onclick="switchJobTab(\'applications\')"><td class="px-4 py-3 whitespace-nowrap"><span class="font-bold text-gray-800 text-[11px]">' + escHtml(j.company) + '</span></td><td class="px-4 py-3 whitespace-nowrap text-[11px] text-gray-700">' + escHtml(j.position) + '</td><td class="px-4 py-3 whitespace-nowrap"><span class="text-[10px] px-2 py-0.5 rounded-full text-white" style="background:' + (statusColors[j.status] || '#9CA3AF') + '">' + escHtml((status||{}).label || j.status || '未设置') + '</span></td><td class="px-4 py-3 whitespace-nowrap text-[11px] text-gray-500">' + escHtml(displayDate) + '</td><td class="px-4 py-3 whitespace-nowrap"><span class="text-[10px] text-[var(--accent-600)]">' + escHtml(hint) + '</span><span class="ml-2 text-[10px] text-gray-300">管理 →</span></td></tr>';
   }).join('');
 }
 
