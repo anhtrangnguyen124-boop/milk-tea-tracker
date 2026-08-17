@@ -1666,6 +1666,7 @@ tailwind.config = {
         <button data-jobtab="overview" class="job-tab-btn text-xs font-bold px-4 py-1.5 rounded-xl transition-all duration-200 cursor-pointer border-none" style="background:var(--accent-500);color:#fff;" onclick="switchJobTab('overview')">总览</button>
         <button data-jobtab="kanban" class="job-tab-btn text-xs font-bold px-4 py-1.5 rounded-xl transition-all duration-200 cursor-pointer border-none" style="background:transparent;color:#9B8E84;" onclick="switchJobTab('kanban')">投递看板</button>
         <button data-jobtab="review" class="job-tab-btn text-xs font-bold px-4 py-1.5 rounded-xl transition-all duration-200 cursor-pointer border-none" style="background:transparent;color:#9B8E84;" onclick="switchJobTab('review')">面试复盘</button>
+        <button data-jobtab="calendar" class="job-tab-btn text-xs font-bold px-4 py-1.5 rounded-xl transition-all duration-200 cursor-pointer border-none" style="background:transparent;color:#9B8E84;" onclick="switchJobTab('calendar')">面试日历</button>
       </div>
 
       <!-- Sub-page: Overview -->
@@ -1755,6 +1756,14 @@ tailwind.config = {
           <button class="soft-btn primary text-xs" onclick="openReviewPanel()">+ 添加复盘</button>
         </div>
         <div id="review-list" class="space-y-3"><p class="text-xs text-gray-400 text-center py-10">暂无面试复盘记录</p></div>
+      </div>
+
+      <div id="job-calendar" class="hidden space-y-4">
+        <div class="module-card p-4 sm:p-5">
+          <div class="flex items-center justify-between gap-2 mb-4"><div><p id="interview-calendar-title" class="text-sm font-bold text-gray-800 font-boba"></p><p class="text-[10px] text-gray-400 mt-1">所有安排均来自对应投递记录的面试轮次</p></div><div class="flex gap-1.5"><button class="soft-btn text-xs" onclick="changeInterviewCalendar(-1)">←</button><button class="soft-btn text-xs" onclick="goInterviewCalendarToday()">本月</button><button class="soft-btn text-xs" onclick="changeInterviewCalendar(1)">→</button></div></div>
+          <div class="grid grid-cols-7 gap-1 text-center text-[10px] text-gray-400 mb-1"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div><div id="interview-calendar-grid" class="grid grid-cols-7 gap-1"></div>
+        </div>
+        <div class="module-card p-4 sm:p-5"><div class="flex items-center justify-between mb-3"><span class="text-sm font-bold text-gray-800 font-boba">接下来的安排</span><span id="upcoming-interview-count" class="text-[10px] text-gray-400"></span></div><div id="upcoming-interview-list" class="space-y-2"></div></div>
       </div>
 
     </div><!-- /#page-job -->
@@ -1968,6 +1977,7 @@ tailwind.config = {
         <div><label class="block text-[11px] font-semibold text-gray-400 mb-1">行业标签</label><div class="grid grid-cols-3 gap-1.5 mb-1.5" id="job-industry-pills"></div><input id="job-industry-custom" class="w-full px-3 py-2 rounded-xl border border-gray-200 bg-white/80 text-xs text-gray-800 font-boba focus:border-[var(--accent-500)] focus:ring-4 focus:ring-[rgba(212,104,122,0.08)] outline-none transition-all duration-200" placeholder="或自定义行业标签..."></div>
         <div><label class="block text-[11px] font-semibold text-gray-400 mb-1">截止日期 <span class="text-[10px] text-gray-300">（笔试/测评）</span></label><input id="job-deadline" type="date" class="w-full px-3 py-2 rounded-xl border border-gray-200 bg-white/80 text-sm text-gray-800 font-boba focus:border-[var(--accent-500)] focus:ring-4 focus:ring-[rgba(212,104,122,0.08)] outline-none transition-all duration-200"></div>
         <div><label class="block text-[11px] font-semibold text-gray-400 mb-1">备注</label><textarea id="job-notes" rows="3" class="w-full px-3 py-2 rounded-xl border border-gray-200 bg-white/80 text-sm text-gray-800 font-boba focus:border-[var(--accent-500)] focus:ring-4 focus:ring-[rgba(212,104,122,0.08)] outline-none transition-all duration-200 resize-none" placeholder="任何想记录的信息..."></textarea></div>
+        <details class="rounded-2xl border border-[var(--accent-100)] bg-[var(--accent-50)]/35 p-3 group"><summary class="cursor-pointer text-xs font-bold text-[var(--accent-700)] font-boba">＋ 面试安排 <span class="font-normal text-[10px] text-gray-400">（选填，可稍后补充）</span></summary><div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3"><select id="job-first-interview-name" class="px-3 py-2 rounded-xl border border-gray-200 bg-white text-xs font-boba"><option value="">选择轮次</option><option>HR 初筛</option><option>笔试</option><option>一面</option><option>二面</option><option>终面</option><option>作业</option><option>其他</option></select><input id="job-first-interview-datetime" type="datetime-local" class="px-3 py-2 rounded-xl border border-gray-200 bg-white text-xs font-boba"><select id="job-first-interview-mode" class="px-3 py-2 rounded-xl border border-gray-200 bg-white text-xs font-boba"><option value="线上">线上</option><option value="电话">电话</option><option value="线下">线下</option><option value="笔试">笔试</option><option value="其他">其他</option></select><input id="job-first-interview-location" class="px-3 py-2 rounded-xl border border-gray-200 bg-white text-xs font-boba" placeholder="地点或会议链接"><input id="job-first-interview-contact" class="px-3 py-2 rounded-xl border border-gray-200 bg-white text-xs font-boba" placeholder="面试官/联系人"><input id="job-first-interview-doc" class="px-3 py-2 rounded-xl border border-gray-200 bg-white text-xs font-boba" placeholder="文档/测评/作业链接"><select id="job-first-interview-status" class="px-3 py-2 rounded-xl border border-gray-200 bg-white text-xs font-boba"><option value="待安排">待安排</option><option value="待参加" selected>待参加</option><option value="已完成">已完成</option><option value="已取消">已取消</option><option value="已通过">已通过</option><option value="未通过">未通过</option></select><input id="job-first-interview-result" class="px-3 py-2 rounded-xl border border-gray-200 bg-white text-xs font-boba" placeholder="结果（选填）"><input id="job-first-interview-focus" class="px-3 py-2 rounded-xl border border-gray-200 bg-white text-xs font-boba" placeholder="重点关注事项（选填）"></div><textarea id="job-first-interview-notes" rows="2" class="w-full mt-2 px-3 py-2 rounded-xl border border-gray-200 bg-white text-xs font-boba resize-none" placeholder="复盘笔记（选填）"></textarea></details>
       </div>
       <div class="flex gap-2 pt-2">
         <button id="job-save-btn" class="soft-btn primary flex-1 text-sm" onclick="saveJob()" style="padding-top:0.75rem;padding-bottom:0.75rem;">保存</button>
@@ -1978,6 +1988,11 @@ tailwind.config = {
   <button class="absolute -top-3 -right-3 w-10 h-10 rounded-full border-none bg-white text-gray-500 cursor-pointer flex items-center justify-center text-lg shadow-lg hover:bg-gray-100 hover:scale-110 hover:rotate-90 transition-all duration-200 font-boba" onclick="closeJobPanel()">✕</button>
   </div>
 </div>
+
+<!-- ============================================================
+     Modal — 投递流程 / 面试安排
+     ============================================================ -->
+<div id="job-flow-overlay" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/20 backdrop-blur-sm" onclick="if(event.target===this)closeJobFlow()"><div class="relative w-[94%] max-w-[680px]"><div class="relative w-full max-h-[86vh] overflow-y-auto p-5 sm:p-6 rounded-3xl bg-white/95 border border-white/50 backdrop-blur-xl shadow-2xl animate-modal-in thin-scroll"><div id="job-flow-content"></div></div><button class="absolute -top-3 -right-3 w-10 h-10 rounded-full border-none bg-white text-gray-500 cursor-pointer flex items-center justify-center text-lg shadow-lg hover:bg-gray-100 transition-all font-boba" onclick="closeJobFlow()">✕</button></div></div>
 
 <!-- ============================================================
      Modal — 面试复盘 Add/Edit
@@ -6340,6 +6355,9 @@ var reviewEntries = [];
 var reviewEditId = null;
 var reviewStars = 0;
 var reviewRound = '一面';
+var interviewCalendarCursor = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+var jobFlowId = null;
+var jobFlowFocusInterviewId = null;
 
 // ── Data Layer ─────────────────────────────────────────
 function loadJobs() {
@@ -6358,6 +6376,7 @@ function switchJobTab(tab) {
   document.getElementById('job-overview').classList.toggle('hidden', tab !== 'overview');
   document.getElementById('job-kanban').classList.toggle('hidden', tab !== 'kanban');
   document.getElementById('job-review').classList.toggle('hidden', tab !== 'review');
+  document.getElementById('job-calendar').classList.toggle('hidden', tab !== 'calendar');
   document.querySelectorAll('.job-tab-btn').forEach(function(b) {
     if (b.dataset.jobtab === tab) {
       b.style.background = 'var(--accent-500)'; b.style.color = '#fff';
@@ -6368,6 +6387,7 @@ function switchJobTab(tab) {
   if (tab === 'overview') renderJobOverview();
   if (tab === 'kanban') { renderJobKanban(); renderJobCharts(); }
   if (tab === 'review') renderReviewList();
+  if (tab === 'calendar') renderInterviewCalendar();
 }
 
 // ── Panel: Job Add/Edit ─────────────────────────────────
@@ -6394,6 +6414,16 @@ function openJobPanel(id) {
     document.getElementById('job-salary').value = job.salary || '';
     document.getElementById('job-deadline').value = job.deadline || '';
     document.getElementById('job-notes').value = job.notes || '';
+    document.getElementById('job-first-interview-name').value = '';
+    document.getElementById('job-first-interview-datetime').value = '';
+    document.getElementById('job-first-interview-location').value = '';
+    document.getElementById('job-first-interview-contact').value = '';
+    document.getElementById('job-first-interview-doc').value = '';
+    document.getElementById('job-first-interview-result').value = '';
+    document.getElementById('job-first-interview-focus').value = '';
+    document.getElementById('job-first-interview-notes').value = '';
+    document.getElementById('job-first-interview-mode').value = '线上';
+    document.getElementById('job-first-interview-status').value = '待参加';
     pendingJdImages = (job.jdImages || []).slice();
     renderJdImagePreviews();
     jobPanelStatus = job.status;
@@ -6411,6 +6441,16 @@ function openJobPanel(id) {
     document.getElementById('job-salary').value = '';
     document.getElementById('job-deadline').value = '';
     document.getElementById('job-notes').value = '';
+    document.getElementById('job-first-interview-name').value = '';
+    document.getElementById('job-first-interview-datetime').value = '';
+    document.getElementById('job-first-interview-location').value = '';
+    document.getElementById('job-first-interview-contact').value = '';
+    document.getElementById('job-first-interview-doc').value = '';
+    document.getElementById('job-first-interview-result').value = '';
+    document.getElementById('job-first-interview-focus').value = '';
+    document.getElementById('job-first-interview-notes').value = '';
+    document.getElementById('job-first-interview-mode').value = '线上';
+    document.getElementById('job-first-interview-status').value = '待参加';
     pendingJdImages = [];
     renderJdImagePreviews();
     jobPanelStatus = 'applied';
@@ -6434,6 +6474,11 @@ function saveJob() {
   var company = document.getElementById('job-company').value.trim();
   var position = document.getElementById('job-position').value.trim();
   if (!company || !position) { showJobToast('请填写公司名称和岗位名称'); return; }
+  var oldJob = jobEditId ? jobEntries.find(function(j){ return j.id === jobEditId; }) : null;
+  var interviews = oldJob && Array.isArray(oldJob.interviews) ? oldJob.interviews.slice() : [];
+  var firstName = document.getElementById('job-first-interview-name').value;
+  var firstDateTime = document.getElementById('job-first-interview-datetime').value;
+  if (firstName || firstDateTime) interviews.push({ id:Date.now() + Math.floor(Math.random()*1000), name:firstName || '其他', datetime:firstDateTime || '', mode:document.getElementById('job-first-interview-mode').value || '线上', location:document.getElementById('job-first-interview-location').value.trim(), contact:document.getElementById('job-first-interview-contact').value.trim(), documentUrl:document.getElementById('job-first-interview-doc').value.trim(), status:document.getElementById('job-first-interview-status').value || '待参加', result:document.getElementById('job-first-interview-result').value.trim(), focus:document.getElementById('job-first-interview-focus').value.trim(), notes:document.getElementById('job-first-interview-notes').value.trim(), createdAt:Date.now(), updatedAt:Date.now() });
   var data = {
     id: jobEditId || Date.now(),
     company: company,
@@ -6448,7 +6493,8 @@ function saveJob() {
     salary: document.getElementById('job-salary').value.trim(),
     deadline: document.getElementById('job-deadline').value,
     notes: document.getElementById('job-notes').value.trim(),
-    createdAt: jobEditId ? (jobEntries.find(function(j){return j.id===jobEditId})||{}).createdAt || Date.now() : Date.now(),
+    interviews: interviews,
+    createdAt: jobEditId ? (oldJob||{}).createdAt || Date.now() : Date.now(),
     updatedAt: Date.now()
   };
   if (jobEditId) {
@@ -6462,6 +6508,34 @@ function saveJob() {
   renderJobAll();
   showJobToast('投递记录已保存');
 }
+
+// ── Interviews: nested under each job record ───────────
+var INTERVIEW_STATUSES = ['待安排','待参加','已完成','已取消','已通过','未通过'];
+function getJobInterviews(job) { return (job && Array.isArray(job.interviews) ? job.interviews : []).slice().sort(function(a,b) { return String(a.datetime || '9999').localeCompare(String(b.datetime || '9999')); }); }
+function getAllInterviewEvents() { var list = []; jobEntries.forEach(function(job) { getJobInterviews(job).forEach(function(interview) { if (interview.datetime) list.push({ job:job, interview:interview }); }); }); return list.sort(function(a,b) { return String(a.interview.datetime).localeCompare(String(b.interview.datetime)); }); }
+function interviewStatusStyle(status) { return ({ '待安排':'#9ca3af','待参加':'var(--accent-500)','已完成':'#6ba8d8','已取消':'#9ca3af','已通过':'#5ba88c','未通过':'#d4687a' })[status] || '#9ca3af'; }
+function formatInterviewTime(value) { if (!value) return '时间待定'; var d = new Date(value); if (isNaN(d)) return value.replace('T',' '); return (d.getMonth()+1) + '月' + d.getDate() + '日 ' + String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0'); }
+function getInterviewProgressHint(job) { var items = getJobInterviews(job); if (!items.length) return ''; var now = Date.now(), next = items.filter(function(i) { return i.datetime && new Date(i.datetime).getTime() >= now && ['待安排','待参加'].indexOf(i.status) >= 0; })[0], finished = items.filter(function(i) { return ['已完成','已通过','未通过','已取消'].indexOf(i.status) >= 0; }).length; if (next) return '下一场：' + formatInterviewTime(next.datetime) + ' · ' + (next.name || '面试'); if (finished) return '已完成 ' + finished + '/' + items.length + ' 轮'; return '进行至 ' + ((items[items.length-1] || {}).name || '面试'); }
+function openExternalLink(url) { try { var parsed = new URL(url); if (parsed.protocol === 'http:' || parsed.protocol === 'https:') window.open(parsed.href, '_blank', 'noopener'); else showJobToast('链接格式不正确'); } catch(e) { showJobToast('链接格式不正确'); } }
+function openJobFlow(id, focusId) { jobFlowId = id; jobFlowFocusInterviewId = focusId || null; document.getElementById('job-flow-overlay').classList.add('flex'); document.getElementById('job-flow-overlay').classList.remove('hidden'); renderJobFlow(); }
+function closeJobFlow() { document.getElementById('job-flow-overlay').classList.add('hidden'); document.getElementById('job-flow-overlay').classList.remove('flex'); jobFlowId = null; jobFlowFocusInterviewId = null; }
+function renderJobFlow() {
+  var root = document.getElementById('job-flow-content'), job = jobEntries.find(function(j) { return j.id === jobFlowId; }); if (!root || !job) return;
+  var status = JOB_STATUSES.find(function(s) { return s.key === job.status; }), interviews = getJobInterviews(job), hint = getInterviewProgressHint(job);
+  root.innerHTML = '<div class="flex items-start justify-between gap-3 mb-5"><div><p class="text-[10px] text-gray-400 font-boba">投递流程</p><h3 class="text-lg font-bold text-gray-800 font-boba mt-1">' + escHtml(job.company) + ' · ' + escHtml(job.position) + '</h3><p class="text-[10px] text-gray-400 mt-1">投递于 ' + escHtml(job.date || '未记录') + '　·　' + escHtml((status||{}).label || job.status || '未设置') + (hint ? '　·　' + escHtml(hint) : '') + '</p></div><button class="soft-btn primary text-xs" onclick="openInterviewEditor()">+ 添加轮次</button></div><div id="interview-editor-wrap"></div><div class="relative pl-5 sm:pl-6">' + (interviews.length ? interviews.map(function(i, index) { return renderInterviewTimelineCard(i, index); }).join('') : '<div class="rounded-2xl border border-dashed border-gray-200 bg-gray-50/60 p-7 text-center text-xs text-gray-400">还没有面试安排。可以从这里补充第一轮面试。</div>') + '</div>';
+  if (jobFlowFocusInterviewId) setTimeout(function() { var el = document.getElementById('interview-' + jobFlowFocusInterviewId); if (el) { el.scrollIntoView({ behavior:'smooth', block:'center' }); el.classList.add('ring-2','ring-[var(--accent-300)]'); } }, 60);
+}
+function renderInterviewTimelineCard(i, index) {
+  var links = (i.location && /^https?:\/\//i.test(i.location) ? '<button class="text-[10px] px-2 py-1 rounded-lg border-0 bg-[var(--accent-500)] text-white cursor-pointer" onclick="openExternalLink(\'' + escHtml(i.location) + '\')">进入面试</button>' : '') + (i.documentUrl ? '<button class="text-[10px] px-2 py-1 rounded-lg border border-gray-200 bg-white text-gray-500 cursor-pointer" onclick="openExternalLink(\'' + escHtml(i.documentUrl) + '\')">文档</button>' : '') + (i.notes ? '<button class="text-[10px] px-2 py-1 rounded-lg border border-[#eaded3] bg-[#fffaf5] text-[#8c6f5f] cursor-pointer" onclick="openInterviewEditor(' + i.id + ')">复盘</button>' : '');
+  return '<div id="interview-' + i.id + '" class="relative mb-3 rounded-2xl border border-gray-100 bg-white/80 p-3.5 shadow-sm"><span class="absolute -left-[22px] top-5 w-3 h-3 rounded-full border-2 border-white" style="background:' + interviewStatusStyle(i.status) + ';box-shadow:0 0 0 1px #e5e7eb"></span>' + (index ? '<span class="absolute -left-[17px] -top-3 h-3 border-l border-dashed border-gray-200"></span>' : '') + '<div class="flex items-start justify-between gap-2"><div><div class="flex items-center gap-2 flex-wrap"><b class="text-sm text-gray-800 font-boba">' + escHtml(i.name || '面试') + '</b><span class="text-[10px] px-1.5 py-0.5 rounded-full text-white" style="background:' + interviewStatusStyle(i.status) + '">' + escHtml(i.status || '待参加') + '</span></div><p class="text-[10px] text-gray-500 mt-1">' + escHtml(formatInterviewTime(i.datetime)) + '　·　' + escHtml(i.mode || '未填写形式') + (i.contact ? '　·　' + escHtml(i.contact) : '') + '</p></div><div class="flex gap-1"><button class="text-[10px] text-gray-400 border-0 bg-transparent cursor-pointer" onclick="openInterviewEditor(' + i.id + ')">编辑</button><button class="text-[10px] text-red-400 border-0 bg-transparent cursor-pointer" onclick="deleteInterview(' + i.id + ')">删除</button></div></div>' + (i.location && !/^https?:\/\//i.test(i.location) ? '<p class="text-[10px] text-gray-500 mt-2">地点：' + escHtml(i.location) + '</p>' : '') + (i.focus ? '<p class="text-[10px] text-[#8c6f5f] mt-2">关注：' + escHtml(i.focus) + '</p>' : '') + (i.result ? '<p class="text-[10px] text-gray-500 mt-1">结果：' + escHtml(i.result) + '</p>' : '') + (i.notes ? '<p class="text-[10px] text-gray-400 mt-1.5 leading-relaxed whitespace-pre-line">' + escHtml(i.notes) + '</p>' : '') + (links ? '<div class="flex gap-1.5 mt-2.5 flex-wrap">' + links + '</div>' : '') + '</div>';
+}
+function openInterviewEditor(id) {
+  var job = jobEntries.find(function(j) { return j.id === jobFlowId; }), target = job && getJobInterviews(job).find(function(i) { return i.id === id; }) || {};
+  var wrap = document.getElementById('interview-editor-wrap'); if (!wrap) return;
+  wrap.innerHTML = '<div class="rounded-2xl border border-[var(--accent-100)] bg-[var(--accent-50)]/45 p-3 mb-4"><div class="flex items-center justify-between mb-2"><b class="text-xs text-[var(--accent-700)] font-boba">' + (id ? '编辑面试轮次' : '新增面试轮次') + '</b><button class="text-[10px] border-0 bg-transparent text-gray-400 cursor-pointer" onclick="document.getElementById(\'interview-editor-wrap\').innerHTML=\'\'">收起</button></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-2"><select id="interview-name" class="px-2.5 py-2 rounded-xl border border-gray-200 bg-white text-xs"><option>' + escHtml(target.name || '一面') + '</option><option>HR 初筛</option><option>笔试</option><option>一面</option><option>二面</option><option>终面</option><option>作业</option><option>其他</option></select><input id="interview-datetime" type="datetime-local" value="' + escHtml(target.datetime || '') + '" class="px-2.5 py-2 rounded-xl border border-gray-200 bg-white text-xs"><select id="interview-mode" class="px-2.5 py-2 rounded-xl border border-gray-200 bg-white text-xs"><option>' + escHtml(target.mode || '线上') + '</option><option>线上</option><option>电话</option><option>线下</option><option>笔试</option><option>其他</option></select><select id="interview-status" class="px-2.5 py-2 rounded-xl border border-gray-200 bg-white text-xs">' + INTERVIEW_STATUSES.map(function(s) { return '<option' + ((target.status || '待参加') === s ? ' selected' : '') + '>' + s + '</option>'; }).join('') + '</select><input id="interview-location" value="' + escHtml(target.location || '') + '" placeholder="地点或会议链接" class="px-2.5 py-2 rounded-xl border border-gray-200 bg-white text-xs"><input id="interview-contact" value="' + escHtml(target.contact || '') + '" placeholder="面试官/联系人" class="px-2.5 py-2 rounded-xl border border-gray-200 bg-white text-xs"><input id="interview-doc" value="' + escHtml(target.documentUrl || '') + '" placeholder="文档/测评/作业链接" class="px-2.5 py-2 rounded-xl border border-gray-200 bg-white text-xs"><input id="interview-result" value="' + escHtml(target.result || '') + '" placeholder="结果" class="px-2.5 py-2 rounded-xl border border-gray-200 bg-white text-xs"><input id="interview-focus" value="' + escHtml(target.focus || '') + '" placeholder="重点关注事项" class="sm:col-span-2 px-2.5 py-2 rounded-xl border border-gray-200 bg-white text-xs"><textarea id="interview-notes" rows="3" placeholder="复盘笔记" class="sm:col-span-2 px-2.5 py-2 rounded-xl border border-gray-200 bg-white text-xs resize-none">' + escHtml(target.notes || '') + '</textarea></div><button class="soft-btn primary text-xs mt-3" onclick="saveInterview(' + (id || 0) + ')">保存轮次</button></div>';
+}
+function saveInterview(id) { var job = jobEntries.find(function(j) { return j.id === jobFlowId; }); if (!job) return; var name = document.getElementById('interview-name').value, datetime = document.getElementById('interview-datetime').value; if (!name) { showJobToast('请填写面试轮次'); return; } var item = { id:id || Date.now() + Math.floor(Math.random()*1000), name:name, datetime:datetime, mode:document.getElementById('interview-mode').value, location:document.getElementById('interview-location').value.trim(), contact:document.getElementById('interview-contact').value.trim(), documentUrl:document.getElementById('interview-doc').value.trim(), status:document.getElementById('interview-status').value, result:document.getElementById('interview-result').value.trim(), focus:document.getElementById('interview-focus').value.trim(), notes:document.getElementById('interview-notes').value.trim(), createdAt:id ? ((getJobInterviews(job).find(function(i){return i.id===id})||{}).createdAt || Date.now()) : Date.now(), updatedAt:Date.now() }; job.interviews = Array.isArray(job.interviews) ? job.interviews : []; var idx = job.interviews.findIndex(function(i){ return i.id === id; }); if (idx >= 0) job.interviews[idx] = item; else job.interviews.push(item); job.updatedAt = Date.now(); saveJobs(jobEntries); renderJobFlow(); renderJobAll(); showJobToast('面试轮次已保存'); }
+function deleteInterview(id) { if (!confirm('确定删除这轮面试吗？')) return; var job = jobEntries.find(function(j) { return j.id === jobFlowId; }); if (!job) return; job.interviews = getJobInterviews(job).filter(function(i) { return i.id !== id; }); job.updatedAt = Date.now(); saveJobs(jobEntries); renderJobFlow(); renderJobAll(); showJobToast('面试轮次已删除'); }
 
 function deleteJob() {
   if (!jobEditId) return;
@@ -6659,6 +6733,7 @@ function renderJobAll() {
   if (jobCurrentTab === 'overview') renderJobOverview();
   else if (jobCurrentTab === 'kanban') { renderJobKanban(); renderJobCharts(); }
   else if (jobCurrentTab === 'review') renderReviewList();
+  else if (jobCurrentTab === 'calendar') renderInterviewCalendar();
   checkDeadlines();
 }
 
@@ -6764,9 +6839,10 @@ function renderJobTable() {
     var batchCheckboxHtml = '<td class="batch-col px-2 py-2.5 text-center" style="display:' + (batchMode ? '' : 'none') + ';">' +
       '<input type="checkbox" class="w-3.5 h-3.5 rounded cursor-pointer batch-checkbox" data-id="' + j.id + '"' + (isChecked ? ' checked' : '') + ' onclick="event.stopPropagation();toggleSelectJob(' + j.id + ',this.checked)" style="accent-color:var(--accent-500);"></td>';
 
+    var flowHint = getInterviewProgressHint(j);
     return '<tr class="border-b border-gray-50 hover:bg-gray-50/50 transition-colors duration-100 cursor-pointer" onclick="' + (batchMode ? 'event.stopPropagation();var cb=this.querySelector(\'.batch-checkbox\');if(cb){cb.checked=!cb.checked;toggleSelectJob(' + j.id + ',cb.checked)}' : 'openJobPanel(' + j.id + ')') + '">' +
       batchCheckboxHtml +
-      '<td class="px-4 py-2.5 whitespace-nowrap"><span class="font-bold text-gray-800 text-[11px]">' + escHtml(j.company) + '</span></td>' +
+      '<td class="px-4 py-2.5 whitespace-nowrap"><span class="font-bold text-gray-800 text-[11px]">' + escHtml(j.company) + '</span>' + (flowHint ? '<span class="block mt-1 text-[9px] text-[var(--accent-600)]">' + escHtml(flowHint) + '</span>' : '') + '</td>' +
       '<td class="px-4 py-2.5 whitespace-nowrap"><span class="text-gray-700 text-[11px]">' + escHtml(j.position) + '</span></td>' +
       '<td class="px-4 py-2.5 whitespace-nowrap"><span class="text-[10px] px-2 py-0.5 rounded-full text-white font-medium" style="background:' + statusBg + '">' + (si ? si.label : j.status) + '</span></td>' +
       '<td class="px-4 py-2.5 whitespace-nowrap"><span class="text-gray-500 text-[11px]">' + displayDate + '</span></td>' +
@@ -6778,11 +6854,30 @@ function renderJobTable() {
       '<td class="px-4 py-2.5 whitespace-nowrap">' + applyUrlHtml + '</td>' +
       '<td class="px-4 py-2.5 max-w-[100px]"><span class="text-gray-400 text-[10px] truncate block" style="max-width:100px;">' + (j.notes ? escHtml(j.notes).slice(0,40) + (j.notes.length > 40 ? '...' : '') : '-') + '</span></td>' +
       '<td class="px-3 py-2.5 whitespace-nowrap text-center"><div class="flex items-center justify-center gap-0.5">' +
+        '<button class="px-1.5 py-1 rounded-lg text-[10px] text-[var(--accent-600)] bg-[var(--accent-50)] hover:bg-[var(--accent-100)] transition-colors cursor-pointer border-none" onclick="event.stopPropagation();openJobFlow(' + j.id + ')" title="面试安排">流程</button>' +
         '<button class="p-1 rounded-lg text-gray-400 hover:text-accent-500 transition-colors cursor-pointer border-none bg-transparent" onclick="event.stopPropagation();openJobPanel(' + j.id + ')" title="编辑"><svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>' +
         '<button class="p-1 rounded-lg text-gray-400 hover:text-red-400 hover:bg-red-50 transition-colors cursor-pointer border-none bg-transparent" onclick="event.stopPropagation();activityDeleteJob(' + j.id + ')" title="删除"><svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2M19 6l-.867 12.142A2 2 0 0116.138 20H7.862a2 2 0 01-1.995-1.858L5 6h14z"/></svg></button>' +
       '</div></td>' +
     '</tr>';
   }).join('');
+}
+
+// ── Calendar: derived only from job.interviews ─────────
+function changeInterviewCalendar(delta) { interviewCalendarCursor = new Date(interviewCalendarCursor.getFullYear(), interviewCalendarCursor.getMonth() + delta, 1); renderInterviewCalendar(); }
+function goInterviewCalendarToday() { var now = new Date(); interviewCalendarCursor = new Date(now.getFullYear(), now.getMonth(), 1); renderInterviewCalendar(); }
+function interviewRelativeTime(value) { var diff = new Date(value).getTime() - Date.now(); if (diff < 0) return '已结束'; var mins = Math.round(diff / 60000); if (mins < 60) return mins ? mins + ' 分钟后' : '即将开始'; var hours = Math.floor(mins / 60); if (hours < 24) return hours + ' 小时后'; return Math.ceil(hours / 24) + ' 天后'; }
+function renderInterviewCalendar() {
+  var title = document.getElementById('interview-calendar-title'), grid = document.getElementById('interview-calendar-grid'), upcoming = document.getElementById('upcoming-interview-list'); if (!grid || !upcoming) return;
+  var year = interviewCalendarCursor.getFullYear(), month = interviewCalendarCursor.getMonth(), now = new Date(), todayKey = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
+  if (title) title.textContent = year + ' 年 ' + (month + 1) + ' 月';
+  var byDate = {}; getAllInterviewEvents().forEach(function(event) { var key = String(event.interview.datetime).slice(0,10); if (key) (byDate[key] || (byDate[key]=[])).push(event); });
+  var first = new Date(year, month, 1), startOffset = (first.getDay()+6)%7, days = new Date(year, month+1, 0).getDate(), cells = [];
+  for (var blank=0; blank<startOffset; blank++) cells.push('<div class="min-h-[82px] rounded-xl bg-gray-50/35"></div>');
+  for (var day=1; day<=days; day++) { var key = year + '-' + String(month+1).padStart(2,'0') + '-' + String(day).padStart(2,'0'), events = byDate[key] || [], shown = events.slice(0,2); cells.push('<div class="min-h-[82px] rounded-xl border ' + (key===todayKey ? 'border-[var(--accent-400)] bg-[var(--accent-50)]/45' : 'border-gray-100 bg-white/55') + ' p-1.5 overflow-hidden"><div class="text-[10px] font-bold ' + (key===todayKey ? 'text-[var(--accent-600)]' : 'text-gray-500') + '">' + day + '</div>' + shown.map(function(event) { var i=event.interview; return '<button class="block w-full text-left mt-1 px-1 py-0.5 rounded text-[8px] truncate border-0 cursor-pointer" style="background:' + interviewStatusStyle(i.status) + '18;color:' + interviewStatusStyle(i.status) + ';" onclick="openJobFlow(' + event.job.id + ',' + i.id + ')">' + escHtml(String(i.datetime).slice(11,16) + ' ' + event.job.company + '·' + (i.name||'面试')) + '</button>'; }).join('') + (events.length>2 ? '<button class="text-[8px] mt-1 border-0 bg-transparent text-gray-400 cursor-pointer" onclick="openJobFlow(' + events[0].job.id + ')">+' + (events.length-2) + ' 场</button>' : '') + '</div>'); }
+  grid.innerHTML = cells.join('');
+  var future = getAllInterviewEvents().filter(function(event) { return new Date(event.interview.datetime).getTime() >= Date.now() && ['已取消','已完成','已通过','未通过'].indexOf(event.interview.status) < 0; });
+  var count = document.getElementById('upcoming-interview-count'); if (count) count.textContent = future.length ? future.length + ' 场待参加' : '';
+  upcoming.innerHTML = future.length ? future.map(function(event) { var i=event.interview, actions = (i.location && /^https?:\/\//i.test(i.location) ? '<button class="text-[10px] px-2 py-1 rounded-lg border-0 bg-[var(--accent-500)] text-white cursor-pointer" onclick="openExternalLink(\'' + escHtml(i.location) + '\')">进入面试</button>' : '') + (i.documentUrl ? '<button class="text-[10px] px-2 py-1 rounded-lg border border-gray-200 bg-white text-gray-500 cursor-pointer" onclick="openExternalLink(\'' + escHtml(i.documentUrl) + '\')">文档</button>' : '') + (i.notes ? '<button class="text-[10px] px-2 py-1 rounded-lg border border-[#eaded3] bg-[#fffaf5] text-[#8c6f5f] cursor-pointer" onclick="openJobFlow(' + event.job.id + ',' + i.id + ')">复盘</button>' : ''); return '<div class="rounded-xl border border-gray-100 bg-white/70 p-3 flex flex-col sm:flex-row sm:items-center gap-2"><div class="flex-1 min-w-0 cursor-pointer" onclick="openJobFlow(' + event.job.id + ',' + i.id + ')"><div class="text-xs font-bold text-gray-800 font-boba truncate">' + escHtml(event.job.company + ' · ' + event.job.position) + '</div><div class="text-[10px] text-gray-500 mt-1">' + escHtml((i.name||'面试') + ' · ' + formatInterviewTime(i.datetime) + ' · ' + (i.mode||'未填写形式')) + ' <span class="text-[var(--accent-600)]">' + interviewRelativeTime(i.datetime) + '</span></div></div><div class="flex gap-1.5 flex-wrap">' + actions + '</div></div>'; }).join('') : '<div class="rounded-2xl border border-dashed border-gray-200 bg-gray-50/60 p-8 text-center"><p class="text-xs text-gray-400">近期没有面试安排</p><button class="text-[10px] mt-2 border-0 bg-transparent text-[var(--accent-600)] cursor-pointer" onclick="switchJobTab(\'overview\');openJobPanel()">从投递记录补充面试安排</button></div>';
 }
 
 // ── Deadline Checker ────────────────────────────────────
