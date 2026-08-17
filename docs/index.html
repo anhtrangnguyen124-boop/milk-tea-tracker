@@ -6503,7 +6503,21 @@ function getAllInterviewEvents() { var list = []; jobEntries.forEach(function(jo
 function interviewStatusStyle(status) { return ({ '待安排':'#9ca3af','待参加':'var(--accent-500)','已完成':'#6ba8d8','已取消':'#9ca3af','已通过':'#5ba88c','未通过':'#d4687a' })[status] || '#9ca3af'; }
 function formatInterviewTime(value) { if (!value) return '时间待定'; var d = new Date(value); if (isNaN(d)) return value.replace('T',' '); return (d.getMonth()+1) + '月' + d.getDate() + '日 ' + String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0'); }
 function getInterviewProgressHint(job) { var items = getJobInterviews(job); if (!items.length) return ''; var now = Date.now(), next = items.filter(function(i) { return i.datetime && new Date(i.datetime).getTime() >= now && ['待安排','待参加'].indexOf(i.status) >= 0; })[0], finished = items.filter(function(i) { return ['已完成','已通过','未通过','已取消'].indexOf(i.status) >= 0; }).length; if (next) return '下一场：' + formatInterviewTime(next.datetime) + ' · ' + (next.name || '面试'); if (finished) return '已完成 ' + finished + '/' + items.length + ' 轮'; return '进行至 ' + ((items[items.length-1] || {}).name || '面试'); }
-function openExternalLink(url) { try { var parsed = new URL(url); if (parsed.protocol === 'http:' || parsed.protocol === 'https:') window.open(parsed.href, '_blank', 'noopener'); else showJobToast('链接格式不正确'); } catch(e) { showJobToast('链接格式不正确'); } }
+function openExternalLink(url) {
+  try {
+    var parsed = new URL(url);
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') { showJobToast('链接格式不正确'); return; }
+    // 使用原生链接导航，而不是 window.open：避免 Chrome 将面试文档与旅行 PDF 导出的脚本弹窗复用。
+    var link = document.createElement('a');
+    link.href = parsed.href;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  } catch(e) { showJobToast('链接格式不正确'); }
+}
 function openJobFlow(id, focusId) { jobFlowId = id; jobFlowFocusInterviewId = focusId || null; document.getElementById('job-flow-overlay').classList.add('flex'); document.getElementById('job-flow-overlay').classList.remove('hidden'); renderJobFlow(); }
 function closeJobFlow() { document.getElementById('job-flow-overlay').classList.add('hidden'); document.getElementById('job-flow-overlay').classList.remove('flex'); jobFlowId = null; jobFlowFocusInterviewId = null; }
 function renderJobFlow() {
