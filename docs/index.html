@@ -1658,12 +1658,13 @@ tailwind.config = {
           </h2>
           <p class="text-[10px] text-gray-400 mt-0">生活小事档案馆 · 记录秋招里的每一份印记</p>
         </div>
-        <button class="soft-btn primary text-xs sm:text-sm" onclick="openJobPanel()">+ 添加投递</button>
+        <button id="job-add-button" class="soft-btn primary text-xs sm:text-sm" style="display:none;" onclick="openJobPanel()">+ 添加投递</button>
       </div>
 
       <!-- Sub-tab Nav -->
       <div class="flex items-center gap-1 bg-white/40 backdrop-blur-md rounded-2xl p-1 w-fit border border-white/50">
         <button data-jobtab="overview" class="job-tab-btn text-xs font-bold px-4 py-1.5 rounded-xl transition-all duration-200 cursor-pointer border-none" style="background:var(--accent-500);color:#fff;" onclick="switchJobTab('overview')">总览</button>
+        <button data-jobtab="applications" class="job-tab-btn text-xs font-bold px-4 py-1.5 rounded-xl transition-all duration-200 cursor-pointer border-none" style="background:transparent;color:#9B8E84;" onclick="switchJobTab('applications')">投递管理</button>
         <button data-jobtab="kanban" class="job-tab-btn text-xs font-bold px-4 py-1.5 rounded-xl transition-all duration-200 cursor-pointer border-none" style="background:transparent;color:#9B8E84;" onclick="switchJobTab('kanban')">投递看板</button>
         <button data-jobtab="review" class="job-tab-btn text-xs font-bold px-4 py-1.5 rounded-xl transition-all duration-200 cursor-pointer border-none" style="background:transparent;color:#9B8E84;" onclick="switchJobTab('review')">面试复盘</button>
         <button data-jobtab="calendar" class="job-tab-btn text-xs font-bold px-4 py-1.5 rounded-xl transition-all duration-200 cursor-pointer border-none" style="background:transparent;color:#9B8E84;" onclick="switchJobTab('calendar')">面试日历</button>
@@ -1672,6 +1673,11 @@ tailwind.config = {
       <!-- Sub-page: Overview -->
       <div id="job-overview" class="space-y-4">
         <div id="job-stats-row" class="grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
+        <div class="module-card p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4"><div><p class="text-sm font-bold text-gray-800 font-boba">投递总览</p><p class="text-[11px] text-gray-400 mt-1">在这里快速查看整体进度；新增投递、管理记录和面试流程请前往投递管理。</p></div><button class="soft-btn primary text-xs whitespace-nowrap" onclick="switchJobTab('applications')">进入投递管理 →</button></div>
+      </div>
+
+      <!-- Sub-page: Applications / workflow management -->
+      <div id="job-applications" class="hidden space-y-4">
         <div class="module-card overflow-hidden" style="padding:0;">
           <div class="flex items-center justify-between px-5 py-3 border-b border-gray-100">
             <div class="flex items-center gap-2">
@@ -1973,6 +1979,7 @@ tailwind.config = {
         <div><label class="block text-[11px] font-semibold text-gray-400 mb-1">JD 内容</label><textarea id="job-jdcontent" rows="3" class="w-full px-3 py-2 rounded-xl border border-gray-200 bg-white/80 text-sm text-gray-800 font-boba focus:border-[var(--accent-500)] focus:ring-4 focus:ring-[rgba(212,104,122,0.08)] outline-none transition-all duration-200 resize-none" placeholder="粘贴 JD 描述内容..."></textarea></div>
         <div><label class="block text-[11px] font-semibold text-gray-400 mb-1">JD 截图 <span class="text-[10px] text-gray-300">（≤20MB）</span></label><div id="job-jdimages-drop" class="relative border-2 border-dashed border-gray-200 rounded-xl p-4 text-center cursor-pointer hover:border-[var(--accent-300)] hover:bg-[var(--accent-50)]/30 transition-all duration-200" onclick="document.getElementById('job-jdimages-input').click()"><svg class="w-6 h-6 mx-auto mb-1 text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><p class="text-[10px] text-gray-400">点击或拖拽上传 JD 截图</p><input id="job-jdimages-input" type="file" accept="image/*" multiple class="hidden" onchange="handleJobJdImages(this.files)"></div><div id="job-jdimages-preview" class="flex gap-2 mt-2 flex-wrap"></div></div>
         <div><label class="block text-[11px] font-semibold text-gray-400 mb-1">投递链接</label><input id="job-applyurl" class="w-full px-3 py-2 rounded-xl border border-gray-200 bg-white/80 text-sm text-gray-800 font-boba focus:border-[var(--accent-500)] focus:ring-4 focus:ring-[rgba(212,104,122,0.08)] outline-none transition-all duration-200" placeholder="如：https://zhaopin.xxx.com/..."></div>
+        <div><label class="block text-[11px] font-semibold text-gray-400 mb-1">外部文档链接 <span class="text-[10px] text-gray-300">（作品集、网申材料等）</span></label><input id="job-documenturl" class="w-full px-3 py-2 rounded-xl border border-gray-200 bg-white/80 text-sm text-gray-800 font-boba focus:border-[var(--accent-500)] focus:ring-4 focus:ring-[rgba(212,104,122,0.08)] outline-none transition-all duration-200" placeholder="如：飞书文档、在线作品集链接..."></div>
         <div><label class="block text-[11px] font-semibold text-gray-400 mb-1">薪资范围</label><input id="job-salary" class="w-full px-3 py-2 rounded-xl border border-gray-200 bg-white/80 text-sm text-gray-800 font-boba focus:border-[var(--accent-500)] focus:ring-4 focus:ring-[rgba(212,104,122,0.08)] outline-none transition-all duration-200" placeholder="如：20-30K · 15薪"></div>
         <div><label class="block text-[11px] font-semibold text-gray-400 mb-1">行业标签</label><div class="grid grid-cols-3 gap-1.5 mb-1.5" id="job-industry-pills"></div><input id="job-industry-custom" class="w-full px-3 py-2 rounded-xl border border-gray-200 bg-white/80 text-xs text-gray-800 font-boba focus:border-[var(--accent-500)] focus:ring-4 focus:ring-[rgba(212,104,122,0.08)] outline-none transition-all duration-200" placeholder="或自定义行业标签..."></div>
         <div><label class="block text-[11px] font-semibold text-gray-400 mb-1">截止日期 <span class="text-[10px] text-gray-300">（笔试/测评）</span></label><input id="job-deadline" type="date" class="w-full px-3 py-2 rounded-xl border border-gray-200 bg-white/80 text-sm text-gray-800 font-boba focus:border-[var(--accent-500)] focus:ring-4 focus:ring-[rgba(212,104,122,0.08)] outline-none transition-all duration-200"></div>
@@ -6234,8 +6241,10 @@ function onAuthSuccess(email) {
     renderAll();
     if (typeof jobCurrentTab !== 'undefined') {
       if (jobCurrentTab === 'overview') renderJobOverview();
+      else if (jobCurrentTab === 'applications') renderJobTable();
       else if (jobCurrentTab === 'kanban') { renderJobKanban(); renderJobCharts(); }
       else if (jobCurrentTab === 'review') renderReviewList();
+      else if (jobCurrentTab === 'calendar') renderInterviewCalendar();
     }
     if (typeof checkDeadlines === 'function') checkDeadlines();
   }).catch(function(e) {
@@ -6374,6 +6383,7 @@ function switchJobTab(tab) {
   if (tab === jobCurrentTab) return;
   jobCurrentTab = tab;
   document.getElementById('job-overview').classList.toggle('hidden', tab !== 'overview');
+  document.getElementById('job-applications').classList.toggle('hidden', tab !== 'applications');
   document.getElementById('job-kanban').classList.toggle('hidden', tab !== 'kanban');
   document.getElementById('job-review').classList.toggle('hidden', tab !== 'review');
   document.getElementById('job-calendar').classList.toggle('hidden', tab !== 'calendar');
@@ -6384,7 +6394,10 @@ function switchJobTab(tab) {
       b.style.background = 'transparent'; b.style.color = '#9B8E84';
     }
   });
+  var addButton = document.getElementById('job-add-button');
+  if (addButton) addButton.style.display = tab === 'applications' ? '' : 'none';
   if (tab === 'overview') renderJobOverview();
+  if (tab === 'applications') renderJobTable();
   if (tab === 'kanban') { renderJobKanban(); renderJobCharts(); }
   if (tab === 'review') renderReviewList();
   if (tab === 'calendar') renderInterviewCalendar();
@@ -6411,6 +6424,7 @@ function openJobPanel(id) {
     document.getElementById('job-date').value = job.date || '';
     document.getElementById('job-jdcontent').value = job.jdContent || '';
     document.getElementById('job-applyurl').value = job.applyUrl || '';
+    document.getElementById('job-documenturl').value = job.documentUrl || '';
     document.getElementById('job-salary').value = job.salary || '';
     document.getElementById('job-deadline').value = job.deadline || '';
     document.getElementById('job-notes').value = job.notes || '';
@@ -6438,6 +6452,7 @@ function openJobPanel(id) {
     document.getElementById('job-date').value = new Date().toISOString().slice(0,10);
     document.getElementById('job-jdcontent').value = '';
     document.getElementById('job-applyurl').value = '';
+    document.getElementById('job-documenturl').value = '';
     document.getElementById('job-salary').value = '';
     document.getElementById('job-deadline').value = '';
     document.getElementById('job-notes').value = '';
@@ -6490,6 +6505,7 @@ function saveJob() {
     jdContent: document.getElementById('job-jdcontent').value.trim(),
     jdImages: pendingJdImages.slice(),
     applyUrl: document.getElementById('job-applyurl').value.trim(),
+    documentUrl: document.getElementById('job-documenturl').value.trim(),
     salary: document.getElementById('job-salary').value.trim(),
     deadline: document.getElementById('job-deadline').value,
     notes: document.getElementById('job-notes').value.trim(),
@@ -6522,11 +6538,11 @@ function closeJobFlow() { document.getElementById('job-flow-overlay').classList.
 function renderJobFlow() {
   var root = document.getElementById('job-flow-content'), job = jobEntries.find(function(j) { return j.id === jobFlowId; }); if (!root || !job) return;
   var status = JOB_STATUSES.find(function(s) { return s.key === job.status; }), interviews = getJobInterviews(job), hint = getInterviewProgressHint(job);
-  root.innerHTML = '<div class="flex items-start justify-between gap-3 mb-5"><div><p class="text-[10px] text-gray-400 font-boba">投递流程</p><h3 class="text-lg font-bold text-gray-800 font-boba mt-1">' + escHtml(job.company) + ' · ' + escHtml(job.position) + '</h3><p class="text-[10px] text-gray-400 mt-1">投递于 ' + escHtml(job.date || '未记录') + '　·　' + escHtml((status||{}).label || job.status || '未设置') + (hint ? '　·　' + escHtml(hint) : '') + '</p></div><button class="soft-btn primary text-xs" onclick="openInterviewEditor()">+ 添加轮次</button></div><div id="interview-editor-wrap"></div><div class="relative pl-5 sm:pl-6">' + (interviews.length ? interviews.map(function(i, index) { return renderInterviewTimelineCard(i, index); }).join('') : '<div class="rounded-2xl border border-dashed border-gray-200 bg-gray-50/60 p-7 text-center text-xs text-gray-400">还没有面试安排。可以从这里补充第一轮面试。</div>') + '</div>';
+  root.innerHTML = '<div class="flex items-start justify-between gap-3 mb-5"><div><p class="text-[10px] text-gray-400 font-boba">投递流程</p><h3 class="text-lg font-bold text-gray-800 font-boba mt-1">' + escHtml(job.company) + ' · ' + escHtml(job.position) + '</h3><p class="text-[10px] text-gray-400 mt-1">投递于 ' + escHtml(job.date || '未记录') + '　·　' + escHtml((status||{}).label || job.status || '未设置') + (hint ? '　·　' + escHtml(hint) : '') + '</p>' + (job.documentUrl ? '<button data-url="' + escHtml(job.documentUrl) + '" class="inline-flex mt-2 text-[10px] px-2 py-1 rounded-lg border border-gray-200 bg-white text-gray-500 hover:text-[var(--accent-600)] cursor-pointer" onclick="openExternalLink(this.dataset.url)">打开外部文档 ↗</button>' : '') + '</div><button class="soft-btn primary text-xs" onclick="openInterviewEditor()">+ 添加轮次</button></div><div id="interview-editor-wrap"></div><div class="relative pl-5 sm:pl-6">' + (interviews.length ? interviews.map(function(i, index) { return renderInterviewTimelineCard(i, index); }).join('') : '<div class="rounded-2xl border border-dashed border-gray-200 bg-gray-50/60 p-7 text-center text-xs text-gray-400">还没有面试安排。可以从这里补充第一轮面试。</div>') + '</div>';
   if (jobFlowFocusInterviewId) setTimeout(function() { var el = document.getElementById('interview-' + jobFlowFocusInterviewId); if (el) { el.scrollIntoView({ behavior:'smooth', block:'center' }); el.classList.add('ring-2','ring-[var(--accent-300)]'); } }, 60);
 }
 function renderInterviewTimelineCard(i, index) {
-  var links = (i.location && /^https?:\/\//i.test(i.location) ? '<button class="text-[10px] px-2 py-1 rounded-lg border-0 bg-[var(--accent-500)] text-white cursor-pointer" onclick="openExternalLink(\'' + escHtml(i.location) + '\')">进入面试</button>' : '') + (i.documentUrl ? '<button class="text-[10px] px-2 py-1 rounded-lg border border-gray-200 bg-white text-gray-500 cursor-pointer" onclick="openExternalLink(\'' + escHtml(i.documentUrl) + '\')">文档</button>' : '') + (i.notes ? '<button class="text-[10px] px-2 py-1 rounded-lg border border-[#eaded3] bg-[#fffaf5] text-[#8c6f5f] cursor-pointer" onclick="openInterviewEditor(' + i.id + ')">复盘</button>' : '');
+  var links = (i.location && /^https?:\/\//i.test(i.location) ? '<button data-url="' + escHtml(i.location) + '" class="text-[10px] px-2 py-1 rounded-lg border-0 bg-[var(--accent-500)] text-white cursor-pointer" onclick="openExternalLink(this.dataset.url)">进入面试</button>' : '') + (i.documentUrl ? '<button data-url="' + escHtml(i.documentUrl) + '" class="text-[10px] px-2 py-1 rounded-lg border border-gray-200 bg-white text-gray-500 cursor-pointer" onclick="openExternalLink(this.dataset.url)">文档</button>' : '') + (i.notes ? '<button class="text-[10px] px-2 py-1 rounded-lg border border-[#eaded3] bg-[#fffaf5] text-[#8c6f5f] cursor-pointer" onclick="openInterviewEditor(' + i.id + ')">复盘</button>' : '');
   return '<div id="interview-' + i.id + '" class="relative mb-3 rounded-2xl border border-gray-100 bg-white/80 p-3.5 shadow-sm"><span class="absolute -left-[22px] top-5 w-3 h-3 rounded-full border-2 border-white" style="background:' + interviewStatusStyle(i.status) + ';box-shadow:0 0 0 1px #e5e7eb"></span>' + (index ? '<span class="absolute -left-[17px] -top-3 h-3 border-l border-dashed border-gray-200"></span>' : '') + '<div class="flex items-start justify-between gap-2"><div><div class="flex items-center gap-2 flex-wrap"><b class="text-sm text-gray-800 font-boba">' + escHtml(i.name || '面试') + '</b><span class="text-[10px] px-1.5 py-0.5 rounded-full text-white" style="background:' + interviewStatusStyle(i.status) + '">' + escHtml(i.status || '待参加') + '</span></div><p class="text-[10px] text-gray-500 mt-1">' + escHtml(formatInterviewTime(i.datetime)) + '　·　' + escHtml(i.mode || '未填写形式') + (i.contact ? '　·　' + escHtml(i.contact) : '') + '</p></div><div class="flex gap-1"><button class="text-[10px] text-gray-400 border-0 bg-transparent cursor-pointer" onclick="openInterviewEditor(' + i.id + ')">编辑</button><button class="text-[10px] text-red-400 border-0 bg-transparent cursor-pointer" onclick="deleteInterview(' + i.id + ')">删除</button></div></div>' + (i.location && !/^https?:\/\//i.test(i.location) ? '<p class="text-[10px] text-gray-500 mt-2">地点：' + escHtml(i.location) + '</p>' : '') + (i.focus ? '<p class="text-[10px] text-[#8c6f5f] mt-2">关注：' + escHtml(i.focus) + '</p>' : '') + (i.result ? '<p class="text-[10px] text-gray-500 mt-1">结果：' + escHtml(i.result) + '</p>' : '') + (i.notes ? '<p class="text-[10px] text-gray-400 mt-1.5 leading-relaxed whitespace-pre-line">' + escHtml(i.notes) + '</p>' : '') + (links ? '<div class="flex gap-1.5 mt-2.5 flex-wrap">' + links + '</div>' : '') + '</div>';
 }
 function openInterviewEditor(id) {
@@ -6731,6 +6747,7 @@ function renderJobAll() {
   jobEntries = loadJobs();
   reviewEntries = loadReviews();
   if (jobCurrentTab === 'overview') renderJobOverview();
+  else if (jobCurrentTab === 'applications') renderJobTable();
   else if (jobCurrentTab === 'kanban') { renderJobKanban(); renderJobCharts(); }
   else if (jobCurrentTab === 'review') renderReviewList();
   else if (jobCurrentTab === 'calendar') renderInterviewCalendar();
@@ -6877,7 +6894,7 @@ function renderInterviewCalendar() {
   grid.innerHTML = cells.join('');
   var future = getAllInterviewEvents().filter(function(event) { return new Date(event.interview.datetime).getTime() >= Date.now() && ['已取消','已完成','已通过','未通过'].indexOf(event.interview.status) < 0; });
   var count = document.getElementById('upcoming-interview-count'); if (count) count.textContent = future.length ? future.length + ' 场待参加' : '';
-  upcoming.innerHTML = future.length ? future.map(function(event) { var i=event.interview, actions = (i.location && /^https?:\/\//i.test(i.location) ? '<button class="text-[10px] px-2 py-1 rounded-lg border-0 bg-[var(--accent-500)] text-white cursor-pointer" onclick="openExternalLink(\'' + escHtml(i.location) + '\')">进入面试</button>' : '') + (i.documentUrl ? '<button class="text-[10px] px-2 py-1 rounded-lg border border-gray-200 bg-white text-gray-500 cursor-pointer" onclick="openExternalLink(\'' + escHtml(i.documentUrl) + '\')">文档</button>' : '') + (i.notes ? '<button class="text-[10px] px-2 py-1 rounded-lg border border-[#eaded3] bg-[#fffaf5] text-[#8c6f5f] cursor-pointer" onclick="openJobFlow(' + event.job.id + ',' + i.id + ')">复盘</button>' : ''); return '<div class="rounded-xl border border-gray-100 bg-white/70 p-3 flex flex-col sm:flex-row sm:items-center gap-2"><div class="flex-1 min-w-0 cursor-pointer" onclick="openJobFlow(' + event.job.id + ',' + i.id + ')"><div class="text-xs font-bold text-gray-800 font-boba truncate">' + escHtml(event.job.company + ' · ' + event.job.position) + '</div><div class="text-[10px] text-gray-500 mt-1">' + escHtml((i.name||'面试') + ' · ' + formatInterviewTime(i.datetime) + ' · ' + (i.mode||'未填写形式')) + ' <span class="text-[var(--accent-600)]">' + interviewRelativeTime(i.datetime) + '</span></div></div><div class="flex gap-1.5 flex-wrap">' + actions + '</div></div>'; }).join('') : '<div class="rounded-2xl border border-dashed border-gray-200 bg-gray-50/60 p-8 text-center"><p class="text-xs text-gray-400">近期没有面试安排</p><button class="text-[10px] mt-2 border-0 bg-transparent text-[var(--accent-600)] cursor-pointer" onclick="switchJobTab(\'overview\');openJobPanel()">从投递记录补充面试安排</button></div>';
+  upcoming.innerHTML = future.length ? future.map(function(event) { var i=event.interview, actions = (i.location && /^https?:\/\//i.test(i.location) ? '<button data-url="' + escHtml(i.location) + '" class="text-[10px] px-2 py-1 rounded-lg border-0 bg-[var(--accent-500)] text-white cursor-pointer" onclick="openExternalLink(this.dataset.url)">进入面试</button>' : '') + (i.documentUrl ? '<button data-url="' + escHtml(i.documentUrl) + '" class="text-[10px] px-2 py-1 rounded-lg border border-gray-200 bg-white text-gray-500 cursor-pointer" onclick="openExternalLink(this.dataset.url)">文档</button>' : '') + (i.notes ? '<button class="text-[10px] px-2 py-1 rounded-lg border border-[#eaded3] bg-[#fffaf5] text-[#8c6f5f] cursor-pointer" onclick="openJobFlow(' + event.job.id + ',' + i.id + ')">复盘</button>' : ''); return '<div class="rounded-xl border border-gray-100 bg-white/70 p-3 flex flex-col sm:flex-row sm:items-center gap-2"><div class="flex-1 min-w-0 cursor-pointer" onclick="openJobFlow(' + event.job.id + ',' + i.id + ')"><div class="text-xs font-bold text-gray-800 font-boba truncate">' + escHtml(event.job.company + ' · ' + event.job.position) + '</div><div class="text-[10px] text-gray-500 mt-1">' + escHtml((i.name||'面试') + ' · ' + formatInterviewTime(i.datetime) + ' · ' + (i.mode||'未填写形式')) + ' <span class="text-[var(--accent-600)]">' + interviewRelativeTime(i.datetime) + '</span></div></div><div class="flex gap-1.5 flex-wrap">' + actions + '</div></div>'; }).join('') : '<div class="rounded-2xl border border-dashed border-gray-200 bg-gray-50/60 p-8 text-center"><p class="text-xs text-gray-400">近期没有面试安排</p><button class="text-[10px] mt-2 border-0 bg-transparent text-[var(--accent-600)] cursor-pointer" onclick="switchJobTab(\'applications\');openJobPanel()">从投递记录补充面试安排</button></div>';
 }
 
 // ── Deadline Checker ────────────────────────────────────
