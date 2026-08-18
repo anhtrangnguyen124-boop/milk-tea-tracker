@@ -17,7 +17,7 @@ module.exports = async function handler(req, res) {
   const source = {
     company: text(job.company, 200), position: text(job.position, 200), jdContent: text(job.jdContent, 6000),
     interviewName: text(interview.name, 100), interviewMode: text(interview.mode, 100), interviewStatus: text(interview.status, 100),
-    preparation: { intro:text(preparation.intro, 4000), internship:text(preparation.internship, 7000), keyQuestions:text(preparation.keyQuestions, 4000), materials:text(preparation.materials, 4000), resourceNotes:Array.isArray(preparation.notes) ? preparation.notes.map((note) => ({ title:text(note && note.title, 300), content:text(note && note.content, 5000) })) : [] },
+    preparation: { intro:text(preparation.intro, 4000), internship:text(preparation.internship, 7000), precautions:text(preparation.precautions, 4000), keyQuestions:text(preparation.keyQuestions, 4000), materials:text(preparation.materials, 4000), resourceNotes:Array.isArray(preparation.notes) ? preparation.notes.map((note) => ({ title:text(note && note.title, 300), content:text(note && note.content, 5000) })) : [] },
     question: { title:text(question.title, 1000), tag:text(question.tag, 100), originalQuestion:text(question.originalQuestion, 5000), answer:text(question.answer, 7000), feedback:text(question.feedback, 1000) }
   };
   if (!source.question.title && !source.question.originalQuestion) return json(res, 400, { error: '请先填写题目或面试官原始提问' });
