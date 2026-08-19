@@ -1666,7 +1666,7 @@ tailwind.config = {
         <button data-jobtab="overview" class="job-tab-btn text-xs font-bold px-4 py-1.5 rounded-xl transition-all duration-200 cursor-pointer border-none" style="background:var(--accent-500);color:#fff;" onclick="switchJobTab('overview')">总览</button>
         <button data-jobtab="applications" class="job-tab-btn text-xs font-bold px-4 py-1.5 rounded-xl transition-all duration-200 cursor-pointer border-none" style="background:transparent;color:#9B8E84;" onclick="switchJobTab('applications')">投递管理</button>
         <button data-jobtab="kanban" class="job-tab-btn text-xs font-bold px-4 py-1.5 rounded-xl transition-all duration-200 cursor-pointer border-none" style="background:transparent;color:#9B8E84;" onclick="switchJobTab('kanban')">投递看板</button>
-        <button data-jobtab="review" class="job-tab-btn text-xs font-bold px-4 py-1.5 rounded-xl transition-all duration-200 cursor-pointer border-none" style="background:transparent;color:#9B8E84;" onclick="switchJobTab('review')">面试复盘</button>
+        <button data-jobtab="review" class="job-tab-btn text-xs font-bold px-4 py-1.5 rounded-xl transition-all duration-200 cursor-pointer border-none" style="background:transparent;color:#9B8E84;" onclick="switchJobTab('review')">面试工作台</button>
         <button data-jobtab="calendar" class="job-tab-btn text-xs font-bold px-4 py-1.5 rounded-xl transition-all duration-200 cursor-pointer border-none" style="background:transparent;color:#9B8E84;" onclick="switchJobTab('calendar')">面试日历</button>
       </div>
 
@@ -1717,12 +1717,12 @@ tailwind.config = {
         <div id="kanban-container" class="kanban-scroll flex gap-3 overflow-x-auto pb-3" style="min-height:360px;"></div>
       </div>
 
-      <!-- Sub-page: Review — 每份复盘都属于某条投递下的某一轮面试 -->
+      <!-- Sub-page: Interview workbench — 每项仍属于某条投递下的某一轮面试 -->
       <div id="job-review" class="hidden">
         <div class="module-card p-0 overflow-hidden">
           <div class="grid grid-cols-1 lg:grid-cols-[280px_minmax(0,1fr)] min-h-[620px]">
             <aside class="border-b lg:border-b-0 lg:border-r border-gray-100 bg-white/35">
-              <div class="p-4 border-b border-gray-100"><div class="flex items-center justify-between"><div><p class="text-sm font-bold text-gray-800 font-boba">面试复盘</p><p class="text-[10px] text-gray-400 mt-1">每份复盘均关联到具体面试轮次</p></div><span id="review-workspace-count" class="text-[10px] px-2 py-1 rounded-full bg-[var(--accent-50)] text-[var(--accent-600)]">0</span></div><div class="flex gap-1 mt-3 overflow-x-auto thin-scroll" id="review-filter-tabs"></div></div>
+              <div class="p-4 border-b border-gray-100"><div class="flex items-center justify-between"><div><p class="text-sm font-bold text-gray-800 font-boba">面试工作台</p><p class="text-[10px] text-gray-400 mt-1">按具体面试轮次处理准备与复盘</p></div><span id="review-workspace-count" class="text-[10px] px-2 py-1 rounded-full bg-[var(--accent-50)] text-[var(--accent-600)]">0</span></div><div class="flex gap-1 mt-3" id="workbench-view-tabs"></div><div class="flex gap-1 mt-2 overflow-x-auto thin-scroll" id="review-filter-tabs"></div></div>
               <div id="review-workspace-list" class="max-h-[520px] overflow-y-auto thin-scroll p-2"></div>
             </aside>
             <section id="review-workspace-editor" class="bg-white/45 min-w-0"></section>
@@ -1940,6 +1940,7 @@ tailwind.config = {
         <div><label class="block text-[11px] font-semibold text-gray-400 mb-1">公司名称 <span class="text-red-400">*</span></label><input id="job-company" class="w-full px-3 py-2 rounded-xl border border-gray-200 bg-white/80 text-sm text-gray-800 font-boba focus:border-[var(--accent-500)] focus:ring-4 focus:ring-[rgba(212,104,122,0.08)] outline-none transition-all duration-200" placeholder="如：字节跳动"></div>
         <div><label class="block text-[11px] font-semibold text-gray-400 mb-1">岗位名称 <span class="text-red-400">*</span></label><input id="job-position" class="w-full px-3 py-2 rounded-xl border border-gray-200 bg-white/80 text-sm text-gray-800 font-boba focus:border-[var(--accent-500)] focus:ring-4 focus:ring-[rgba(212,104,122,0.08)] outline-none transition-all duration-200" placeholder="如：前端开发工程师"></div>
         <div><label class="block text-[11px] font-semibold text-gray-400 mb-1">当前状态</label><div class="grid grid-cols-3 gap-1.5" id="job-status-pills"></div></div>
+        <div id="job-end-result-wrap" class="hidden"><label class="block text-[11px] font-semibold text-gray-400 mb-1">结束结果</label><select id="job-end-result" class="w-full px-3 py-2 rounded-xl border border-gray-200 bg-white/80 text-sm text-gray-800 font-boba"><option value="">请选择结束结果</option><option>获得 Offer</option><option>未通过</option><option>主动放弃</option><option>无结果</option><option>其他</option></select></div>
         <div><label class="block text-[11px] font-semibold text-gray-400 mb-1">投递日期</label><input id="job-date" type="date" class="w-full px-3 py-2 rounded-xl border border-gray-200 bg-white/80 text-sm text-gray-800 font-boba focus:border-[var(--accent-500)] focus:ring-4 focus:ring-[rgba(212,104,122,0.08)] outline-none transition-all duration-200"></div>
         <div><label class="block text-[11px] font-semibold text-gray-400 mb-1">投递渠道</label><div class="grid grid-cols-3 gap-1.5" id="job-channel-pills"></div></div>
         <div><label class="block text-[11px] font-semibold text-gray-400 mb-1">JD 内容</label><textarea id="job-jdcontent" rows="3" class="w-full px-3 py-2 rounded-xl border border-gray-200 bg-white/80 text-sm text-gray-800 font-boba focus:border-[var(--accent-500)] focus:ring-4 focus:ring-[rgba(212,104,122,0.08)] outline-none transition-all duration-200 resize-none" placeholder="粘贴 JD 描述内容..."></textarea></div>
@@ -1950,7 +1951,7 @@ tailwind.config = {
         <div><label class="block text-[11px] font-semibold text-gray-400 mb-1">行业标签</label><div class="grid grid-cols-3 gap-1.5 mb-1.5" id="job-industry-pills"></div><input id="job-industry-custom" class="w-full px-3 py-2 rounded-xl border border-gray-200 bg-white/80 text-xs text-gray-800 font-boba focus:border-[var(--accent-500)] focus:ring-4 focus:ring-[rgba(212,104,122,0.08)] outline-none transition-all duration-200" placeholder="或自定义行业标签..."></div>
         <div><label class="block text-[11px] font-semibold text-gray-400 mb-1">截止日期 <span class="text-[10px] text-gray-300">（笔试/测评）</span></label><input id="job-deadline" type="date" class="w-full px-3 py-2 rounded-xl border border-gray-200 bg-white/80 text-sm text-gray-800 font-boba focus:border-[var(--accent-500)] focus:ring-4 focus:ring-[rgba(212,104,122,0.08)] outline-none transition-all duration-200"></div>
         <div><label class="block text-[11px] font-semibold text-gray-400 mb-1">备注</label><textarea id="job-notes" rows="3" class="w-full px-3 py-2 rounded-xl border border-gray-200 bg-white/80 text-sm text-gray-800 font-boba focus:border-[var(--accent-500)] focus:ring-4 focus:ring-[rgba(212,104,122,0.08)] outline-none transition-all duration-200 resize-none" placeholder="任何想记录的信息..."></textarea></div>
-        <details class="rounded-2xl border border-[var(--accent-100)] bg-[var(--accent-50)]/35 p-3 group"><summary class="cursor-pointer text-xs font-bold text-[var(--accent-700)] font-boba">＋ 面试安排 <span class="font-normal text-[10px] text-gray-400">（选填，可稍后补充）</span></summary><div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3"><select id="job-first-interview-name" class="px-3 py-2 rounded-xl border border-gray-200 bg-white text-xs font-boba"><option value="">选择轮次</option><option>HR 初筛</option><option>笔试</option><option>一面</option><option>二面</option><option>终面</option><option>作业</option><option>其他</option></select><input id="job-first-interview-datetime" type="datetime-local" class="px-3 py-2 rounded-xl border border-gray-200 bg-white text-xs font-boba"><select id="job-first-interview-mode" class="px-3 py-2 rounded-xl border border-gray-200 bg-white text-xs font-boba"><option value="线上">线上</option><option value="电话">电话</option><option value="线下">线下</option><option value="笔试">笔试</option><option value="其他">其他</option></select><input id="job-first-interview-location" class="px-3 py-2 rounded-xl border border-gray-200 bg-white text-xs font-boba" placeholder="地点或会议链接"><input id="job-first-interview-contact" class="px-3 py-2 rounded-xl border border-gray-200 bg-white text-xs font-boba" placeholder="面试官/联系人"><input id="job-first-interview-doc" class="px-3 py-2 rounded-xl border border-gray-200 bg-white text-xs font-boba" placeholder="文档/测评/作业链接"><select id="job-first-interview-status" class="px-3 py-2 rounded-xl border border-gray-200 bg-white text-xs font-boba"><option value="待安排">待安排</option><option value="待参加" selected>待参加</option><option value="已完成">已完成</option><option value="已取消">已取消</option><option value="已通过">已通过</option><option value="未通过">未通过</option></select><input id="job-first-interview-result" class="px-3 py-2 rounded-xl border border-gray-200 bg-white text-xs font-boba" placeholder="结果（选填）"><input id="job-first-interview-focus" class="px-3 py-2 rounded-xl border border-gray-200 bg-white text-xs font-boba" placeholder="重点关注事项（选填）"></div><textarea id="job-first-interview-notes" rows="2" class="w-full mt-2 px-3 py-2 rounded-xl border border-gray-200 bg-white text-xs font-boba resize-none" placeholder="复盘笔记（选填）"></textarea></details>
+        <details class="rounded-2xl border border-[var(--accent-100)] bg-[var(--accent-50)]/35 p-3 group"><summary class="cursor-pointer text-xs font-bold text-[var(--accent-700)] font-boba">＋ 面试安排 <span class="font-normal text-[10px] text-gray-400">（选填，可稍后补充）</span></summary><div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3"><select id="job-first-interview-name" class="px-3 py-2 rounded-xl border border-gray-200 bg-white text-xs font-boba"><option value="">选择轮次</option><option>HR 初筛</option><option>笔试</option><option>一面</option><option>二面</option><option>终面</option><option>作业</option><option>其他</option></select><input id="job-first-interview-datetime" type="datetime-local" class="px-3 py-2 rounded-xl border border-gray-200 bg-white text-xs font-boba"><select id="job-first-interview-mode" class="px-3 py-2 rounded-xl border border-gray-200 bg-white text-xs font-boba"><option value="线上">线上</option><option value="电话">电话</option><option value="线下">线下</option><option value="笔试">笔试</option><option value="其他">其他</option></select><select id="job-first-interview-status" class="px-3 py-2 rounded-xl border border-gray-200 bg-white text-xs font-boba"><option value="not_started" selected>未开始</option><option value="completed">已完成</option><option value="cancelled">已取消</option></select><input id="job-first-interview-location" class="sm:col-span-2 px-3 py-2 rounded-xl border border-gray-200 bg-white text-xs font-boba" placeholder="地点或会议链接"><input id="job-first-interview-doc" class="sm:col-span-2 px-3 py-2 rounded-xl border border-gray-200 bg-white text-xs font-boba" placeholder="文档/测评/作业链接"></div></details>
       </div>
       <div class="flex gap-2 pt-2">
         <button id="job-save-btn" class="soft-btn primary flex-1 text-sm" onclick="saveJob()" style="padding-top:0.75rem;padding-bottom:0.75rem;">保存</button>
@@ -6306,12 +6307,9 @@ console.log('[DELEGATION] 注册完成');
 
 // ── Constants ──────────────────────────────────────────
 var JOB_STATUSES = [
-  { key: 'wishlist',   label: '待投递' },
   { key: 'applied',    label: '已投递' },
-  { key: 'assessment', label: '笔试/测评' },
-  { key: 'interview',  label: '面试中' },
-  { key: 'offer',      label: 'Offer' },
-  { key: 'rejected',   label: '已拒' }
+  { key: 'in_progress', label: '进行中' },
+  { key: 'ended',      label: '已结束' }
 ];
 
 var JOB_CHANNELS = ['官网', '内推', 'Boss直聘', 'LinkedIn', '猎头', '其他'];
@@ -6342,12 +6340,51 @@ var reviewRound = '一面';
 var interviewCalendarCursor = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
 var jobFlowId = null;
 var jobFlowFocusInterviewId = null;
+var workbenchView = 'preparation';
+var workbenchInterviewFilter = 'all';
+var preparationDirty = false;
+var preparationReminderState = {};
+var reviewReminderState = {};
+var interviewAutoCompleteTimer = null;
 
 // ── Data Layer ─────────────────────────────────────────
-function loadJobs() {
-  try { return _cacheGet('job_v1'); } catch(e) { return []; }
+function normalizeInterviewStatus(status) { return ({'待安排':'not_started','待参加':'not_started','未开始':'not_started','已完成':'completed','已通过':'completed','未通过':'completed','已取消':'cancelled','not_started':'not_started','completed':'completed','cancelled':'cancelled'})[status] || 'not_started'; }
+function interviewTimeHasPassed(interview, now) { var raw=interview&&interview.datetime; if(!raw)return false;var time=new Date(raw).getTime();return Number.isFinite(time)&&time<=(now||Date.now()); }
+function interviewStatusLabel(status) { return ({not_started:'未开始',completed:'已完成',cancelled:'已取消'})[normalizeInterviewStatus(status)] || '未开始'; }
+function jobStatusColor(status) { return ({applied:'#6BA8D8',in_progress:'#D4687A',ended:'#9CA3AF'})[status] || '#9CA3AF'; }
+function jobStatusLabel(job) { var label=((JOB_STATUSES.find(function(item){ return item.key===job.status; })||{}).label || job.status || '未设置'); return job.status === 'ended' && job.endResult ? label + ' · ' + job.endResult : label; }
+function normalizeJobStatus(status, interviews) { var mapped=({'wishlist':'applied','applied':'applied','assessment':'applied','interview':'in_progress','in_progress':'in_progress','offer':'ended','rejected':'ended','ended':'ended','已投递':'applied','进行中':'in_progress','已结束':'ended'})[status] || 'applied'; return mapped === 'ended' ? 'ended' : (Array.isArray(interviews) && interviews.length ? 'in_progress' : mapped); }
+function legacyEndResult(status, result) { if (result) return result; return ({offer:'获得 Offer',rejected:'未通过'})[status] || ''; }
+function normalizeJobRecord(job) {
+  var source=job||{}, now=Date.now(), interviews=(Array.isArray(source.interviews)?source.interviews:[]).map(function(item){
+    var next=Object.assign({},item), normalized=normalizeInterviewStatus(item.status);
+    if (normalized==='not_started' && interviewTimeHasPassed(next,now)) {
+      next.status='completed';
+      next.completedAt=next.completedAt||now;
+      next.autoCompletedAt=next.autoCompletedAt||now;
+      next.autoCompletionReason='scheduled_time_passed';
+      next.updatedAt=now;
+    } else next.status=normalized;
+    if (item.status && item.status !== next.status) next.legacyStatus=item.status;
+    return next;
+  });
+  var next=Object.assign({},source,{interviews:interviews}); next.status=normalizeJobStatus(source.status,interviews); next.endResult=next.status==='ended' ? legacyEndResult(source.status,source.endResult) : ''; if(source.status && source.status !== next.status) next.legacyStatus=source.status; return next;
 }
-function saveJobs(a) { _cacheSet('job_v1', a); }
+function loadJobs() {
+  try { var raw=_cacheGet('job_v1') || [], normalized=raw.map(normalizeJobRecord); if (JSON.stringify(raw)!==JSON.stringify(normalized)) _cacheSet('job_v1', normalized); return normalized; } catch(e) { return []; }
+}
+function saveJobs(a) { _cacheSet('job_v1', (a||[]).map(normalizeJobRecord)); }
+function loadPreparationReminderState() { try { return _cacheGet('job_preparation_reminder_v1') || {}; } catch(e) { return {}; } }
+function savePreparationReminderState() { _cacheSet('job_preparation_reminder_v1', preparationReminderState); }
+function loadReviewReminderState() { try { return _cacheGet('job_review_reminder_v1') || {}; } catch(e) { return {}; } }
+function saveReviewReminderState() { _cacheSet('job_review_reminder_v1', reviewReminderState); }
+function scheduleInterviewAutoCompletion() {
+  clearTimeout(interviewAutoCompleteTimer);
+  var now=Date.now(), nextTime=Infinity;
+  jobEntries.forEach(function(job){getJobInterviews(job).forEach(function(interview){if(normalizeInterviewStatus(interview.status)!=='not_started'||!interview.datetime)return;var time=new Date(interview.datetime).getTime();if(Number.isFinite(time)&&time>now&&time<nextTime)nextTime=time;});});
+  if(nextTime===Infinity)return;
+  interviewAutoCompleteTimer=setTimeout(function(){renderJobAll();if(jobFlowId)renderJobFlow();showJobToast('面试时间已过，已自动标记为已完成');},Math.min(Math.max(nextTime-now+250,250),2147483000));
+}
 function loadReviews() {
   try { return _cacheGet('job_review_v1'); } catch(e) { return []; }
 }
@@ -6406,16 +6443,13 @@ function openJobPanel(id) {
     document.getElementById('job-first-interview-name').value = '';
     document.getElementById('job-first-interview-datetime').value = '';
     document.getElementById('job-first-interview-location').value = '';
-    document.getElementById('job-first-interview-contact').value = '';
     document.getElementById('job-first-interview-doc').value = '';
-    document.getElementById('job-first-interview-result').value = '';
-    document.getElementById('job-first-interview-focus').value = '';
-    document.getElementById('job-first-interview-notes').value = '';
     document.getElementById('job-first-interview-mode').value = '线上';
-    document.getElementById('job-first-interview-status').value = '待参加';
+    document.getElementById('job-first-interview-status').value = 'not_started';
     pendingJdImages = (job.jdImages || []).slice();
     renderJdImagePreviews();
-    jobPanelStatus = job.status;
+    jobPanelStatus = normalizeJobStatus(job.status, job.interviews);
+    document.getElementById('job-end-result').value = job.endResult || '';
     jobPanelChannel = job.channel || '';
     jobPanelIndustry = job.industry || '';
   } else {
@@ -6434,13 +6468,10 @@ function openJobPanel(id) {
     document.getElementById('job-first-interview-name').value = '';
     document.getElementById('job-first-interview-datetime').value = '';
     document.getElementById('job-first-interview-location').value = '';
-    document.getElementById('job-first-interview-contact').value = '';
     document.getElementById('job-first-interview-doc').value = '';
-    document.getElementById('job-first-interview-result').value = '';
-    document.getElementById('job-first-interview-focus').value = '';
-    document.getElementById('job-first-interview-notes').value = '';
     document.getElementById('job-first-interview-mode').value = '线上';
-    document.getElementById('job-first-interview-status').value = '待参加';
+    document.getElementById('job-first-interview-status').value = 'not_started';
+    document.getElementById('job-end-result').value = '';
     pendingJdImages = [];
     renderJdImagePreviews();
     jobPanelStatus = 'applied';
@@ -6468,13 +6499,14 @@ function saveJob() {
   var interviews = oldJob && Array.isArray(oldJob.interviews) ? oldJob.interviews.slice() : [];
   var firstName = document.getElementById('job-first-interview-name').value;
   var firstDateTime = document.getElementById('job-first-interview-datetime').value;
-  if (firstName || firstDateTime) interviews.push({ id:Date.now() + Math.floor(Math.random()*1000), name:firstName || '其他', datetime:firstDateTime || '', mode:document.getElementById('job-first-interview-mode').value || '线上', location:document.getElementById('job-first-interview-location').value.trim(), contact:document.getElementById('job-first-interview-contact').value.trim(), documentUrl:document.getElementById('job-first-interview-doc').value.trim(), status:document.getElementById('job-first-interview-status').value || '待参加', result:document.getElementById('job-first-interview-result').value.trim(), focus:document.getElementById('job-first-interview-focus').value.trim(), notes:document.getElementById('job-first-interview-notes').value.trim(), createdAt:Date.now(), updatedAt:Date.now() });
+  if (firstName || firstDateTime) interviews.push({ id:Date.now() + Math.floor(Math.random()*1000), name:firstName || '其他', datetime:firstDateTime || '', mode:document.getElementById('job-first-interview-mode').value || '线上', location:document.getElementById('job-first-interview-location').value.trim(), contact:'', documentUrl:document.getElementById('job-first-interview-doc').value.trim(), status:normalizeInterviewStatus(document.getElementById('job-first-interview-status').value), createdAt:Date.now(), updatedAt:Date.now() });
   var data = {
     id: jobEditId || Date.now(),
     company: company,
     position: position,
     date: document.getElementById('job-date').value || new Date().toISOString().slice(0,10),
-    status: jobPanelStatus,
+    status: normalizeJobStatus(jobPanelStatus, interviews),
+    endResult: jobPanelStatus === 'ended' ? document.getElementById('job-end-result').value : '',
     channel: jobPanelChannel || '',
     industry: jobPanelIndustry || document.getElementById('job-industry-custom').value.trim(),
     jdContent: document.getElementById('job-jdcontent').value.trim(),
@@ -6501,12 +6533,12 @@ function saveJob() {
 }
 
 // ── Interviews: nested under each job record ───────────
-var INTERVIEW_STATUSES = ['待安排','待参加','已完成','已取消','已通过','未通过'];
+var INTERVIEW_STATUSES = ['not_started','completed','cancelled'];
 function getJobInterviews(job) { return (job && Array.isArray(job.interviews) ? job.interviews : []).slice().sort(function(a,b) { return String(a.datetime || '9999').localeCompare(String(b.datetime || '9999')); }); }
 function getAllInterviewEvents() { var list = []; jobEntries.forEach(function(job) { getJobInterviews(job).forEach(function(interview) { if (interview.datetime) list.push({ job:job, interview:interview }); }); }); return list.sort(function(a,b) { return String(a.interview.datetime).localeCompare(String(b.interview.datetime)); }); }
-function interviewStatusStyle(status) { return ({ '待安排':'#9ca3af','待参加':'var(--accent-500)','已完成':'#6ba8d8','已取消':'#9ca3af','已通过':'#5ba88c','未通过':'#d4687a' })[status] || '#9ca3af'; }
+function interviewStatusStyle(status) { return ({not_started:'#4f7edb',completed:'#4f9b7c',cancelled:'#b85c67'})[normalizeInterviewStatus(status)] || '#9ca3af'; }
 function formatInterviewTime(value) { if (!value) return '时间待定'; var d = new Date(value); if (isNaN(d)) return value.replace('T',' '); return (d.getMonth()+1) + '月' + d.getDate() + '日 ' + String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0'); }
-function getInterviewProgressHint(job) { var items = getJobInterviews(job); if (!items.length) return ''; var now = Date.now(), next = items.filter(function(i) { return i.datetime && new Date(i.datetime).getTime() >= now && ['待安排','待参加'].indexOf(i.status) >= 0; })[0], finished = items.filter(function(i) { return ['已完成','已通过','未通过','已取消'].indexOf(i.status) >= 0; }).length; if (next) return '下一场：' + formatInterviewTime(next.datetime) + ' · ' + (next.name || '面试'); if (finished) return '已完成 ' + finished + '/' + items.length + ' 轮'; return '进行至 ' + ((items[items.length-1] || {}).name || '面试'); }
+function getInterviewProgressHint(job) { var items = getJobInterviews(job); if (!items.length) return ''; var now = Date.now(), next = items.filter(function(i) { return i.datetime && new Date(i.datetime).getTime() >= now && normalizeInterviewStatus(i.status) === 'not_started'; })[0], finished = items.filter(function(i) { return normalizeInterviewStatus(i.status) === 'completed'; }).length; if (next) return '下一场：' + formatInterviewTime(next.datetime) + ' · ' + (next.name || '面试'); if (finished) return '已完成 ' + finished + '/' + items.length + ' 轮'; return '已添加 ' + items.length + ' 轮面试'; }
 function openExternalLink(url) {
   try {
     var parsed = new URL(url);
@@ -6541,14 +6573,21 @@ function renderJobFlow() {
 function renderInterviewTimelineCard(job, i, index) {
   var review = i.review && !i.review.deletedAt ? i.review : null, reviewState = getInterviewReviewState(i), reviewText = review ? (review.summary || reviewStateLabel(reviewState)) : (isInterviewFinished(i) ? '待复盘' : '去复盘');
   var links = externalLinkHtml(i.location, '进入面试/笔试', 'text-[10px] px-2 py-1 rounded-lg border-0 bg-[var(--accent-500)] text-white cursor-pointer') + externalLinkHtml(i.documentUrl, '面试准备文档', 'text-[10px] px-2 py-1 rounded-lg border border-gray-200 bg-white text-gray-500 cursor-pointer') + '<button class="text-[10px] px-2 py-1 rounded-lg border border-gray-200 bg-white text-gray-500 cursor-pointer" onclick="openInterviewReview(' + job.id + ',' + i.id + ')">' + (review ? '查看复盘' : '去复盘') + '</button>';
-  return '<div id="interview-' + i.id + '" class="relative mb-3 rounded-2xl border border-gray-200 bg-white p-3.5"><span class="absolute -left-[23px] top-5 w-3 h-3 rounded-full border-2 border-white" style="background:' + interviewStatusStyle(i.status) + ';box-shadow:0 0 0 1px #d1d5db"></span><div class="flex items-start justify-between gap-2"><div><div class="flex items-center gap-2 flex-wrap"><b class="text-sm text-gray-800 font-boba">' + escHtml(i.name || '面试') + '</b><span class="text-[10px] px-1.5 py-0.5 rounded-full text-white" style="background:' + interviewStatusStyle(i.status) + '">' + escHtml(i.status || '待参加') + '</span><span class="text-[10px]" style="color:' + reviewStateStyle(reviewState) + '">' + escHtml(reviewStateLabel(reviewState)) + '</span></div><p class="text-[10px] text-gray-500 mt-1">' + escHtml(formatInterviewTime(i.datetime)) + '　·　' + escHtml(i.mode || '未填写形式') + '</p>' + (review && review.summary ? '<p class="text-[10px] text-gray-500 mt-2 line-clamp-2">复盘：' + escHtml(reviewText) + '</p>' : '') + '</div><div class="flex gap-2"><button class="text-[10px] text-gray-400 hover:text-[var(--accent-600)] border-0 bg-transparent cursor-pointer" onclick="openInterviewEditor(' + i.id + ')">编辑</button><button class="text-[10px] text-gray-400 hover:text-red-400 border-0 bg-transparent cursor-pointer" onclick="deleteInterview(' + i.id + ')">删除</button></div></div>' + (links ? '<div class="flex gap-1.5 mt-2.5 flex-wrap">' + links + '</div>' : '') + '</div>';
+  return '<div id="interview-' + i.id + '" class="relative mb-3 rounded-2xl border border-gray-200 bg-white p-3.5"><span class="absolute -left-[23px] top-5 w-3 h-3 rounded-full border-2 border-white" style="background:' + interviewStatusStyle(i.status) + ';box-shadow:0 0 0 1px #d1d5db"></span><div class="flex items-start justify-between gap-2"><div><div class="flex items-center gap-2 flex-wrap"><b class="text-sm text-gray-800 font-boba">' + escHtml(i.name || '面试') + '</b><span class="text-[10px] px-1.5 py-0.5 rounded-full text-white" style="background:' + interviewStatusStyle(i.status) + '">' + escHtml(interviewStatusLabel(i.status)) + '</span><span class="text-[10px]" style="color:' + reviewStateStyle(reviewState) + '">' + escHtml(reviewStateLabel(reviewState)) + '</span></div><p class="text-[10px] text-gray-500 mt-1">' + escHtml(formatInterviewTime(i.datetime)) + '　·　' + escHtml(i.mode || '未填写形式') + '</p>' + (review && review.summary ? '<p class="text-[10px] text-gray-500 mt-2 line-clamp-2">复盘：' + escHtml(reviewText) + '</p>' : '') + '</div><div class="flex gap-2"><button class="text-[10px] text-gray-400 hover:text-[var(--accent-600)] border-0 bg-transparent cursor-pointer" onclick="openInterviewEditor(' + i.id + ')">编辑</button><button class="text-[10px] text-gray-400 hover:text-red-400 border-0 bg-transparent cursor-pointer" onclick="deleteInterview(' + i.id + ')">删除</button></div></div>' + (links ? '<div class="flex gap-1.5 mt-2.5 flex-wrap">' + links + '</div>' : '') + '</div>';
 }
 function openInterviewEditor(id) {
   var job = jobEntries.find(function(j) { return j.id === jobFlowId; }), target = job && getJobInterviews(job).find(function(i) { return i.id === id; }) || {};
   var wrap = document.getElementById('interview-editor-wrap'); if (!wrap) return;
-  wrap.innerHTML = '<div class="rounded-2xl border border-[var(--accent-100)] bg-[var(--accent-50)]/45 p-3 mb-4"><div class="flex items-center justify-between mb-2"><b class="text-xs text-[var(--accent-700)] font-boba">' + (id ? '编辑面试轮次' : '新增面试轮次') + '</b><button class="text-[10px] border-0 bg-transparent text-gray-400 cursor-pointer" onclick="document.getElementById(\'interview-editor-wrap\').innerHTML=\'\'">收起</button></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-2"><select id="interview-name" class="px-2.5 py-2 rounded-xl border border-gray-200 bg-white text-xs"><option>' + escHtml(target.name || '一面') + '</option><option>HR 初筛</option><option>笔试</option><option>一面</option><option>二面</option><option>终面</option><option>作业</option><option>其他</option></select><input id="interview-datetime" type="datetime-local" value="' + escHtml(target.datetime || '') + '" class="px-2.5 py-2 rounded-xl border border-gray-200 bg-white text-xs"><select id="interview-mode" class="px-2.5 py-2 rounded-xl border border-gray-200 bg-white text-xs"><option>' + escHtml(target.mode || '线上') + '</option><option>线上</option><option>电话</option><option>线下</option><option>笔试</option><option>其他</option></select><select id="interview-status" class="px-2.5 py-2 rounded-xl border border-gray-200 bg-white text-xs">' + INTERVIEW_STATUSES.map(function(s) { return '<option' + ((target.status || '待参加') === s ? ' selected' : '') + '>' + s + '</option>'; }).join('') + '</select><input id="interview-location" value="' + escHtml(target.location || '') + '" placeholder="面试/笔试链接（https://）" class="sm:col-span-2 px-2.5 py-2 rounded-xl border border-gray-200 bg-white text-xs"><input id="interview-doc" value="' + escHtml(target.documentUrl || '') + '" placeholder="面试准备文档链接（https://）" class="sm:col-span-2 px-2.5 py-2 rounded-xl border border-gray-200 bg-white text-xs"></div><div class="mt-3 flex items-center gap-2 flex-wrap"><button class="soft-btn primary text-xs" onclick="saveInterview(' + (id || 0) + ')">保存轮次</button>' + (id ? '<button class="text-[10px] px-2.5 py-1.5 rounded-lg border border-gray-200 bg-white text-gray-500 cursor-pointer" onclick="jumpToInterviewReview(' + id + ')">前往面试复盘</button>' : '') + '</div></div>';
+  wrap.innerHTML = '<div class="rounded-2xl border border-[var(--accent-100)] bg-[var(--accent-50)]/45 p-3 mb-4"><div class="flex items-center justify-between mb-2"><b class="text-xs text-[var(--accent-700)] font-boba">' + (id ? '编辑面试轮次' : '新增面试轮次') + '</b><button class="text-[10px] border-0 bg-transparent text-gray-400 cursor-pointer" onclick="document.getElementById(\'interview-editor-wrap\').innerHTML=\'\'">收起</button></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-2"><select id="interview-name" class="px-2.5 py-2 rounded-xl border border-gray-200 bg-white text-xs"><option>' + escHtml(target.name || '一面') + '</option><option>HR 初筛</option><option>笔试</option><option>一面</option><option>二面</option><option>终面</option><option>作业</option><option>其他</option></select><input id="interview-datetime" type="datetime-local" value="' + escHtml(target.datetime || '') + '" class="px-2.5 py-2 rounded-xl border border-gray-200 bg-white text-xs"><select id="interview-mode" class="px-2.5 py-2 rounded-xl border border-gray-200 bg-white text-xs"><option>' + escHtml(target.mode || '线上') + '</option><option>线上</option><option>电话</option><option>线下</option><option>笔试</option><option>其他</option></select><select id="interview-status" class="px-2.5 py-2 rounded-xl border border-gray-200 bg-white text-xs">' + INTERVIEW_STATUSES.map(function(s) { return '<option value="'+s+'"' + (normalizeInterviewStatus(target.status) === s ? ' selected' : '') + '>' + interviewStatusLabel(s) + '</option>'; }).join('') + '</select><input id="interview-location" value="' + escHtml(target.location || '') + '" placeholder="面试/笔试链接（https://）" class="sm:col-span-2 px-2.5 py-2 rounded-xl border border-gray-200 bg-white text-xs"><input id="interview-doc" value="' + escHtml(target.documentUrl || '') + '" placeholder="面试准备文档链接（https://）" class="sm:col-span-2 px-2.5 py-2 rounded-xl border border-gray-200 bg-white text-xs"></div><div class="mt-3 flex items-center gap-2 flex-wrap"><button class="soft-btn primary text-xs" onclick="saveInterview(' + (id || 0) + ')">保存轮次</button>' + (id ? '<button class="text-[10px] px-2.5 py-1.5 rounded-lg border border-gray-200 bg-white text-gray-500 cursor-pointer" onclick="jumpToInterviewReview(' + id + ')">打开面试工作台</button>' : '') + '</div></div>';
 }
-function saveInterview(id) { var job = jobEntries.find(function(j) { return j.id === jobFlowId; }); if (!job) return; var name = document.getElementById('interview-name').value, datetime = document.getElementById('interview-datetime').value, oldItem = id ? (getJobInterviews(job).find(function(i){ return i.id === id; }) || {}) : {}; if (!name) { showJobToast('请填写面试轮次'); return; } var item = { id:id || Date.now() + Math.floor(Math.random()*1000), name:name, datetime:datetime, mode:document.getElementById('interview-mode').value, location:document.getElementById('interview-location').value.trim(), documentUrl:document.getElementById('interview-doc').value.trim(), status:document.getElementById('interview-status').value, contact:oldItem.contact || '', result:oldItem.result || '', focus:oldItem.focus || '', notes:oldItem.notes || '', createdAt:oldItem.createdAt || Date.now(), updatedAt:Date.now() }; job.interviews = Array.isArray(job.interviews) ? job.interviews : []; var idx = job.interviews.findIndex(function(i){ return i.id === id; }); if (idx >= 0) job.interviews[idx] = item; else job.interviews.push(item); job.updatedAt = Date.now(); saveJobs(jobEntries); renderJobFlow(); renderJobAll(); showJobToast('面试轮次已保存'); }
+function saveInterview(id) {
+  var job=jobEntries.find(function(j){return j.id===jobFlowId;}); if(!job)return;
+  var name=document.getElementById('interview-name').value, datetime=document.getElementById('interview-datetime').value, oldItem=id?(getJobInterviews(job).find(function(i){return i.id===id;})||{}):{};
+  if(!name){showJobToast('请填写面试轮次');return;}
+  var selectedStatus=normalizeInterviewStatus(document.getElementById('interview-status').value), item=Object.assign({},oldItem,{id:id||Date.now()+Math.floor(Math.random()*1000),name:name,datetime:datetime,mode:document.getElementById('interview-mode').value,location:document.getElementById('interview-location').value.trim(),documentUrl:document.getElementById('interview-doc').value.trim(),status:selectedStatus,createdAt:oldItem.createdAt||Date.now(),updatedAt:Date.now()});
+  if(selectedStatus==='not_started'&&interviewTimeHasPassed(item)){item.status='completed';item.completedAt=item.completedAt||Date.now();item.autoCompletedAt=item.autoCompletedAt||Date.now();item.autoCompletionReason='scheduled_time_passed';}
+  job.interviews=Array.isArray(job.interviews)?job.interviews:[];var idx=job.interviews.findIndex(function(i){return i.id===id;});if(idx>=0)job.interviews[idx]=item;else job.interviews.push(item);if(job.status!=='ended')job.status='in_progress';job.updatedAt=Date.now();saveJobs(jobEntries);renderJobAll();renderJobFlow();showJobToast(item.status==='completed'&&selectedStatus==='not_started'?'面试时间已过，已自动标记为已完成':'面试轮次已保存');
+}
 function jumpToInterviewReview(id) { if (jobFlowId && id) { openInterviewReview(jobFlowId, id); return; } closeJobFlow(); if (currentTab !== 'job') switchTab('job'); if (jobCurrentTab !== 'review') switchJobTab('review'); else renderReviewList(); window.scrollTo({ top:0, behavior:'auto' }); }
 function deleteInterview(id) { var job = jobEntries.find(function(j) { return j.id === jobFlowId; }), interview = job && (job.interviews || []).find(function(i){ return i.id === id; }); if (!job) return; var note = interview && interview.review ? '这会同时移除关联复盘；投递流程与面试日历也会失去该轮记录。' : '该轮会从投递流程和面试日历中移除。'; if (!confirm('确定删除这轮面试吗？' + note)) return; job.interviews = getJobInterviews(job).filter(function(i) { return i.id !== id; }); job.updatedAt = Date.now(); saveJobs(jobEntries); renderJobFlow(); renderJobAll(); showJobToast('面试轮次已删除'); }
 
@@ -6577,6 +6616,8 @@ function renderStatusPills() {
     var sel = jobPanelStatus === s.key ? 'selected' : '';
     return '<button class="pill-option ' + sel + '" onclick="jobPanelStatus=\'' + s.key + '\';renderStatusPills();">' + s.label + '</button>';
   }).join('');
+  var endWrap = document.getElementById('job-end-result-wrap');
+  if (endWrap) endWrap.classList.toggle('hidden', jobPanelStatus !== 'ended');
 }
 
 function renderChannelPills() {
@@ -6707,13 +6748,13 @@ function exportSelectedJobs() {
 function exportJobs(jobs, format) {
   if (!jobs.length) { showJobToast('暂无数据可导出'); return; }
   var si, displayDate;
-  var headers = ['公司', '岗位', '状态', '投递日期', '渠道', '行业', '薪资', '截止日期', 'JD内容', '投递链接', '备注'];
+  var headers = ['公司', '岗位', '状态', '结束结果', '投递日期', '渠道', '行业', '薪资', '截止日期', 'JD内容', '投递链接', '备注'];
   var values = [];
   jobs.forEach(function(j) {
     si = JOB_STATUSES.find(function(s) { return s.key === j.status; });
     displayDate = j.date || '';
     if (displayDate) { var dp = displayDate.split('-'); displayDate = dp[1] + '月' + dp[2] + '日'; }
-    values.push([j.company, j.position, si ? si.label : j.status, displayDate, j.channel || '', j.industry || '', j.salary || '', j.deadline || '', j.jdContent || j.jdUrl || '', j.applyUrl || '', j.notes || '']);
+    values.push([j.company, j.position, si ? si.label : j.status, j.status === 'ended' ? (j.endResult || '') : '', displayDate, j.channel || '', j.industry || '', j.salary || '', j.deadline || '', j.jdContent || j.jdUrl || '', j.applyUrl || '', j.notes || '']);
   });
   var isExcel = format === 'excel';
   var content, type, extension;
@@ -6747,6 +6788,9 @@ function escCsv(str) {
 // ── Render: Master ──────────────────────────────────────
 function renderJobAll() {
   jobEntries = loadJobs();
+  scheduleInterviewAutoCompletion();
+  preparationReminderState = loadPreparationReminderState();
+  reviewReminderState = loadReviewReminderState();
   reviewEntries = loadReviews();
   if (jobCurrentTab === 'overview') renderJobOverview();
   else if (jobCurrentTab === 'applications') renderJobManagement();
@@ -6765,13 +6809,13 @@ function renderJobOverview() {
 function renderJobStats() {
   var row = document.getElementById('job-stats-row');
   if (!row) return;
-  var total = jobEntries.filter(function(j) { return j.status !== 'wishlist'; }).length;
-  var interviewing = jobEntries.filter(function(j) { return j.status === 'interview'; }).length;
-  var offers = jobEntries.filter(function(j) { return j.status === 'offer'; }).length;
+  var total = jobEntries.filter(function(j) { return j.status === 'applied'; }).length;
+  var interviewing = jobEntries.filter(function(j) { return j.status === 'in_progress'; }).length;
+  var ended = jobEntries.filter(function(j) { return j.status === 'ended'; }).length;
   var now = new Date(); now.setHours(0,0,0,0);
   var d3 = new Date(now.getTime() + 3*86400000);
   var urgentCount = jobEntries.filter(function(j) {
-    if (!j.deadline || j.status === 'rejected' || j.status === 'offer') return false;
+    if (!j.deadline || j.status === 'ended') return false;
     var dl = new Date(j.deadline + 'T00:00:00');
     return dl >= now && dl <= d3;
   }).length;
@@ -6779,7 +6823,7 @@ function renderJobStats() {
   var cards = [
     { label: '已投递', value: total, icon: '<line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>' },
     { label: '面试中', value: interviewing, icon: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>' },
-    { label: '已 Offer', value: offers, icon: '<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5C7 4 7 7 7 7"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5C17 4 17 7 17 7"/><path d="M4 22h16"/><path d="M10 22V8c0-2 2-4 2-4s2 2 2 4v14"/>' },
+    { label: '已结束', value: ended, icon: '<circle cx="12" cy="12" r="10"/><path d="m8 12 2.5 2.5L16 9"/>' },
     { label: '将截止', value: urgentCount, icon: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>', urgent: urgentCount > 0 }
   ];
 
@@ -6793,7 +6837,45 @@ function renderJobStats() {
       '<div class="flex items-center gap-2"><span class="text-2xl font-bold text-gray-800 font-boba">' + c.value + '</span></div>' +
     '</div>';
   }).join('');
+  renderPreparationReminders();
+  renderReviewReminders();
 }
+
+function getPreparationReminders() {
+  var now=Date.now();
+  return getWorkbenchItems().filter(function(item){
+    var interview=item.interview, time=interview.datetime&&new Date(interview.datetime).getTime();
+    return normalizeInterviewStatus(interview.status)==='not_started' && time && time>=now && time-now<=24*3600000 && getPreparationState(interview)!=='completed';
+  }).map(function(item){var diff=new Date(item.interview.datetime).getTime()-now;return Object.assign({},item,{reminderType:diff<=3600000?'oneHour':'oneDay'});});
+}
+function renderPreparationReminders() {
+  var row=document.getElementById('job-stats-row'); if(!row)return;
+  var wrap=document.getElementById('job-preparation-reminders');
+  if(!wrap){wrap=document.createElement('div');wrap.id='job-preparation-reminders';wrap.className='col-span-full';row.parentNode.insertBefore(wrap,row.nextSibling);}
+  var reminders=getPreparationReminders().filter(function(item){var record=preparationReminderState[reviewItemKey(item.job.id,item.interview.id)+'-'+item.reminderType]||{};return !record.handled && (!record.snoozedUntil || record.snoozedUntil<Date.now());});
+  wrap.innerHTML=reminders.length?'<div class="rounded-2xl border border-[var(--accent-100)] bg-[var(--accent-50)]/55 px-4 py-3 mt-1"><div class="flex flex-wrap items-center justify-between gap-2"><div><p class="text-xs font-bold text-[var(--accent-700)] font-boba">面试准备提醒</p><p class="text-[10px] text-gray-500 mt-1">有 '+reminders.length+' 场未开始面试需要确认准备事项。</p></div></div><div class="mt-2 space-y-1.5">'+reminders.map(function(item){var key=reviewItemKey(item.job.id,item.interview.id)+'-'+item.reminderType,when=item.reminderType==='oneHour'?'1 小时内开始':'24 小时内开始';return '<div class="flex flex-wrap items-center gap-2 text-[10px] text-gray-600"><span class="flex-1">'+escHtml(item.job.company+' · '+item.job.position+' · '+(item.interview.name||'面试')+'（'+when+'）')+'</span><button class="border-0 bg-transparent text-[var(--accent-600)] cursor-pointer" onclick="openInterviewReview('+item.job.id+','+item.interview.id+')">去准备</button><button class="border-0 bg-transparent text-gray-400 cursor-pointer" onclick="dismissPreparationReminder(\''+key+'\')">关闭</button><button class="border-0 bg-transparent text-gray-400 cursor-pointer" onclick="handlePreparationReminder(\''+key+'\')">已处理</button></div>';}).join('')+'</div></div>':'';
+}
+function dismissPreparationReminder(key) { preparationReminderState[key]={snoozedUntil:Date.now()+30*60*1000};savePreparationReminderState();renderPreparationReminders(); }
+function handlePreparationReminder(key) { preparationReminderState[key]={handled:true,handledAt:Date.now()};savePreparationReminderState();renderPreparationReminders(); }
+
+function getReviewReminders() {
+  var now=Date.now();
+  return getWorkbenchItems().filter(function(item){
+    var interview=item.interview, time=interview.datetime&&new Date(interview.datetime).getTime();
+    if (normalizeInterviewStatus(interview.status)!=='completed' || !time || getInterviewReviewState(interview)!=='pending') return false;
+    var after=time+30*60*1000, sameNight=new Date(time).toDateString()===new Date(now).toDateString() && new Date(now).getHours()>=19;
+    return now>=after || sameNight;
+  }).map(function(item){ var time=new Date(item.interview.datetime).getTime(); return Object.assign({},item,{reminderType:Date.now()>=time+30*60*1000?'afterThirty':'tonight'}); });
+}
+function renderReviewReminders() {
+  var row=document.getElementById('job-stats-row'); if(!row)return;
+  var wrap=document.getElementById('job-review-reminders');
+  if(!wrap){wrap=document.createElement('div');wrap.id='job-review-reminders';wrap.className='col-span-full';var prep=document.getElementById('job-preparation-reminders');if(prep&&prep.parentNode)prep.parentNode.insertBefore(wrap,prep.nextSibling);else row.parentNode.insertBefore(wrap,row.nextSibling);}
+  var reminders=getReviewReminders().filter(function(item){var key=reviewItemKey(item.job.id,item.interview.id)+'-'+item.reminderType,record=reviewReminderState[key]||{};return !record.handled&&(!record.snoozedUntil||record.snoozedUntil<Date.now());});
+  wrap.innerHTML=reminders.length?'<div class="rounded-2xl border border-[#ead9c4] bg-[#fff8ef] px-4 py-3 mt-1"><div class="flex flex-wrap items-center justify-between gap-2"><div><p class="text-xs font-bold text-[#9a6847] font-boba">面后复盘提醒</p><p class="text-[10px] text-gray-500 mt-1">趁记忆清晰，记录本轮问题与过程。</p></div></div><div class="mt-2 space-y-1.5">'+reminders.map(function(item){var key=reviewItemKey(item.job.id,item.interview.id)+'-'+item.reminderType,when=item.reminderType==='afterThirty'?'面试已结束 30 分钟':'今晚提醒';return '<div class="flex flex-wrap items-center gap-2 text-[10px] text-gray-600"><span class="flex-1">'+escHtml(item.job.company+' · '+item.job.position+' · '+(item.interview.name||'面试')+'（'+when+'）')+'</span><button class="border-0 bg-transparent text-[var(--accent-600)] cursor-pointer" onclick="openInterviewReview('+item.job.id+','+item.interview.id+')">去复盘</button><button class="border-0 bg-transparent text-gray-400 cursor-pointer" onclick="dismissReviewReminder(\''+key+'\')">关闭</button><button class="border-0 bg-transparent text-gray-400 cursor-pointer" onclick="handleReviewReminder(\''+key+'\')">已处理</button></div>';}).join('')+'</div></div>':'';
+}
+function dismissReviewReminder(key){reviewReminderState[key]={snoozedUntil:Date.now()+30*60*1000};saveReviewReminderState();renderReviewReminders();}
+function handleReviewReminder(key){reviewReminderState[key]={handled:true,handledAt:Date.now()};saveReviewReminderState();renderReviewReminders();}
 
 function renderJobOverviewTable() {
   var tbody = document.getElementById('job-overview-table-body');
@@ -6802,7 +6884,6 @@ function renderJobOverviewTable() {
   var count = document.getElementById('job-overview-table-count');
   if (count) count.textContent = allJobs.length + ' 条记录';
   if (!allJobs.length) { tbody.innerHTML = '<tr><td colspan="13" class="text-center py-10 text-xs text-gray-400">暂无投递记录，前往投递管理添加第一条记录吧</td></tr>'; return; }
-  var statusColors = { wishlist:'#9CA3AF', applied:'#6BA8D8', assessment:'#E8927C', interview:'#D4687A', offer:'#5BA88C', rejected:'#9CA3AF' };
   tbody.innerHTML = allJobs.map(function(j) {
     var status = JOB_STATUSES.find(function(s) { return s.key === j.status; });
     var displayDate = j.date || '-';
@@ -6813,7 +6894,7 @@ function renderJobOverviewTable() {
     var applyUrl = j.applyUrl ? '<a href="' + escHtml(j.applyUrl) + '" target="_blank" rel="noopener" class="text-blue-500 hover:underline" onclick="event.stopPropagation()">🔗</a>' : '<span class="text-gray-300">-</span>';
     var selected = selectedJobIds.has(j.id);
     var selectCell = '<td class="overview-select-col text-center px-2 py-2.5 ' + (overviewSelectionMode ? '' : 'hidden') + '"><input type="checkbox" class="w-3.5 h-3.5 rounded cursor-pointer" ' + (selected ? 'checked ' : '') + 'onclick="event.stopPropagation();toggleOverviewJobSelection(' + j.id + ',this.checked)" style="accent-color:var(--accent-500);"></td>';
-    return '<tr class="border-b border-gray-50 hover:bg-[var(--accent-50)]/35 transition-colors">' + selectCell + '<td class="px-4 py-2.5 whitespace-nowrap"><span class="font-bold text-gray-800 text-[11px]">' + escHtml(j.company) + '</span></td><td class="px-4 py-2.5 whitespace-nowrap text-[11px] text-gray-700">' + escHtml(j.position) + '</td><td class="px-4 py-2.5 whitespace-nowrap"><span class="text-[10px] px-2 py-0.5 rounded-full text-white" style="background:' + (statusColors[j.status] || '#9CA3AF') + '">' + escHtml((status||{}).label || j.status || '未设置') + '</span></td><td class="px-4 py-2.5 whitespace-nowrap text-[11px] text-gray-500">' + escHtml(displayDate) + '</td><td class="px-4 py-2.5 whitespace-nowrap text-[11px] text-gray-500">' + escHtml(j.channel || '-') + '</td><td class="px-4 py-2.5 whitespace-nowrap text-[11px] text-gray-500">' + escHtml(j.industry || '-') + '</td><td class="px-4 py-2.5 whitespace-nowrap text-[11px] text-gray-500">' + escHtml(j.salary || '-') + '</td><td class="px-4 py-2.5 whitespace-nowrap text-[11px] text-gray-500">' + escHtml(deadline) + '</td><td class="px-4 py-2.5 max-w-[120px]"><span class="text-gray-400 text-[10px] truncate block" style="max-width:120px;">' + jdDisplay + '</span></td><td class="px-4 py-2.5 whitespace-nowrap">' + applyUrl + '</td><td class="px-4 py-2.5 max-w-[100px]"><span class="text-gray-400 text-[10px] truncate block" style="max-width:100px;">' + (j.notes ? escHtml(j.notes).slice(0,40) + (j.notes.length > 40 ? '...' : '') : '-') + '</span></td><td class="px-3 py-2.5 whitespace-nowrap text-center"><button class="text-[10px] text-gray-400 hover:text-[var(--accent-600)] border-0 bg-transparent cursor-pointer" onclick="openJobPanel(' + j.id + ')">编辑</button><span class="text-gray-200 mx-1">|</span><button class="text-[10px] text-gray-400 hover:text-red-400 border-0 bg-transparent cursor-pointer" onclick="activityDeleteJob(' + j.id + ')">删除</button><span class="text-gray-200 mx-1">|</span><button class="text-[10px] text-[var(--accent-600)] hover:underline border-0 bg-transparent cursor-pointer" onclick="openJobManagement(' + j.id + ')">管理</button></td></tr>';
+    return '<tr class="border-b border-gray-50 hover:bg-[var(--accent-50)]/35 transition-colors">' + selectCell + '<td class="px-4 py-2.5 whitespace-nowrap"><span class="font-bold text-gray-800 text-[11px]">' + escHtml(j.company) + '</span></td><td class="px-4 py-2.5 whitespace-nowrap text-[11px] text-gray-700">' + escHtml(j.position) + '</td><td class="px-4 py-2.5 whitespace-nowrap"><span class="text-[10px] px-2 py-0.5 rounded-full text-white" style="background:' + jobStatusColor(j.status) + '">' + escHtml((status||{}).label || j.status || '未设置') + '</span></td><td class="px-4 py-2.5 whitespace-nowrap text-[11px] text-gray-500">' + escHtml(displayDate) + '</td><td class="px-4 py-2.5 whitespace-nowrap text-[11px] text-gray-500">' + escHtml(j.channel || '-') + '</td><td class="px-4 py-2.5 whitespace-nowrap text-[11px] text-gray-500">' + escHtml(j.industry || '-') + '</td><td class="px-4 py-2.5 whitespace-nowrap text-[11px] text-gray-500">' + escHtml(j.salary || '-') + '</td><td class="px-4 py-2.5 whitespace-nowrap text-[11px] text-gray-500">' + escHtml(deadline) + '</td><td class="px-4 py-2.5 max-w-[120px]"><span class="text-gray-400 text-[10px] truncate block" style="max-width:120px;">' + jdDisplay + '</span></td><td class="px-4 py-2.5 whitespace-nowrap">' + applyUrl + '</td><td class="px-4 py-2.5 max-w-[100px]"><span class="text-gray-400 text-[10px] truncate block" style="max-width:100px;">' + (j.notes ? escHtml(j.notes).slice(0,40) + (j.notes.length > 40 ? '...' : '') : '-') + '</span></td><td class="px-3 py-2.5 whitespace-nowrap text-center"><button class="text-[10px] text-gray-400 hover:text-[var(--accent-600)] border-0 bg-transparent cursor-pointer" onclick="openJobPanel(' + j.id + ')">编辑</button><span class="text-gray-200 mx-1">|</span><button class="text-[10px] text-gray-400 hover:text-red-400 border-0 bg-transparent cursor-pointer" onclick="activityDeleteJob(' + j.id + ')">删除</button><span class="text-gray-200 mx-1">|</span><button class="text-[10px] text-[var(--accent-600)] hover:underline border-0 bg-transparent cursor-pointer" onclick="openJobManagement(' + j.id + ')">管理</button></td></tr>';
   }).join('');
   document.querySelectorAll('.overview-select-col').forEach(function(el) { el.classList.toggle('hidden', !overviewSelectionMode); });
   var allCheckbox = document.getElementById('overview-select-all');
@@ -6829,8 +6910,7 @@ function renderJobManagement() {
   var root = document.getElementById('job-management-list'); if (!root) return;
   var jobs = jobEntries.slice().sort(function(a,b) { return b.updatedAt - a.updatedAt; });
   if (!jobs.length) { root.innerHTML = '<div class="rounded-2xl border border-dashed border-gray-200 bg-gray-50/60 p-9 text-center"><p class="text-xs text-gray-400">还没有投递记录</p><p class="text-[10px] text-gray-300 mt-2">请使用页面最上方的“添加投递”开始记录。</p></div>'; return; }
-  var statusColors = { wishlist:'#9CA3AF', applied:'#6BA8D8', assessment:'#E8927C', interview:'#D4687A', offer:'#5BA88C', rejected:'#9CA3AF' };
-  root.innerHTML = jobs.map(function(j) { var status=JOB_STATUSES.find(function(s){return s.key===j.status;}), hint=getInterviewProgressHint(j) || '暂无面试安排', date=j.date ? j.date.slice(5).replace('-','月') + '日' : '未记录日期'; return '<div class="py-3.5 flex flex-col sm:flex-row sm:items-center gap-3 cursor-pointer hover:bg-gray-50/70 px-2 -mx-2 rounded-xl transition-colors" onclick="openJobFlow(' + j.id + ')"><div class="min-w-0 flex-1"><div class="flex items-center gap-2 flex-wrap"><span class="text-sm font-bold text-gray-800 font-boba">' + escHtml(j.company) + '</span><span class="text-[10px] text-gray-500">' + escHtml(j.position) + '</span><span class="text-[9px] px-1.5 py-0.5 rounded-full text-white" style="background:' + (statusColors[j.status] || '#9CA3AF') + '">' + escHtml((status||{}).label || j.status || '未设置') + '</span></div><p class="text-[10px] text-gray-400 mt-1">投递于 ' + escHtml(date) + '　·　<span class="text-[var(--accent-600)]">' + escHtml(hint) + '</span></p></div><div class="flex items-center gap-2 shrink-0"><button class="text-[10px] text-gray-400 hover:text-[var(--accent-600)] border-0 bg-transparent cursor-pointer" onclick="event.stopPropagation();openJobPanel(' + j.id + ')">编辑</button><button class="text-[10px] text-gray-400 hover:text-red-400 border-0 bg-transparent cursor-pointer" onclick="event.stopPropagation();activityDeleteJob(' + j.id + ')">删除</button><span class="text-[10px] text-[var(--accent-600)]">流程 →</span></div></div>'; }).join('');
+  root.innerHTML = jobs.map(function(j) { var status=JOB_STATUSES.find(function(s){return s.key===j.status;}), hint=getInterviewProgressHint(j) || '暂无面试安排', date=j.date ? j.date.slice(5).replace('-','月') + '日' : '未记录日期'; return '<div class="py-3.5 flex flex-col sm:flex-row sm:items-center gap-3 cursor-pointer hover:bg-gray-50/70 px-2 -mx-2 rounded-xl transition-colors" onclick="openJobFlow(' + j.id + ')"><div class="min-w-0 flex-1"><div class="flex items-center gap-2 flex-wrap"><span class="text-sm font-bold text-gray-800 font-boba">' + escHtml(j.company) + '</span><span class="text-[10px] text-gray-500">' + escHtml(j.position) + '</span><span class="text-[9px] px-1.5 py-0.5 rounded-full text-white" style="background:' + jobStatusColor(j.status) + '">' + escHtml((status||{}).label || j.status || '未设置') + '</span></div><p class="text-[10px] text-gray-400 mt-1">投递于 ' + escHtml(date) + '　·　<span class="text-[var(--accent-600)]">' + escHtml(hint) + '</span></p></div><div class="flex items-center gap-2 shrink-0"><button class="text-[10px] text-gray-400 hover:text-[var(--accent-600)] border-0 bg-transparent cursor-pointer" onclick="event.stopPropagation();openJobPanel(' + j.id + ')">编辑</button><button class="text-[10px] text-gray-400 hover:text-red-400 border-0 bg-transparent cursor-pointer" onclick="event.stopPropagation();activityDeleteJob(' + j.id + ')">删除</button><span class="text-[10px] text-[var(--accent-600)]">流程 →</span></div></div>'; }).join('');
 }
 
 function renderJobTable() {
@@ -6887,9 +6967,8 @@ function renderJobTable() {
     // Apply URL display
     var applyUrlHtml = j.applyUrl ? '<a href="' + escHtml(j.applyUrl) + '" target="_blank" class="text-blue-500 hover:underline" onclick="event.stopPropagation();" title="' + escHtml(j.applyUrl) + '">🔗</a>' : '<span class="text-gray-300">-</span>';
 
-    // Status badge color
-    var statusColors = { wishlist:'#9CA3AF', applied:'#6BA8D8', assessment:'#E8927C', interview:'#D4687A', offer:'#5BA88C', rejected:'#9CA3AF' };
-    var statusBg = statusColors[j.status] || '#9CA3AF';
+    // Keep the three current application states visually distinct in every view.
+    var statusBg = jobStatusColor(j.status);
 
     // Batch checkbox
     var isChecked = selectedJobIds.has(j.id);
@@ -6932,9 +7011,9 @@ function renderInterviewCalendar() {
   for (var blank=0; blank<startOffset; blank++) cells.push('<div class="min-h-[82px] rounded-xl bg-gray-50/35"></div>');
   for (var day=1; day<=days; day++) { var key = year + '-' + String(month+1).padStart(2,'0') + '-' + String(day).padStart(2,'0'), events = byDate[key] || [], shown = events.slice(0,2); cells.push('<div class="min-h-[82px] rounded-xl border ' + (key===todayKey ? 'border-[var(--accent-400)] bg-[var(--accent-50)]/45' : 'border-gray-100 bg-white/55') + ' p-1.5 overflow-hidden"><div class="text-[10px] font-bold ' + (key===todayKey ? 'text-[var(--accent-600)]' : 'text-gray-500') + '">' + day + '</div>' + shown.map(function(event) { var i=event.interview; return '<button class="block w-full text-left mt-1 px-1 py-0.5 rounded text-[8px] truncate border-0 cursor-pointer" style="background:' + interviewStatusStyle(i.status) + '18;color:' + interviewStatusStyle(i.status) + ';" onclick="openJobFlow(' + event.job.id + ',' + i.id + ')">' + escHtml(String(i.datetime).slice(11,16) + ' ' + event.job.company + '·' + (i.name||'面试')) + '</button>'; }).join('') + (events.length>2 ? '<button class="text-[8px] mt-1 border-0 bg-transparent text-gray-400 cursor-pointer" onclick="openJobFlow(' + events[0].job.id + ')">+' + (events.length-2) + ' 场</button>' : '') + '</div>'); }
   grid.innerHTML = cells.join('');
-  var future = getAllInterviewEvents().filter(function(event) { return new Date(event.interview.datetime).getTime() >= Date.now() && ['已取消','已完成','已通过','未通过'].indexOf(event.interview.status) < 0; });
-  var count = document.getElementById('upcoming-interview-count'); if (count) count.textContent = future.length ? future.length + ' 场待参加' : '';
-  upcoming.innerHTML = future.length ? future.map(function(event) { var i=event.interview, actions = externalLinkHtml(i.location, '进入面试', 'text-[10px] px-2 py-1 rounded-lg border-0 bg-[var(--accent-500)] text-white cursor-pointer') + externalLinkHtml(i.documentUrl, '文档', 'text-[10px] px-2 py-1 rounded-lg border border-gray-200 bg-white text-gray-500 cursor-pointer') + '<button class="text-[10px] px-2 py-1 rounded-lg border border-[#eaded3] bg-[#fffaf5] text-[#8c6f5f] cursor-pointer" onclick="openInterviewReview(' + event.job.id + ',' + i.id + ')">' + (i.review && !i.review.deletedAt ? '查看复盘' : '复盘') + '</button>'; return '<div class="rounded-xl border border-gray-100 bg-white/70 p-3 flex flex-col sm:flex-row sm:items-center gap-2"><div class="flex-1 min-w-0 cursor-pointer" onclick="openJobFlow(' + event.job.id + ',' + i.id + ')"><div class="text-xs font-bold text-gray-800 font-boba truncate">' + escHtml(event.job.company + ' · ' + event.job.position) + '</div><div class="text-[10px] text-gray-500 mt-1">' + escHtml((i.name||'面试') + ' · ' + formatInterviewTime(i.datetime) + ' · ' + (i.mode||'未填写形式')) + ' <span class="text-[var(--accent-600)]">' + interviewRelativeTime(i.datetime) + '</span></div></div><div class="flex gap-1.5 flex-wrap">' + actions + '</div></div>'; }).join('') : '<div class="rounded-2xl border border-dashed border-gray-200 bg-gray-50/60 p-8 text-center"><p class="text-xs text-gray-400">近期没有面试安排</p><button class="text-[10px] mt-2 border-0 bg-transparent text-[var(--accent-600)] cursor-pointer" onclick="switchJobTab(\'applications\');openJobPanel()">从投递记录补充面试安排</button></div>';
+  var future = getAllInterviewEvents().filter(function(event) { return normalizeInterviewStatus(event.interview.status) === 'not_started' && !!event.interview.datetime && new Date(event.interview.datetime).getTime() >= Date.now(); });
+  var count = document.getElementById('upcoming-interview-count'); if (count) count.textContent = future.length ? future.length + ' 场未开始' : '';
+  upcoming.innerHTML = future.length ? future.map(function(event) { var i=event.interview, actions = externalLinkHtml(i.location, '进入面试', 'text-[10px] px-2 py-1 rounded-lg border-0 bg-[var(--accent-500)] text-white cursor-pointer') + externalLinkHtml(i.documentUrl, '文档', 'text-[10px] px-2 py-1 rounded-lg border border-gray-200 bg-white text-gray-500 cursor-pointer') + '<button class="text-[10px] px-2 py-1 rounded-lg border border-[#eaded3] bg-[#fffaf5] text-[#8c6f5f] cursor-pointer" onclick="openInterviewReview(' + event.job.id + ',' + i.id + ')">打开工作台</button>'; return '<div class="rounded-xl border border-gray-100 bg-white/70 p-3 flex flex-col sm:flex-row sm:items-center gap-2"><div class="flex-1 min-w-0 cursor-pointer" onclick="openJobFlow(' + event.job.id + ',' + i.id + ')"><div class="text-xs font-bold text-gray-800 font-boba truncate">' + escHtml(event.job.company + ' · ' + event.job.position) + '</div><div class="text-[10px] text-gray-500 mt-1">' + escHtml((i.name||'面试') + ' · ' + formatInterviewTime(i.datetime) + ' · ' + (i.mode||'未填写形式')) + ' <span class="text-[var(--accent-600)]">' + interviewRelativeTime(i.datetime) + '</span></div></div><div class="flex gap-1.5 flex-wrap">' + actions + '</div></div>'; }).join('') : '<div class="rounded-2xl border border-dashed border-gray-200 bg-gray-50/60 p-8 text-center"><p class="text-xs text-gray-400">近期没有未开始的面试安排</p><button class="text-[10px] mt-2 border-0 bg-transparent text-[var(--accent-600)] cursor-pointer" onclick="switchJobTab(\'applications\');openJobPanel()">从投递记录补充面试安排</button></div>';
 }
 
 // ── Deadline Checker ────────────────────────────────────
@@ -6942,7 +7021,7 @@ function checkDeadlines() {
   var now = new Date(); now.setHours(0,0,0,0);
   var d1 = new Date(now.getTime() + 1*86400000);
   var urgent = jobEntries.filter(function(j) {
-    if (!j.deadline || j.status === 'rejected' || j.status === 'offer') return false;
+    if (!j.deadline || j.status === 'ended') return false;
     var dl = new Date(j.deadline + 'T00:00:00');
     return dl >= now && dl <= d1;
   });
@@ -6973,7 +7052,7 @@ function renderJobKanban() {
 function renderKanbanCard(j) {
   var avatarColor = AVATAR_COLORS[Math.abs(hashStr(j.company)) % AVATAR_COLORS.length];
   var initial = (j.company || '?').charAt(0);
-  var hasDeadline = j.deadline && j.status === 'assessment';
+  var hasDeadline = j.deadline && j.status !== 'ended';
   var dlUrgent = false;
   if (hasDeadline) {
     var now = new Date(); now.setHours(0,0,0,0);
@@ -7236,20 +7315,20 @@ var reviewWorkspaceFilter = 'all';
 var reviewWorkspaceKey = '';
 var reviewWorkspaceDirty = false;
 var reviewWorkspaceTimer = null;
+var reviewAiRequests = {};
 var REVIEW_FILTERS = [['all','全部'],['pending','待复盘'],['draft','复盘中'],['completed','已复盘'],['trash','废纸篓']];
 var REVIEW_QUESTION_TAGS = ['实习经历','专业知识','案例分析','行为面试','HR 问题','算法/技术','其他'];
 var REVIEW_ANALYSIS_TAGS = ['准备不足','表达不清','项目深度不足','知识盲区','时间管理','心态','岗位匹配度'];
 
 function reviewItemKey(jobId, interviewId) { return String(jobId) + ':' + String(interviewId); }
-function isInterviewFinished(interview) { return ['已完成','已通过','未通过','已取消'].indexOf(interview.status) >= 0 || (!!interview.datetime && new Date(interview.datetime).getTime() < Date.now()); }
+function isInterviewFinished(interview) { return normalizeInterviewStatus(interview && interview.status) === 'completed'; }
 function getInterviewReviewState(interview) {
   var review = interview && interview.review;
   if (review && review.deletedAt) return 'trash';
   if (review && review.status === 'completed') return 'completed';
-  if (review && (review.status === 'draft' || review.updatedAt)) return 'draft';
-  return isInterviewFinished(interview) ? 'pending' : 'pending';
+  return review && hasReviewContent(review) ? 'draft' : 'pending';
 }
-function reviewStateLabel(state) { return ({pending:'待复盘',draft:'复盘中',completed:'已复盘',trash:'废纸篓'})[state] || '待复盘'; }
+function reviewStateLabel(state) { return ({pending:'待记录',draft:'复盘中',completed:'已复盘',trash:'废纸篓'})[state] || '待记录'; }
 function reviewStateStyle(state) { return ({pending:'#d4a830',draft:'#6ba8d8',completed:'#5ba88c',trash:'#9ca3af'})[state] || '#9ca3af'; }
 function formatInterviewMonthDay(value) { if (!value) return '时间待定'; var d=new Date(value); if (!isNaN(d)) return (d.getMonth()+1) + ' 月 ' + d.getDate() + ' 日'; var parts=String(value).slice(0,10).split('-'); return parts.length===3 ? Number(parts[1])+' 月 '+Number(parts[2])+' 日' : '时间待定'; }
 function getReviewWorkspaceItems(includeAll) {
@@ -7259,8 +7338,15 @@ function getReviewWorkspaceItems(includeAll) {
     if (state === 'trash' || interview) items.push({ job:job, interview:interview, state:state });
   }); });
   return items.sort(function(a,b) {
-    var order = {pending:0,draft:1,completed:2,trash:3};
-    var d = (order[a.state] || 9) - (order[b.state] || 9);
+    // 默认先处理已结束但尚未复盘的轮次，再显示复盘中的内容；未开始的面试放在后面。
+    var priority = function(item) {
+      if (item.state === 'pending' && isInterviewFinished(item.interview)) return 0;
+      if (item.state === 'draft') return 1;
+      if (item.state === 'completed') return 2;
+      if (item.state === 'pending') return 3;
+      return 4;
+    };
+    var d = priority(a) - priority(b);
     if (d) return d;
     if (a.state === 'pending') { var finishOrder = (isInterviewFinished(a.interview) ? 0 : 1) - (isInterviewFinished(b.interview) ? 0 : 1); if (finishOrder) return finishOrder; }
     return String(b.interview.datetime || '').localeCompare(String(a.interview.datetime || ''));
@@ -7274,7 +7360,20 @@ function getReviewTarget() {
 }
 function createReviewDraft(interview) {
   var now = Date.now();
-  return { status:'draft', preparation:{intro:'',internship:'',precautions:'',resources:[],notes:[]}, questions:[], performance:{rating:'',strengths:'',gaps:'',dimensions:{expression:'',professional:'',logic:'',project:'',response:''}}, analysis:{reason:'',improvement:'',tags:[]}, summary:'', createdAt:now, updatedAt:now };
+  return { status:'pending', preparation:{intro:'',internship:'',precautions:'',resources:[],notes:[]}, questions:[], performance:{rating:'',strengths:'',gaps:'',dimensions:{expression:'',professional:'',logic:'',project:'',response:''}}, analysis:{reason:'',improvement:'',tags:[]}, summary:'', createdAt:now, updatedAt:now };
+}
+function hasReviewContent(review) {
+  if (!review) return false;
+  var prep=review.preparation||{}, materials=getReviewMaterials(review), performance=review.performance||{}, dimensions=performance.dimensions||{}, analysis=review.analysis||{};
+  if ([prep.intro,prep.internship,prep.precautions,review.summary,performance.rating,performance.strengths,performance.gaps,analysis.reason,analysis.improvement].some(function(v){return String(v||'').trim();})) return true;
+  if (Object.keys(dimensions).some(function(key){return String(dimensions[key]||'').trim();}) || (analysis.tags||[]).length || (materials.resources||[]).length) return true;
+  if ((materials.notes||[]).some(function(note){return String(note.content||'').trim() || (String(note.title||'').trim() && note.title !== '准备备注');})) return true;
+  return (review.questions||[]).some(function(question){return ['title','originalQuestion','answer','aiOutput','aiFeedback','finalTwoMinute','finalDetailed'].some(function(key){return String(question[key]||'').trim();});});
+}
+function normalizeReviewStatus(review, complete) {
+  if (complete) return 'completed';
+  if (review.status === 'completed') return 'completed';
+  return hasReviewContent(review) ? 'draft' : 'pending';
 }
 function getReviewMaterials(review) { var prep=review.preparation||{}, resources=Array.isArray(prep.resources)?prep.resources.slice():[], notes=Array.isArray(prep.notes)?prep.notes.slice():[]; [['重点准备题目',prep.keyQuestions],['补充说明',prep.materials]].forEach(function(item){ if(item[1] && !notes.some(function(n){return n.title===item[0];})) notes.push({id:'legacy-'+item[0],title:item[0],content:item[1],createdAt:review.createdAt||Date.now(),updatedAt:review.updatedAt||Date.now()}); }); if(prep.resumeFile && !resources.some(function(r){return r.name===prep.resumeFile.name;})) resources.push(Object.assign({id:'legacy-resume',kind:'file',category:'resume',note:''},prep.resumeFile)); return {resources:resources,notes:notes}; }
 function reviewInput(id, value, placeholder, rows) { return rows ? '<textarea id="' + id + '" rows="' + rows + '" oninput="markReviewDirty()" class="w-full px-3 py-2 rounded-xl border border-gray-200 bg-white/85 text-xs text-gray-700 font-boba outline-none focus:border-[var(--accent-500)] resize-y" placeholder="' + placeholder + '">' + escHtml(value || '') + '</textarea>' : '<input id="' + id + '" value="' + escHtml(value || '') + '" oninput="markReviewDirty()" class="w-full px-3 py-2 rounded-xl border border-gray-200 bg-white/85 text-xs text-gray-700 font-boba outline-none focus:border-[var(--accent-500)]" placeholder="' + placeholder + '">'; }
@@ -7287,26 +7386,158 @@ function renderReviewMaterials(materials, preparation) {
 }
 
 function renderReviewList() { renderReviewWorkspace(); }
-function renderReviewWorkspace() {
-  var list = document.getElementById('review-workspace-list'), editor = document.getElementById('review-workspace-editor'), tabs = document.getElementById('review-filter-tabs');
-  if (!list || !editor || !tabs) return;
-  var expired = false; jobEntries.forEach(function(job) { (job.interviews || []).forEach(function(interview) { if (interview.review && interview.review.deletedAt && Date.now() - interview.review.deletedAt > 30*86400000) { delete interview.review; expired = true; } }); }); if (expired) saveJobs(jobEntries);
-  var all = getReviewWorkspaceItems(true), items = all.filter(function(item) { return reviewWorkspaceFilter === 'all' ? item.state !== 'trash' : item.state === reviewWorkspaceFilter; });
-  if (!reviewWorkspaceKey || !items.some(function(item){ return reviewItemKey(item.job.id,item.interview.id) === reviewWorkspaceKey; })) {
-    var preferred = items[0] || all.find(function(item){ return item.state !== 'trash'; });
-    reviewWorkspaceKey = preferred ? reviewItemKey(preferred.job.id, preferred.interview.id) : '';
-  }
-  var count = document.getElementById('review-workspace-count'); if (count) count.textContent = reviewWorkspaceFilter === 'all' ? jobEntries.length + ' 份 · ' + items.length + ' 场' : items.length + ' 场';
-  tabs.innerHTML = REVIEW_FILTERS.map(function(f) { return '<button class="text-[10px] px-2.5 py-1.5 rounded-full border-0 whitespace-nowrap cursor-pointer font-boba" style="background:' + (reviewWorkspaceFilter===f[0] ? 'var(--accent-500)' : 'transparent') + ';color:' + (reviewWorkspaceFilter===f[0] ? '#fff' : '#9B8E84') + '" onclick="setReviewWorkspaceFilter(\'' + f[0] + '\')">' + f[1] + '</button>'; }).join('');
-  var itemHtml = function(item) { var key = reviewItemKey(item.job.id,item.interview.id), active = key === reviewWorkspaceKey; return '<button class="w-full text-left p-2.5 rounded-xl border transition-all cursor-pointer mt-1" style="background:' + (active ? 'var(--accent-50)' : 'rgba(255,255,255,.65)') + ';border-color:' + (active ? 'var(--accent-200)' : 'transparent') + '" onclick="selectReviewWorkspace(\'' + key + '\')"><div class="flex items-center justify-between gap-2"><p class="text-[10px] text-gray-500 truncate">' + escHtml((item.interview.name || '面试') + ' · ' + formatInterviewMonthDay(item.interview.datetime)) + '</p><span class="text-[10px] shrink-0 flex items-center gap-1" style="color:' + reviewStateStyle(item.state) + '"><i class="w-1.5 h-1.5 rounded-full inline-block" style="background:' + reviewStateStyle(item.state) + '"></i>' + reviewStateLabel(item.state) + '</span></div></button>'; };
-  list.innerHTML = reviewWorkspaceFilter === 'all' ? (jobEntries.length ? jobEntries.map(function(job) { var jobItems=getJobInterviews(job).filter(function(interview){return !(interview.review&&interview.review.deletedAt);}).map(function(interview){return {job:job,interview:interview,state:getInterviewReviewState(interview)};}); return '<div class="mb-3 rounded-xl border border-gray-100 bg-white/45 p-2.5"><p class="text-xs font-bold text-gray-800 font-boba truncate">'+escHtml(job.company+' · '+job.position)+'</p>'+ (jobItems.length ? jobItems.map(itemHtml).join('') : '<p class="text-[10px] text-gray-400 mt-2 px-1">尚未添加面试轮次</p>') +'</div>'; }).join('') : '<div class="py-12 px-5 text-center"><p class="text-xs text-gray-400">还没有投递记录</p><button class="text-[10px] mt-2 border-0 bg-transparent text-[var(--accent-600)] cursor-pointer" onclick="switchJobTab(\'applications\')">前往投递管理新增记录</button></div>') : (items.length ? items.map(function(item){return '<div class="mb-1.5"><p class="text-[10px] px-1 text-gray-500 truncate">'+escHtml(item.job.company+' · '+item.job.position)+'</p>'+itemHtml(item)+'</div>';}).join('') : '<div class="py-12 px-5 text-center"><p class="text-xs text-gray-400">当前筛选下没有复盘记录</p></div>');
-  var target = getReviewTarget();
-  editor.innerHTML = target ? renderReviewEditor(target.job, target.interview) : '<div class="h-full min-h-[480px] flex flex-col items-center justify-center text-center p-8"><div class="text-3xl">🗂️</div><p class="text-sm text-gray-700 font-boba mt-3">选择一场面试开始复盘</p><p class="text-xs text-gray-400 mt-2">所有投递记录下的面试轮次都会自动同步到这里。</p></div>';
-  reviewWorkspaceDirty = false;
+function defaultPreparationChecklist() { return [{id:'meeting',text:'确认会议链接',done:false},{id:'resume',text:'准备简历',done:false},{id:'project',text:'整理项目案例',done:false}]; }
+function getInterviewPreparation(interview) { var source=(interview && interview.preparation)||{}; return { status:source.status==='completed'?'completed':source.status==='draft'?'draft':'pending', notes:source.notes||'', checklist:Array.isArray(source.checklist)&&source.checklist.length?source.checklist:defaultPreparationChecklist(), resources:Array.isArray(source.resources)?source.resources:[], createdAt:source.createdAt||null, updatedAt:source.updatedAt||null }; }
+function hasPreparationContent(prep) { return !!(String(prep.notes||'').trim() || (prep.resources||[]).length || (prep.checklist||[]).some(function(item){return item.done || (item.text && ['确认会议链接','准备简历','整理项目案例'].indexOf(item.text)<0); })); }
+function getPreparationState(interview) { var prep=getInterviewPreparation(interview); return prep.status==='completed'?'completed':(hasPreparationContent(prep)?'draft':'pending'); }
+function preparationStateLabel(state) { return ({pending:'待准备',draft:'准备中',completed:'已准备'})[state] || '待准备'; }
+function preparationStateStyle(state) { return ({pending:'#d4a830',draft:'#6ba8d8',completed:'#5ba88c'})[state] || '#9ca3af'; }
+function getWorkbenchItems() {
+  var items=[];
+  jobEntries.forEach(function(job){ getJobInterviews(job).forEach(function(interview){ items.push({job:job,interview:interview}); }); });
+  return items;
 }
-function setReviewWorkspaceFilter(filter) { saveReviewWorkspace(true); reviewWorkspaceFilter = filter; renderReviewWorkspace(); }
-function selectReviewWorkspace(key) { if (key === reviewWorkspaceKey) return; saveReviewWorkspace(true); reviewWorkspaceKey = key; renderReviewWorkspace(); }
-function openInterviewReview(jobId, interviewId) { var job=jobEntries.find(function(j){return String(j.id)===String(jobId);}), interview=job && (job.interviews||[]).find(function(i){return String(i.id)===String(interviewId);}); if (interview && !interview.review) { interview.review=createReviewDraft(interview); job.updatedAt=Date.now(); saveJobs(jobEntries); } if (jobFlowId) closeJobFlow(); if (currentTab !== 'job') switchTab('job'); if (jobCurrentTab !== 'review') switchJobTab('review'); reviewWorkspaceFilter = 'all'; reviewWorkspaceKey = reviewItemKey(jobId, interviewId); renderReviewWorkspace(); window.scrollTo({top:0,behavior:'auto'}); }
+function getPreparationItems() { return getWorkbenchItems().filter(function(item){return normalizeInterviewStatus(item.interview.status)==='not_started';}).sort(function(a,b){var ad=a.interview.datetime?new Date(a.interview.datetime).getTime():Infinity, bd=b.interview.datetime?new Date(b.interview.datetime).getTime():Infinity; return ad-bd;}); }
+function setWorkbenchView(view) { workbenchView=view; workbenchInterviewFilter='all'; preparationDirty=false; renderReviewWorkspace(); }
+function markPreparationDirty() { preparationDirty=true; var label=document.getElementById('preparation-save-state'); if(label){label.textContent='未保存修改';label.style.color='#d4a830';} }
+function getPreparationTarget() { var target=getReviewTarget(); return target && normalizeInterviewStatus(target.interview.status)==='not_started' ? target : null; }
+function renderPreparationResources(prep) { var resources=prep.resources||[]; if(!resources.length)return '<p class="text-[10px] text-gray-400 py-3 text-center">还没有准备材料。可导入 PDF 或添加在线链接。</p>'; return resources.map(function(item){var file=item.kind==='file', type=file?'PDF':'链接', open=file&&item.data?'<button class="text-[10px] text-[var(--accent-600)] border-0 bg-transparent cursor-pointer" onclick="openPreparationResource(\''+item.id+'\')">打开</button>':(!file&&item.url?'<a href="'+escHtml(item.url)+'" target="_blank" rel="noopener noreferrer" class="text-[10px] text-[var(--accent-600)] no-underline">打开</a>':''); return '<div class="rounded-xl border border-gray-100 bg-white/85 px-3 py-2 flex items-center gap-2"><span class="w-7 h-7 rounded-lg flex items-center justify-center text-[9px] bg-[var(--accent-50)] text-[var(--accent-600)]">'+type+'</span><div class="min-w-0 flex-1"><p class="text-[11px] text-gray-700 font-boba truncate">'+escHtml(item.name||'未命名材料')+'</p><p class="text-[9px] text-gray-400 mt-0.5">'+type+' · '+escHtml(new Date(item.createdAt||Date.now()).toLocaleDateString('zh-CN'))+'</p></div><div class="flex gap-1 shrink-0">'+open+'<button class="text-[10px] text-gray-400 border-0 bg-transparent cursor-pointer" onclick="renamePreparationResource(\''+item.id+'\')">编辑</button>'+(file?'<label class="text-[10px] text-gray-400 cursor-pointer">替换<input class="hidden" type="file" accept="application/pdf,.pdf" onchange="replacePreparationResource(\''+item.id+'\',this.files[0])"></label>':'')+'<button class="text-[10px] text-red-400 border-0 bg-transparent cursor-pointer" onclick="removePreparationResource(\''+item.id+'\')">删除</button></div></div>';}).join(''); }
+function renderPreparationEditor(job, interview) {
+  var prep=getInterviewPreparation(interview), state=getPreparationState(interview), stateColor=preparationStateStyle(state), meeting=externalLinkHtml(interview.location,'进入会议','text-[10px] px-2.5 py-1.5 rounded-lg border-0 bg-[var(--accent-500)] text-white cursor-pointer'), list=(prep.checklist||[]).map(function(item){return '<div class="flex items-center gap-2 py-1.5"><input type="checkbox" '+(item.done?'checked ':'')+'onchange="togglePreparationChecklist(\''+item.id+'\',this.checked)" style="accent-color:var(--accent-500)"><input id="preparation-check-'+item.id+'" value="'+escHtml(item.text||'')+'" oninput="markPreparationDirty()" class="min-w-0 flex-1 border-0 bg-transparent text-[11px] text-gray-700 outline-none" placeholder="准备事项"><button class="text-[10px] text-red-400 border-0 bg-transparent cursor-pointer" onclick="removePreparationChecklist(\''+item.id+'\')">删除</button></div>';}).join('');
+  var actions=state==='completed'?'<button class="text-xs px-3 py-2 rounded-xl border border-[var(--accent-200)] bg-white text-[var(--accent-600)] cursor-pointer" onclick="reopenPreparation()">重新准备</button>':'<button class="text-xs px-3 py-2 rounded-xl border border-[var(--accent-200)] bg-white text-[var(--accent-600)] cursor-pointer" onclick="completePreparation()">确认已准备</button>';
+  return '<div class="p-4 sm:p-5 space-y-5"><div class="sticky top-0 z-10 -mx-4 -mt-4 sm:-mx-5 sm:-mt-5 px-4 pt-4 sm:px-5 sm:pt-5 pb-3 bg-white/95 backdrop-blur border-b border-gray-100 flex flex-col sm:flex-row sm:items-start justify-between gap-3"><div><p class="text-lg font-bold text-gray-800 font-boba">'+escHtml(job.company)+' · '+escHtml(job.position)+'</p><p class="text-[10px] text-gray-500 mt-1">'+escHtml((interview.name||'面试')+' · '+formatInterviewTime(interview.datetime)+' · '+(interview.mode||'未填写形式'))+'</p><div class="flex flex-wrap gap-1.5 mt-3">'+meeting+'<button class="text-[10px] px-2.5 py-1.5 rounded-lg border border-gray-200 bg-white text-gray-600 cursor-pointer" onclick="openJobFlow('+job.id+','+interview.id+')">查看投递流程</button></div></div><div class="flex flex-wrap items-center justify-end gap-2 shrink-0"><span id="preparation-save-state" class="text-[10px]" style="color:'+stateColor+'">'+preparationStateLabel(state)+'</span>'+actions+'<button class="soft-btn primary text-xs" onclick="savePreparation(false)">保存准备</button></div></div><section><h4 class="text-sm font-bold text-gray-800 font-boba">本轮准备要点</h4><p class="text-[10px] text-gray-400 mt-1">自由记录自我介绍、项目讲法、重点题目和注意事项。</p><textarea id="preparation-notes" rows="5" oninput="markPreparationDirty()" class="w-full mt-2 px-3 py-2 rounded-xl border border-gray-200 bg-white/85 text-xs text-gray-700 font-boba outline-none focus:border-[var(--accent-500)] resize-y" placeholder="例如：自我介绍重点、项目案例的讲述顺序、需要确认的问题……">'+escHtml(prep.notes)+'</textarea></section><section class="rounded-2xl border border-gray-100 bg-white/55 p-3"><div class="flex items-center justify-between gap-2"><div><h4 class="text-sm font-bold text-gray-800 font-boba">准备清单</h4><p class="text-[10px] text-gray-400 mt-1">勾选已完成事项，也可按需要增删。</p></div><button class="text-[10px] px-2.5 py-1.5 rounded-lg border border-gray-200 bg-white text-gray-600 cursor-pointer" onclick="addPreparationChecklist()">+ 添加事项</button></div><div class="mt-2 divide-y divide-gray-100">'+list+'</div></section><section class="rounded-2xl border border-gray-100 bg-white/55 p-3"><div class="flex flex-wrap items-center justify-between gap-2"><div><h4 class="text-sm font-bold text-gray-800 font-boba">面试材料</h4><p class="text-[10px] text-gray-400 mt-1">简历、作品集、案例材料、岗位 JD、题库或在线文档。</p></div><div class="flex gap-1.5"><label class="text-[10px] px-2.5 py-1.5 rounded-lg border border-dashed border-gray-300 bg-white text-gray-500 cursor-pointer">导入 PDF<input type="file" accept="application/pdf,.pdf" class="hidden" onchange="handlePreparationResourceFile(this.files[0])"></label><button class="text-[10px] px-2.5 py-1.5 rounded-lg border border-gray-200 bg-white text-gray-600 cursor-pointer" onclick="addPreparationResourceLink()">添加链接</button></div></div><div class="mt-2 space-y-1.5">'+renderPreparationResources(prep)+'</div></section></div>';
+}
+function renderWorkbenchEditor(job, interview) { return workbenchView==='preparation' ? renderPreparationEditor(job,interview) : renderPostReviewEditor(job,interview); }
+function getCompletedReviewItems() { return getWorkbenchItems().filter(function(item){ return normalizeInterviewStatus(item.interview.status)==='completed'; }).map(function(item){return Object.assign(item,{state:getInterviewReviewState(item.interview)});}).sort(function(a,b){var priority={pending:0,draft:1,completed:2,trash:3};var diff=priority[a.state]-priority[b.state];return diff||String(b.interview.datetime||'').localeCompare(String(a.interview.datetime||''));}); }
+function renderPostReviewQuestion(question,index) {
+  var id=question.id, tag=question.tag||'其他', versions=question.aiVersions||{}, activeMode=question.aiActiveMode||'twoMinute', activeOutput=versions[activeMode]||question.aiOutput||'', missingByMode=question.aiMissingInfoByMode||{}, missing=missingByMode[activeMode]||question.aiMissingInfo||[], generation=question.aiGeneration||{}, hasVersion=!!String(activeOutput||'').trim();
+  var missingHtml=missing.length?'<div id="review-q-ai-missing-'+id+'" class="mt-2 rounded-xl border border-amber-100 bg-amber-50/70 p-2.5"><p class="text-[10px] font-bold text-amber-700">生成完整回答前建议补充</p><p class="text-[10px] text-amber-700/80 mt-1">'+missing.map(escHtml).join('；')+'</p><p class="text-[9px] text-amber-600 mt-1">当前草稿使用了占位符，不会替你编造经历。</p></div>':'<div id="review-q-ai-missing-'+id+'"></div>';
+  var statusText=generation.status==='error'?'上次生成失败，可重试':(hasVersion?'AI 内容已保存，可继续编辑':'选择版本后生成；不会覆盖你的手动答案');
+  return '<article class="rounded-2xl border border-gray-200 bg-white/85 p-3"><div class="flex items-center justify-between gap-2"><span class="text-xs font-bold text-gray-700 font-boba">问题 '+(index+1)+'</span><div class="flex gap-2"><button class="text-[10px] text-gray-400 border-0 bg-transparent cursor-pointer" onclick="moveReviewQuestion(\''+id+'\',-1)">↑</button><button class="text-[10px] text-gray-400 border-0 bg-transparent cursor-pointer" onclick="moveReviewQuestion(\''+id+'\',1)">↓</button><button class="text-[10px] text-red-400 border-0 bg-transparent cursor-pointer" onclick="removeReviewQuestion(\''+id+'\')">删除</button></div></div>'+
+    '<div class="grid grid-cols-1 sm:grid-cols-[1fr_150px] gap-2 mt-2">'+reviewInput('review-q-title-'+id,question.title,'题目或考察点',false)+'<select id="review-q-tag-'+id+'" onchange="markReviewDirty()" class="px-2.5 py-2 rounded-xl border border-gray-200 bg-white text-xs text-gray-600">'+REVIEW_QUESTION_TAGS.map(function(item){return '<option'+(tag===item?' selected':'')+'>'+item+'</option>';}).join('')+'</select></div>'+
+    '<div class="mt-2">'+reviewInput('review-q-answer-'+id,question.answer,'我当时的回答／补充说明',3)+'</div>'+
+    '<div class="mt-3 rounded-2xl border border-[var(--accent-100)] bg-[var(--accent-50)]/35 p-3"><div class="flex flex-wrap items-center justify-between gap-2"><div><p class="text-[11px] font-bold text-gray-700 font-boba">AI 优化回答</p><p id="review-q-ai-status-'+id+'" class="text-[9px] mt-1 '+(generation.status==='error'?'text-red-400':'text-gray-400')+'">'+escHtml(statusText)+'</p></div><div class="flex gap-1.5"><select id="review-q-ai-mode-'+id+'" onchange="switchReviewAiMode(\''+id+'\',this.value)" class="text-[10px] px-2 py-1.5 rounded-lg border border-gray-200 bg-white"><option value="twoMinute"'+(activeMode==='twoMinute'?' selected':'')+'>2 分钟面试版</option><option value="detailed"'+(activeMode==='detailed'?' selected':'')+'>详细准备版</option></select><button id="review-q-ai-btn-'+id+'" class="text-[10px] px-2.5 py-1.5 rounded-lg border-0 bg-[var(--accent-500)] text-white cursor-pointer disabled:opacity-50" onclick="generateReviewAnswer(\''+id+'\')">'+(hasVersion?'重新生成':'AI 生成回答')+'</button></div></div>'+
+    '<input id="review-q-ai-feedback-'+id+'" value="'+escHtml(question.aiFeedback||'')+'" oninput="markReviewDirty()" class="w-full mt-2 px-2.5 py-2 rounded-xl border border-gray-200 bg-white text-[10px] text-gray-600 outline-none" placeholder="反馈要求：更简洁／更口语化／增加量化结果／突出某个项目／贴近目标岗位">'+
+    '<textarea id="review-q-ai-output-'+id+'" rows="6" oninput="markReviewAiOutputDirty(\''+id+'\')" class="w-full mt-2 px-3 py-2 rounded-xl border border-gray-200 bg-white text-xs text-gray-700 font-boba outline-none focus:border-[var(--accent-500)] resize-y" placeholder="AI 生成内容会显示在这里；可编辑后保存">'+escHtml(activeOutput)+'</textarea>'+missingHtml+
+    '<div class="flex flex-wrap gap-2 mt-2"><button class="text-[10px] px-2.5 py-1.5 rounded-lg border border-gray-200 bg-white text-gray-600 cursor-pointer" onclick="applyReviewAiOutput(\''+id+'\',\'answer\')">填入我的回答</button><button id="review-q-ai-final-btn-'+id+'" class="text-[10px] px-2.5 py-1.5 rounded-lg border border-[var(--accent-200)] bg-white text-[var(--accent-600)] cursor-pointer" onclick="applyReviewAiOutput(\''+id+'\',\'final\')">'+(activeMode==='twoMinute'?'设为最终答案':'保存为详细准备版')+'</button></div>'+
+    '<div id="review-q-final-two-wrap-'+id+'" class="mt-2'+(activeMode==='twoMinute'?'':' hidden')+'"><label class="text-[10px] text-gray-400 mb-1 block">最终答案（2 分钟面试版）</label>'+reviewInput('review-q-final-two-'+id,question.finalTwoMinute,'确认后的可直接口述版本',4)+'</div>'+
+    '<div id="review-q-final-detail-wrap-'+id+'" class="mt-2'+(activeMode==='detailed'?'':' hidden')+'"><label class="text-[10px] text-gray-400 mb-1 block">已保存的详细准备版</label>'+reviewInput('review-q-final-detail-'+id,question.finalDetailed,'回答主线、展开细节、潜在追问与表达建议',5)+'</div></div></article>';
+}
+function renderPostReviewEditor(job, interview) {
+  if(interview.review&&interview.review.deletedAt)return '<div class="h-full min-h-[480px] flex flex-col items-center justify-center text-center p-8"><div class="text-3xl">🗑️</div><p class="text-sm text-gray-700 font-boba mt-3">这份复盘已移入废纸篓</p><p class="text-xs text-gray-400 mt-2">30 天内可以恢复；不会影响投递、面试安排、日历或准备资料。</p><div class="flex gap-2 mt-5"><button class="soft-btn primary text-xs" onclick="restoreReviewWorkspace()">恢复复盘</button><button class="text-xs px-3 py-2 rounded-xl border border-red-100 bg-red-50 text-red-400 cursor-pointer" onclick="purgeReviewWorkspace()">彻底删除</button></div></div>';
+  var review=interview.review||createReviewDraft(interview), state=getInterviewReviewState(interview), questions=Array.isArray(review.questions)?review.questions:[], links=externalLinkHtml(interview.location,'会议','text-[10px] px-2.5 py-1.5 rounded-lg border border-gray-200 bg-white text-gray-600 cursor-pointer')+externalLinkHtml(interview.documentUrl,'文档','text-[10px] px-2.5 py-1.5 rounded-lg border border-gray-200 bg-white text-gray-600 cursor-pointer')+(interview.contact?'<span class="text-[10px] px-2.5 py-1.5 rounded-lg bg-gray-50 text-gray-500">轮次信息：'+escHtml(interview.contact)+'</span>':'')+'<button class="text-[10px] px-2.5 py-1.5 rounded-lg border border-gray-200 bg-white text-gray-600 cursor-pointer" onclick="openJobFlow('+job.id+','+interview.id+')">查看投递流程</button>', completeAction=state==='completed'?'<button class="text-xs px-3 py-2 rounded-xl border border-[var(--accent-200)] bg-white text-[var(--accent-600)] cursor-pointer" onclick="reopenReviewWorkspace()">重新打开复盘</button>':'<button class="text-xs px-3 py-2 rounded-xl border border-[var(--accent-200)] bg-white text-[var(--accent-600)] cursor-pointer" onclick="markReviewCompleted()">标记为已复盘</button>';
+  return '<div class="p-4 sm:p-5 space-y-5"><div class="sticky top-0 z-10 -mx-4 -mt-4 sm:-mx-5 sm:-mt-5 px-4 pt-4 sm:px-5 sm:pt-5 pb-3 bg-white/95 backdrop-blur border-b border-gray-100 flex flex-col sm:flex-row sm:items-start justify-between gap-3"><div><p class="text-lg font-bold text-gray-800 font-boba">'+escHtml(job.company)+' · '+escHtml(job.position)+'</p><p class="text-[10px] text-gray-500 mt-1">'+escHtml((interview.name||'面试')+' · '+formatInterviewTime(interview.datetime)+' · '+(interview.mode||'未填写形式'))+'</p><div class="flex flex-wrap gap-1.5 mt-3">'+links+'</div></div><div class="flex flex-wrap items-center justify-end gap-2 shrink-0"><span id="review-save-state" class="text-[10px]" style="color:'+reviewStateStyle(state)+'">'+({pending:'待记录',draft:'复盘中',completed:'已复盘'})[state]+'</span><button class="text-xs px-3 py-2 rounded-xl border border-red-100 bg-red-50 text-red-400 cursor-pointer" onclick="trashReviewWorkspace()">删除复盘</button>'+completeAction+'<button class="soft-btn primary text-xs" onclick="saveReviewWorkspace(false,false)">保存复盘</button></div></div>'+
+    '<section class="rounded-2xl border border-dashed border-[var(--accent-200)] bg-[var(--accent-50)]/35 p-3"><div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3"><div><h4 class="text-sm font-bold text-gray-800 font-boba">导入外部复盘</h4><p class="text-[10px] text-gray-400 mt-1">支持 Word（.docx）、PDF 和图片；识别后自动拆分题目、表现、改进建议与总结，不覆盖已有内容。</p></div><label class="soft-btn primary text-xs text-center cursor-pointer shrink-0">选择文件并识别<input id="review-import-input" type="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.pdf,application/pdf,image/*" class="hidden" onchange="importInterviewReviewFile(this.files[0]);this.value=null"></label></div><p id="review-import-status" class="hidden text-[10px] mt-2 text-gray-400"></p></section>'+
+    '<section><div class="flex items-center justify-between gap-2 mb-2"><div><h4 class="text-base font-bold text-gray-900 font-boba">逐题复盘</h4><p class="text-[10px] text-gray-400 mt-1">可先只记录问题，后续再补充回答。</p></div><button class="soft-btn text-xs" onclick="addReviewQuestion()">+ 新增题目</button></div><div id="review-question-list" class="space-y-3">'+(questions.length?questions.map(renderPostReviewQuestion).join(''):'<div class="rounded-xl border border-dashed border-gray-200 p-5 text-center text-xs text-gray-400">还没有记录的问题，点击“新增题目”开始复盘。</div>')+'</div></section>'+
+    '<section><div class="mb-2"><h4 class="text-base font-bold text-gray-900 font-boba">总结与改进</h4><p class="text-[10px] text-gray-400 mt-1">沉淀本轮整体表现、下一次的行动建议和最关键收获。</p></div><div class="grid grid-cols-1 lg:grid-cols-3 gap-3"><div>'+reviewInput('review-performance-strengths',(review.performance||{}).strengths,'我的整体表现',4)+'</div><div>'+reviewInput('review-analysis-improvement',(review.analysis||{}).improvement,'下次改进建议',4)+'</div><div>'+reviewInput('review-summary',review.summary,'一句话总结',4)+'</div></div></section></div>';
+}
+function setInterviewReviewImportStatus(message, tone) {
+  var el=document.getElementById('review-import-status'); if(!el)return;
+  el.textContent=message||''; el.classList.toggle('hidden',!message);
+  el.style.color=tone==='error'?'#d4687a':tone==='success'?'#4f9b7c':'#6b7280';
+}
+function recognizeReviewPdfPages(file) {
+  if(!window.pdfjsLib||!window.Tesseract)return Promise.reject(new Error('扫描版 PDF 识别组件未加载'));
+  if(!pdfjsLib.GlobalWorkerOptions.workerSrc)pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  return file.arrayBuffer().then(function(buffer){return pdfjsLib.getDocument({data:buffer}).promise;}).then(function(pdf){
+    var pageCount=Math.min(pdf.numPages,8), texts=[], chain=Promise.resolve();
+    for(var pageNo=1;pageNo<=pageCount;pageNo++)(function(current){chain=chain.then(function(){
+      setInterviewReviewImportStatus('正在识别扫描版 PDF：第 '+current+' / '+pageCount+' 页…');
+      return pdf.getPage(current).then(function(page){var viewport=page.getViewport({scale:1.8}),canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');canvas.width=Math.ceil(viewport.width);canvas.height=Math.ceil(viewport.height);return page.render({canvasContext:ctx,viewport:viewport}).promise.then(function(){return new Promise(function(resolve,reject){canvas.toBlob(function(blob){blob?resolve(blob):reject(new Error('PDF 页面转换失败'));},'image/png');});});}).then(function(blob){return recognizeImageText(blob,'review-import-status');}).then(function(text){if(text)texts.push(text);});
+    });})(pageNo);
+    return chain.then(function(){return texts.join('\n\n');});
+  });
+}
+function readInterviewReviewFileText(file) {
+  var name=String(file&&file.name||'').toLowerCase(), type=String(file&&file.type||'');
+  if(!file)return Promise.reject(new Error('未选择文件'));
+  if(file.size>20*1024*1024)return Promise.reject(new Error('文件请控制在 20MB 以内'));
+  if(type.indexOf('image/')===0)return recognizeImageText(file,'review-import-status');
+  if(type==='application/pdf'||/\.pdf$/.test(name))return importPdfText(file).then(function(text){return String(text||'').trim().length>=20?text:recognizeReviewPdfPages(file);});
+  if(type.indexOf('wordprocessingml')>=0||/\.docx$/.test(name))return importDocxText(file);
+  return Promise.reject(new Error('请上传 Word（.docx）、PDF 或图片文件'));
+}
+function reviewImportHeading(line) {
+  var source=String(line||'').trim(), clean=source.replace(/^(?:#+|[＊*•·-]|\d{1,2}[.、]|[一二三四五六七八九十]+[.、])\s*/,'').trim(), match;
+  var rules=[['performance',/(?:我的)?整体表现|我的表现|表现总结/],['improvement',/下次改进建议|改进建议|改进方向|需要改进|不足与改进/],['summary',/一句话总结|关键收获|本轮总结|复盘总结/],['questions',/逐题复盘|面试问题|问题记录|题目复盘|问答记录/]];
+  for(var i=0;i<rules.length;i++){match=clean.match(rules[i][1]);if(match&&match.index<=3&&clean.length<=80){var inline=clean.slice(match.index+match[0].length).replace(/^[\s:：—-]+/,'').trim();return {key:rules[i][0],inline:inline};}}
+  return null;
+}
+function parseInterviewReviewText(text) {
+  var result={questions:[],performance:'',improvement:'',summary:''}, lines=String(text||'').replace(/\r/g,'').split('\n').map(function(line){return line.trim();}).filter(Boolean), section='', current=null;
+  function append(key,value){value=String(value||'').trim();if(!value)return;result[key]=result[key]?result[key]+'\n'+value:value;}
+  function addQuestion(title){title=String(title||'').replace(/^[\s:：、.-]+/,'').trim();if(!title||title.length>500)return null;var q={title:title,answer:''};result.questions.push(q);return q;}
+  lines.forEach(function(line){
+    var heading=reviewImportHeading(line);if(heading){section=heading.key;current=null;if(heading.inline){if(section==='questions')current=addQuestion(heading.inline);else append(section,heading.inline);}return;}
+    var questionMatch=line.match(/^(?:Q(?:uestion)?\s*\d+|问题\s*\d+|第\s*[一二三四五六七八九十\d]+\s*题|\d{1,2}[.、])\s*[:：-]?\s*(.+)$/i)||line.match(/^(?:问题|题目|面试题)\s*[:：]\s*(.+)$/);
+    if(questionMatch){section='questions';current=addQuestion(questionMatch[1]);return;}
+    var answerMatch=line.match(/^(?:我的回答|回答|当时回答|答)\s*[:：]\s*(.*)$/);if(answerMatch&&current){current.answer=answerMatch[1]||'';return;}
+    if(section==='questions'){
+      if(/[？?]$/.test(line)&&line.length<=300){current=addQuestion(line);return;}
+      if(current){current.answer=current.answer?current.answer+'\n'+line:line;return;}
+    }
+    if(section==='performance'||section==='improvement'||section==='summary'){append(section,line);return;}
+    if(/[？?]$/.test(line)&&line.length<=300){section='questions';current=addQuestion(line);}
+  });
+  if(!result.questions.length){var matches=String(text||'').match(/[^。；;\n]{4,180}[？?]/g)||[];matches.slice(0,20).forEach(function(item){addQuestion(item.trim());});}
+  return result;
+}
+function applyImportedInterviewReview(text,file) {
+  saveReviewWorkspace(true,false);
+  var target=getReviewTarget();if(!target)return {count:0};
+  var parsed=parseInterviewReviewText(text), review=ensureReviewObject(target), questions=review.questions=Array.isArray(review.questions)?review.questions:[], added=0, filled=0;
+  parsed.questions.forEach(function(item){var key=item.title.replace(/\s+/g,'').toLowerCase(),existing=questions.find(function(q){return String(q.title||'').replace(/\s+/g,'').toLowerCase()===key;});if(existing){if(!String(existing.answer||'').trim()&&item.answer){existing.answer=item.answer;filled++;}return;}questions.push({id:'q'+Date.now()+Math.floor(Math.random()*100000),title:item.title,tag:'其他',answer:item.answer||'',aiOutput:'',aiFeedback:'',finalTwoMinute:'',finalDetailed:'',aiVersions:{},sourceApplicationId:target.job.id,sourceInterviewId:target.interview.id,createdAt:Date.now(),updatedAt:Date.now()});added++;});
+  review.performance=review.performance||{};review.analysis=review.analysis||{};
+  if(parsed.performance&&!String(review.performance.strengths||'').trim()){review.performance.strengths=parsed.performance;filled++;}
+  if(parsed.improvement&&!String(review.analysis.improvement||'').trim()){review.analysis.improvement=parsed.improvement;filled++;}
+  if(parsed.summary&&!String(review.summary||'').trim()){review.summary=parsed.summary;filled++;}
+  review.imports=Array.isArray(review.imports)?review.imports:[];review.imports.push({id:'import-'+Date.now(),name:file.name||'外部复盘',type:file.type||'',size:file.size||0,questionCount:added,extractedAt:Date.now(),textPreview:String(text||'').slice(0,1000)});
+  if(review.status!=='completed'&&(added||filled))review.status='draft';review.updatedAt=Date.now();review.createdAt=review.createdAt||Date.now();target.job.updatedAt=Date.now();saveJobs(jobEntries);reviewWorkspaceDirty=false;renderJobAll();renderReviewWorkspace();return {count:added,filled:filled};
+}
+function importInterviewReviewFile(file) {
+  if(!file)return;setInterviewReviewImportStatus('正在读取“'+file.name+'”…');
+  readInterviewReviewFileText(file).then(function(text){text=String(text||'').trim();if(text.length<4)throw new Error('没有识别到可用文字，请换清晰图片或可复制文字的文档');var result=applyImportedInterviewReview(text,file);showJobToast('已导入 '+result.count+' 道题，并填充 '+result.filled+' 项总结内容');}).catch(function(error){console.error('interview review import failed',error);setInterviewReviewImportStatus(error.message||'文件识别失败','error');showJobToast(error.message||'文件识别失败，请重试');});
+}
+function renderReviewWorkspace() {
+  var list=document.getElementById('review-workspace-list'), editor=document.getElementById('review-workspace-editor'), tabs=document.getElementById('review-filter-tabs'), viewTabs=document.getElementById('workbench-view-tabs');
+  if (!list || !editor || !tabs || !viewTabs) return;
+  var isPreparation=workbenchView==='preparation', all=isPreparation?getPreparationItems():getCompletedReviewItems(), items=all.filter(function(item){ return workbenchInterviewFilter === 'all' ? item.state !== 'trash' : (isPreparation ? getPreparationState(item.interview)===workbenchInterviewFilter : item.state===workbenchInterviewFilter); });
+  if (!reviewWorkspaceKey || !items.some(function(item){ return reviewItemKey(item.job.id,item.interview.id)===reviewWorkspaceKey; })) { var preferred=items[0] || all[0]; reviewWorkspaceKey=preferred ? reviewItemKey(preferred.job.id,preferred.interview.id) : ''; }
+  var count=document.getElementById('review-workspace-count'); if (count) count.textContent=items.length + ' 场';
+  viewTabs.innerHTML=[['preparation','面试准备'],['review','面后复盘']].map(function(item){return '<button class="text-[11px] px-3 py-1.5 rounded-lg border-0 cursor-pointer font-boba" style="background:'+(workbenchView===item[0]?'var(--accent-500)':'transparent')+';color:'+(workbenchView===item[0]?'#fff':'#9B8E84')+'" onclick="setWorkbenchView(\''+item[0]+'\')">'+item[1]+'</button>';}).join('');
+  var filters=isPreparation?[['all','全部'],['pending','待准备'],['draft','准备中'],['completed','已准备']]:[['all','全部'],['pending','待记录'],['draft','复盘中'],['completed','已复盘'],['trash','废纸篓']];
+  tabs.innerHTML=filters.map(function(item){return '<button class="text-[10px] px-2.5 py-1.5 rounded-full border-0 whitespace-nowrap cursor-pointer font-boba" style="background:'+(workbenchInterviewFilter===item[0]?'var(--accent-100)':'transparent')+';color:'+(workbenchInterviewFilter===item[0]?'var(--accent-700)':'#9B8E84')+'" onclick="setReviewWorkspaceFilter(\''+item[0]+'\')">'+item[1]+'</button>';}).join('');
+  var itemHtml=function(item){ var key=reviewItemKey(item.job.id,item.interview.id), active=key===reviewWorkspaceKey, status=isPreparation?getPreparationState(item.interview):item.state, color=isPreparation?preparationStateStyle(status):reviewStateStyle(status), label=isPreparation?preparationStateLabel(status):({pending:'待记录',draft:'复盘中',completed:'已复盘',trash:'废纸篓'})[status]; return '<button class="w-full text-left p-2.5 rounded-xl border transition-all cursor-pointer mt-1" style="background:'+(active?'var(--accent-50)':'rgba(255,255,255,.65)')+';border-color:'+(active?'var(--accent-200)':'transparent')+'" onclick="selectReviewWorkspace(\''+key+'\')"><p class="text-[11px] font-bold text-gray-800 font-boba truncate">'+escHtml(item.job.company+' · '+item.job.position)+'</p><div class="flex items-center justify-between gap-2 mt-1"><p class="text-[10px] text-gray-500 truncate">'+escHtml((item.interview.name||'面试')+' · '+formatInterviewMonthDay(item.interview.datetime))+'</p><span class="text-[10px] shrink-0 flex items-center gap-1" style="color:'+color+'"><i class="w-1.5 h-1.5 rounded-full inline-block" style="background:'+color+'"></i>'+label+'</span></div></button>'; };
+  list.innerHTML=items.length ? items.map(itemHtml).join('') : (jobEntries.length ? '<div class="py-12 px-5 text-center"><p class="text-xs text-gray-400">'+(isPreparation?'暂时没有未开始的面试安排。':'暂时没有已完成的面试轮次。')+'</p><button class="text-[10px] mt-2 border-0 bg-transparent text-[var(--accent-600)] cursor-pointer" onclick="switchJobTab(\'applications\')">前往投递管理补充面试</button></div>' : '<div class="py-12 px-5 text-center"><p class="text-xs text-gray-400">还没有投递记录</p><button class="text-[10px] mt-2 border-0 bg-transparent text-[var(--accent-600)] cursor-pointer" onclick="switchJobTab(\'overview\');openJobPanel()">添加投递记录</button></div>');
+  var target=getReviewTarget(); editor.innerHTML=target ? renderWorkbenchEditor(target.job,target.interview) : '<div class="h-full min-h-[480px] flex flex-col items-center justify-center text-center p-8"><div class="text-3xl">🗂️</div><p class="text-sm text-gray-700 font-boba mt-3">选择一场面试开始处理</p><p class="text-xs text-gray-400 mt-2">所有投递记录下的面试轮次都会自动同步到这里。</p></div>';
+}
+function saveReviewIfDirty() { return false; }
+function setReviewWorkspaceFilter(filter) { workbenchInterviewFilter=filter; renderReviewWorkspace(); }
+function selectReviewWorkspace(key) { reviewWorkspaceKey=key; renderReviewWorkspace(); }
+function openInterviewReview(jobId, interviewId) { var job=jobEntries.find(function(item){return item.id===jobId;}), interview=job && getJobInterviews(job).find(function(item){return item.id===interviewId;}); if (jobFlowId) closeJobFlow(); if (currentTab !== 'job') switchTab('job'); if (jobCurrentTab !== 'review') switchJobTab('review'); workbenchView=interview && normalizeInterviewStatus(interview.status)==='completed'?'review':'preparation'; workbenchInterviewFilter='all'; reviewWorkspaceKey=reviewItemKey(jobId,interviewId); renderReviewWorkspace(); window.scrollTo({top:0,behavior:'auto'}); }
+
+function savePreparation(silent, complete) {
+  var target=getPreparationTarget(); if(!target) { showJobToast('请选择一场未开始的面试'); return false; }
+  var current=getInterviewPreparation(target.interview), checklist=(current.checklist||[]).map(function(item){var input=document.getElementById('preparation-check-'+item.id);return Object.assign({},item,{text:input?input.value.trim():item.text});}).filter(function(item){return item.text;});
+  var prep=Object.assign({},current,{notes:reviewElementValue('preparation-notes'),checklist:checklist,updatedAt:Date.now(),createdAt:current.createdAt||Date.now()});
+  prep.status=complete?'completed':(current.status==='completed'?'completed':(hasPreparationContent(prep)?'draft':'pending'));
+  target.interview.preparation=prep; target.job.updatedAt=Date.now(); saveJobs(jobEntries); preparationDirty=false;
+  var status=getPreparationState(target.interview), label=document.getElementById('preparation-save-state'); if(label){label.textContent=complete?'已保存 · 已准备':(status==='completed'?'已保存 · 已准备':status==='draft'?'已保存 · 准备中':'尚无已保存内容');label.style.color=preparationStateStyle(status);}
+  if(!silent){renderJobAll();renderReviewWorkspace();showJobToast(complete?'已确认准备完成':(status==='draft'?'准备内容已保存':'暂未填写准备内容'));} return true;
+}
+function completePreparation() { if(!confirm('确认将本轮面试标记为「已准备」吗？之后仍可继续编辑。'))return; savePreparation(false,true); }
+function reopenPreparation() { if(!confirm('确认重新准备吗？状态会恢复为「准备中」。'))return; var target=getPreparationTarget();if(!target)return;var prep=getInterviewPreparation(target.interview);prep.status='draft';prep.updatedAt=Date.now();prep.createdAt=prep.createdAt||Date.now();target.interview.preparation=prep;target.job.updatedAt=Date.now();saveJobs(jobEntries);preparationDirty=false;renderJobAll();renderReviewWorkspace();showJobToast('已重新打开准备'); }
+function updatePreparationDirect(mutator, message) { var target=getPreparationTarget();if(!target)return;var prep=getInterviewPreparation(target.interview);mutator(prep);if(prep.status!=='completed'&&hasPreparationContent(prep))prep.status='draft';prep.updatedAt=Date.now();prep.createdAt=prep.createdAt||Date.now();target.interview.preparation=prep;target.job.updatedAt=Date.now();saveJobs(jobEntries);preparationDirty=false;renderJobAll();renderReviewWorkspace();if(message)showJobToast(message); }
+function addPreparationChecklist() { updatePreparationDirect(function(prep){prep.checklist.push({id:'prep-'+Date.now()+Math.floor(Math.random()*1000),text:'',done:false});}); }
+function togglePreparationChecklist(id, done) { var target=getPreparationTarget();if(!target)return;var prep=getInterviewPreparation(target.interview), item=(prep.checklist||[]).find(function(entry){return String(entry.id)===String(id);});if(!item)return;item.done=done;if(prep.status!=='completed'&&hasPreparationContent(prep))prep.status='draft';target.interview.preparation=prep;target.job.updatedAt=Date.now();saveJobs(jobEntries);markPreparationDirty(); }
+function removePreparationChecklist(id) { if(!confirm('确定删除这项准备事项吗？'))return; updatePreparationDirect(function(prep){prep.checklist=prep.checklist.filter(function(item){return String(item.id)!==String(id);});}); }
+function handlePreparationResourceFile(file) { if(!file)return;if(!/pdf$/i.test(file.name||'')&&file.type!=='application/pdf'){showJobToast('目前请导入 PDF 格式文件');return;}if(file.size>5*1024*1024){showJobToast('单个 PDF 请控制在 5MB 以内');return;}var reader=new FileReader();reader.onload=function(){updatePreparationDirect(function(prep){prep.resources.push({id:'prep-res-'+Date.now()+Math.floor(Math.random()*1000),kind:'file',name:file.name,type:file.type||'application/pdf',size:file.size,data:reader.result,createdAt:Date.now()});},'材料已保存到本轮准备');};reader.onerror=function(){showJobToast('文件读取失败');};reader.readAsDataURL(file); }
+function addPreparationResourceLink() { var url=prompt('粘贴会议、在线文档、岗位 JD 或题库链接（https://）');if(!url)return;try{var parsed=new URL(url);if(['http:','https:'].indexOf(parsed.protocol)<0)throw new Error();var name=prompt('为这个链接命名','在线材料');if(name===null)return;updatePreparationDirect(function(prep){prep.resources.push({id:'prep-link-'+Date.now()+Math.floor(Math.random()*1000),kind:'link',name:name.trim()||'在线材料',url:parsed.href,createdAt:Date.now()});},'链接已保存到本轮准备');}catch(e){showJobToast('请输入有效的 http 或 https 链接');} }
+function findPreparationResource(id) { var target=getPreparationTarget(), prep=target&&getInterviewPreparation(target.interview), resource=prep&&(prep.resources||[]).find(function(item){return String(item.id)===String(id);});return resource?{target:target,prep:prep,resource:resource}:null; }
+function openPreparationResource(id) { var found=findPreparationResource(id);if(!found)return;var resource=found.resource;if(resource.kind==='link'){window.open(resource.url,'_blank','noopener');return;}if(!resource.data){showJobToast('该文件没有可打开的本地副本');return;}var link=document.createElement('a');link.href=resource.data;link.download=resource.name||'面试材料.pdf';document.body.appendChild(link);link.click();link.remove(); }
+function renamePreparationResource(id) { var found=findPreparationResource(id);if(!found)return;var name=prompt('材料名称',found.resource.name||'');if(name===null)return;updatePreparationDirect(function(prep){var item=prep.resources.find(function(entry){return String(entry.id)===String(id);});if(item)item.name=name.trim()||'未命名材料';},'材料名称已更新'); }
+function replacePreparationResource(id,file) { if(!file)return;if(!/pdf$/i.test(file.name||'')&&file.type!=='application/pdf'){showJobToast('目前请导入 PDF 格式文件');return;}if(file.size>5*1024*1024){showJobToast('单个 PDF 请控制在 5MB 以内');return;}var reader=new FileReader();reader.onload=function(){updatePreparationDirect(function(prep){var item=prep.resources.find(function(entry){return String(entry.id)===String(id);});if(item)Object.assign(item,{name:file.name,type:file.type||'application/pdf',size:file.size,data:reader.result,updatedAt:Date.now()});},'材料已替换');};reader.onerror=function(){showJobToast('文件读取失败');};reader.readAsDataURL(file); }
+function removePreparationResource(id) { if(!confirm('确定移除这份材料吗？不会影响投递记录和面试轮次。'))return;updatePreparationDirect(function(prep){prep.resources=prep.resources.filter(function(item){return String(item.id)!==String(id);});},'材料已移除'); }
 
 function renderReviewEditor(job, interview) {
   if (interview.review && interview.review.deletedAt) return '<div class="h-full min-h-[480px] flex flex-col items-center justify-center text-center p-8"><div class="text-3xl">🗑️</div><p class="text-sm text-gray-700 font-boba mt-3">这份复盘已移入废纸篓</p><p class="text-xs text-gray-400 mt-2">30 天内可以恢复；删除复盘不会影响原始投递、面试流程或日历。</p><div class="flex gap-2 mt-5"><button class="soft-btn primary text-xs" onclick="restoreReviewWorkspace()">恢复复盘</button><button class="text-xs px-3 py-2 rounded-xl border border-red-100 bg-red-50 text-red-400 cursor-pointer" onclick="purgeReviewWorkspace()">彻底删除</button></div></div>';
@@ -7314,7 +7545,8 @@ function renderReviewEditor(job, interview) {
   var materials = getReviewMaterials(review), performance = review.performance || {}, dimensions = performance.dimensions || {}, analysis = review.analysis || {}, questions = Array.isArray(review.questions) ? review.questions : [];
   var state = getInterviewReviewState(interview), result = interview.result || interview.status || '未填写';
   var links = (interview.location && /^https?:\/\//i.test(interview.location) ? '<a href="' + escHtml(interview.location) + '" target="_blank" rel="noopener noreferrer" class="text-[10px] px-2.5 py-1.5 rounded-lg border border-gray-200 bg-white text-gray-600 no-underline">会议 ↗</a>' : '') + (interview.documentUrl ? '<a href="' + escHtml(interview.documentUrl) + '" target="_blank" rel="noopener noreferrer" class="text-[10px] px-2.5 py-1.5 rounded-lg border border-gray-200 bg-white text-gray-600 no-underline">文档 ↗</a>' : '') + (interview.contact ? '<span class="text-[10px] px-2.5 py-1.5 rounded-lg bg-gray-50 text-gray-500">轮次信息：' + escHtml(interview.contact) + '</span>' : '') + '<button class="text-[10px] px-2.5 py-1.5 rounded-lg border border-gray-200 bg-white text-gray-600 cursor-pointer" onclick="openJobFlow(' + job.id + ',' + interview.id + ')">查看投递流程</button>';
-  return '<div class="p-4 sm:p-5 space-y-5"><div class="sticky top-0 z-10 -mx-4 -mt-4 sm:-mx-5 sm:-mt-5 px-4 pt-4 sm:px-5 sm:pt-5 pb-3 bg-white/95 backdrop-blur border-b border-gray-100 flex flex-col sm:flex-row sm:items-start justify-between gap-3"><div><p class="text-lg font-bold text-gray-800 font-boba">' + escHtml(job.company) + ' · ' + escHtml(job.position) + '</p><p class="text-[10px] text-gray-500 mt-1">' + escHtml(interview.name || '面试') + '　·　' + escHtml(formatInterviewTime(interview.datetime)) + '　·　' + escHtml(interview.mode || '未填写形式') + '　·　结果：' + escHtml(result) + '</p><div class="flex flex-wrap gap-1.5 mt-3">' + links + '</div></div><div class="flex items-center gap-2 shrink-0"><span id="review-save-state" class="text-[10px]" style="color:' + reviewStateStyle(state) + '">' + reviewStateLabel(state) + '</span><button class="text-xs px-3 py-2 rounded-xl border border-red-100 bg-red-50 text-red-400 cursor-pointer" onclick="trashReviewWorkspace()">删除复盘</button><button class="soft-btn primary text-xs" onclick="saveReviewWorkspace(false, true)">保存复盘</button></div></div>' +
+  var completeAction = state === 'completed' ? '<button class="text-xs px-3 py-2 rounded-xl border border-[var(--accent-200)] bg-white text-[var(--accent-600)] cursor-pointer" onclick="reopenReviewWorkspace()">重新打开复盘</button>' : '<button class="text-xs px-3 py-2 rounded-xl border border-[var(--accent-200)] bg-white text-[var(--accent-600)] cursor-pointer" onclick="markReviewCompleted()">标记为已复盘</button>';
+  return '<div class="p-4 sm:p-5 space-y-5"><div class="sticky top-0 z-10 -mx-4 -mt-4 sm:-mx-5 sm:-mt-5 px-4 pt-4 sm:px-5 sm:pt-5 pb-3 bg-white/95 backdrop-blur border-b border-gray-100 flex flex-col sm:flex-row sm:items-start justify-between gap-3"><div><p class="text-lg font-bold text-gray-800 font-boba">' + escHtml(job.company) + ' · ' + escHtml(job.position) + '</p><p class="text-[10px] text-gray-500 mt-1">' + escHtml(interview.name || '面试') + '　·　' + escHtml(formatInterviewTime(interview.datetime)) + '　·　' + escHtml(interview.mode || '未填写形式') + '　·　业务状态：' + escHtml(interview.status || '时间待定') + '　·　结果：' + escHtml(result) + '</p><div class="flex flex-wrap gap-1.5 mt-3">' + links + '</div></div><div class="flex flex-wrap items-center justify-end gap-2 shrink-0"><span id="review-save-state" class="text-[10px]" style="color:' + reviewStateStyle(state) + '">' + reviewStateLabel(state) + '</span><button class="text-xs px-3 py-2 rounded-xl border border-red-100 bg-red-50 text-red-400 cursor-pointer" onclick="trashReviewWorkspace()">删除复盘</button>' + completeAction + '<button class="soft-btn primary text-xs" onclick="saveReviewWorkspace(false, false)">保存复盘</button></div></div>' +
     renderReviewMaterials(materials, review.preparation) +
     '<section><div class="flex items-center justify-between mb-2"><div><h4 class="text-sm font-bold text-gray-800 font-boba">2. 逐题复盘</h4><p class="text-[10px] text-gray-400 mt-1">题目将保留来源投递与轮次，供后续题库整理复用。</p></div><button class="soft-btn text-xs" onclick="addReviewQuestion()">+ 新增题目</button></div><div id="review-question-list" class="space-y-3">' + (questions.length ? questions.map(function(q,index){return renderReviewQuestion(q,index);}).join('') : '<div class="rounded-xl border border-dashed border-gray-200 p-5 text-center text-xs text-gray-400">还没有题目，点击右上角添加第一道题。</div>') + '</div></section>' +
     '<section class="grid grid-cols-1 lg:grid-cols-2 gap-4"><div><h4 class="text-sm font-bold text-gray-800 font-boba mb-2">3. 我的表现</h4><select id="review-performance-rating" onchange="markReviewDirty()" class="w-full px-3 py-2 rounded-xl border border-gray-200 bg-white text-xs text-gray-700 font-boba"><option value="">总体评价</option>' + ['优秀','良好','一般','待提升'].map(function(x){return '<option' + (performance.rating===x?' selected':'') + '>'+x+'</option>';}).join('') + '</select><div class="grid grid-cols-2 gap-2 mt-2">' + ['表达','专业能力','逻辑','项目讲解','临场应变'].map(function(x,key){var map=['expression','professional','logic','project','response'];return '<select id="review-dimension-' + map[key] + '" onchange="markReviewDirty()" class="px-2 py-2 rounded-xl border border-gray-200 bg-white text-[10px] text-gray-600"><option value="">'+x+'评分</option>'+[1,2,3,4,5].map(function(n){return '<option value="'+n+'"'+(String(dimensions[map[key]])===String(n)?' selected':'')+'>'+x+' '+n+' / 5</option>';}).join('')+'</select>';}).join('') + '</div><div class="mt-2">' + reviewInput('review-performance-strengths',performance.strengths,'做得好的地方',3) + '</div><div class="mt-2">' + reviewInput('review-performance-gaps',performance.gaps,'没做好的地方',3) + '</div></div><div><h4 class="text-sm font-bold text-gray-800 font-boba mb-2">4. 分析与改进建议</h4>' + reviewInput('review-analysis-reason',analysis.reason,'本轮表现的主要原因／问题分析',4) + '<div class="mt-2">' + reviewInput('review-analysis-improvement',analysis.improvement,'下次如何改进',4) + '</div><div class="flex flex-wrap gap-1.5 mt-2">' + REVIEW_ANALYSIS_TAGS.map(function(tag){var on=(analysis.tags||[]).indexOf(tag)>=0;return '<button class="text-[10px] px-2 py-1 rounded-full border cursor-pointer" style="background:'+(on?'var(--accent-50)':'#fff')+';border-color:'+(on?'var(--accent-300)':'#e5e7eb')+';color:'+(on?'var(--accent-600)':'#9ca3af')+'" onclick="toggleReviewAnalysisTag(\''+tag+'\')">'+tag+'</button>';}).join('') + '</div></div></section>' +
@@ -7322,34 +7554,37 @@ function renderReviewEditor(job, interview) {
 }
 function renderReviewQuestion(q,index) {
   var tag = q.tag || '其他', id = q.id;
-  return '<article class="rounded-2xl border border-gray-200 bg-white/85 p-3"><div class="flex items-center justify-between gap-2"><span class="text-xs font-bold text-gray-700 font-boba">题目 ' + (index+1) + '</span><div class="flex gap-2"><button class="text-[10px] text-gray-400 border-0 bg-transparent cursor-pointer" onclick="moveReviewQuestion(\''+id+'\',-1)">↑</button><button class="text-[10px] text-gray-400 border-0 bg-transparent cursor-pointer" onclick="moveReviewQuestion(\''+id+'\',1)">↓</button><button class="text-[10px] text-red-400 border-0 bg-transparent cursor-pointer" onclick="removeReviewQuestion(\''+id+'\')">删除</button></div></div><div class="grid grid-cols-1 sm:grid-cols-[1fr_150px] gap-2 mt-2">' + reviewInput('review-q-title-'+id,q.title,'题目／考察点',false) + '<select id="review-q-tag-'+id+'" onchange="markReviewDirty()" class="px-2.5 py-2 rounded-xl border border-gray-200 bg-white text-xs text-gray-600">' + REVIEW_QUESTION_TAGS.map(function(t){return '<option'+(tag===t?' selected':'')+'>'+t+'</option>';}).join('') + '</select></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-2 mt-2"><div>' + reviewInput('review-q-original-'+id,q.originalQuestion,'面试官原始提问',3) + '</div><div>' + reviewInput('review-q-answer-'+id,q.answer,'我当时的回答／自我评价／补充事实',3) + '</div></div><div class="mt-2 rounded-xl bg-gray-50/70 border border-gray-100 p-2.5"><div class="flex flex-wrap items-center justify-between gap-2 mb-2"><span class="text-[10px] font-bold text-gray-600">AI 优化回答</span><div class="flex gap-1.5"><select id="review-q-ai-mode-'+id+'" class="text-[10px] px-2 py-1 rounded-lg border border-gray-200 bg-white"><option value="twoMinute">2 分钟面试版</option><option value="detailed">详细准备版</option></select><button id="review-q-ai-btn-'+id+'" class="text-[10px] px-2 py-1 rounded-lg border-0 bg-[var(--accent-500)] text-white cursor-pointer" onclick="generateReviewAnswer(\''+id+'\')">AI 生成回答</button></div></div><input id="review-q-ai-feedback-'+id+'" value="'+escHtml(q.aiFeedback || '')+'" oninput="markReviewDirty()" class="w-full px-2.5 py-2 rounded-lg border border-gray-200 bg-white text-[10px] text-gray-600" placeholder="生成反馈（如：更口语化、突出项目、补充量化结果）">' + reviewInput('review-q-ai-output-'+id,q.aiOutput,'AI 生成内容会显示在这里；可编辑后再填入最终答案',5) + '<div class="grid grid-cols-1 lg:grid-cols-2 gap-2 mt-2"><div><label class="text-[10px] text-gray-400 mb-1 block">2 分钟最终答案</label>' + reviewInput('review-q-final-two-'+id,q.finalTwoMinute,'可直接口述的最终版本',4) + '</div><div><label class="text-[10px] text-gray-400 mb-1 block">详细准备版</label>' + reviewInput('review-q-final-detail-'+id,q.finalDetailed,'回答主线、追问与表达提醒',4) + '</div></div><div class="flex gap-2 mt-2"><button class="text-[10px] px-2 py-1 rounded-lg border border-gray-200 bg-white text-gray-600 cursor-pointer" onclick="applyReviewAiOutput(\''+id+'\',\'two\')">填入 2 分钟版</button><button class="text-[10px] px-2 py-1 rounded-lg border border-gray-200 bg-white text-gray-600 cursor-pointer" onclick="applyReviewAiOutput(\''+id+'\',\'detail\')">填入详细版</button></div></div></article>';
+  return '<article class="rounded-2xl border border-gray-200 bg-white/85 p-3"><div class="flex items-center justify-between gap-2"><span class="text-xs font-bold text-gray-700 font-boba">题目 ' + (index+1) + '</span><div class="flex gap-2"><button class="text-[10px] text-gray-400 border-0 bg-transparent cursor-pointer" onclick="moveReviewQuestion(\''+id+'\',-1)">↑</button><button class="text-[10px] text-gray-400 border-0 bg-transparent cursor-pointer" onclick="moveReviewQuestion(\''+id+'\',1)">↓</button><button class="text-[10px] text-red-400 border-0 bg-transparent cursor-pointer" onclick="removeReviewQuestion(\''+id+'\')">删除</button></div></div><div class="grid grid-cols-1 sm:grid-cols-[1fr_150px] gap-2 mt-2">' + reviewInput('review-q-title-'+id,q.title,'题目／考察点',false) + '<select id="review-q-tag-'+id+'" onchange="markReviewDirty()" class="px-2.5 py-2 rounded-xl border border-gray-200 bg-white text-xs text-gray-600">' + REVIEW_QUESTION_TAGS.map(function(t){return '<option'+(tag===t?' selected':'')+'>'+t+'</option>';}).join('') + '</select></div><div class="mt-2">' + reviewInput('review-q-answer-'+id,q.answer,'我当时的回答／自我评价／补充事实',3) + '</div><div class="mt-2 rounded-xl bg-gray-50/70 border border-gray-100 p-2.5"><div class="flex flex-wrap items-center justify-between gap-2 mb-2"><span class="text-[10px] font-bold text-gray-600">AI 优化回答</span><div class="flex gap-1.5"><select id="review-q-ai-mode-'+id+'" class="text-[10px] px-2 py-1 rounded-lg border border-gray-200 bg-white"><option value="twoMinute">2 分钟面试版</option><option value="detailed">详细准备版</option></select><button id="review-q-ai-btn-'+id+'" class="text-[10px] px-2 py-1 rounded-lg border-0 bg-[var(--accent-500)] text-white cursor-pointer" onclick="generateReviewAnswer(\''+id+'\')">AI 生成回答</button></div></div><input id="review-q-ai-feedback-'+id+'" value="'+escHtml(q.aiFeedback || '')+'" oninput="markReviewDirty()" class="w-full px-2.5 py-2 rounded-lg border border-gray-200 bg-white text-[10px] text-gray-600" placeholder="生成反馈（如：更口语化、突出项目、补充量化结果）">' + reviewInput('review-q-ai-output-'+id,q.aiOutput,'AI 生成内容会显示在这里；可编辑后再填入最终答案',5) + '<div class="grid grid-cols-1 lg:grid-cols-2 gap-2 mt-2"><div><label class="text-[10px] text-gray-400 mb-1 block">2 分钟最终答案</label>' + reviewInput('review-q-final-two-'+id,q.finalTwoMinute,'可直接口述的最终版本',4) + '</div><div><label class="text-[10px] text-gray-400 mb-1 block">详细准备版</label>' + reviewInput('review-q-final-detail-'+id,q.finalDetailed,'回答主线、追问与表达提醒',4) + '</div></div><div class="flex gap-2 mt-2"><button class="text-[10px] px-2 py-1 rounded-lg border border-gray-200 bg-white text-gray-600 cursor-pointer" onclick="applyReviewAiOutput(\''+id+'\',\'two\')">填入 2 分钟版</button><button class="text-[10px] px-2 py-1 rounded-lg border border-gray-200 bg-white text-gray-600 cursor-pointer" onclick="applyReviewAiOutput(\''+id+'\',\'detail\')">填入详细版</button></div></div></article>';
 }
 
 function reviewElementValue(id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; }
+function reviewElementValueOr(id, fallback) { var el=document.getElementById(id);return el?el.value.trim():String(fallback||''); }
 function ensureReviewObject(target) { if (!target.interview.review || target.interview.review.deletedAt) target.interview.review = createReviewDraft(target.interview); return target.interview.review; }
 function reviewQuestionFromInputs(question) {
-  var id = question.id;
-  return Object.assign({}, question, { title:reviewElementValue('review-q-title-'+id), tag:reviewElementValue('review-q-tag-'+id) || '其他', originalQuestion:reviewElementValue('review-q-original-'+id), answer:reviewElementValue('review-q-answer-'+id), aiFeedback:reviewElementValue('review-q-ai-feedback-'+id), aiOutput:reviewElementValue('review-q-ai-output-'+id), finalTwoMinute:reviewElementValue('review-q-final-two-'+id), finalDetailed:reviewElementValue('review-q-final-detail-'+id), updatedAt:Date.now() });
+  var id=question.id, mode=reviewElementValueOr('review-q-ai-mode-'+id,question.aiActiveMode||'twoMinute'), output=reviewElementValueOr('review-q-ai-output-'+id,question.aiOutput), versions=Object.assign({},question.aiVersions||{});
+  if(output)versions[mode]=output;
+  return Object.assign({},question,{title:reviewElementValueOr('review-q-title-'+id,question.title),tag:reviewElementValueOr('review-q-tag-'+id,question.tag)||'其他',originalQuestion:reviewElementValueOr('review-q-original-'+id,question.originalQuestion),answer:reviewElementValueOr('review-q-answer-'+id,question.answer),aiFeedback:reviewElementValueOr('review-q-ai-feedback-'+id,question.aiFeedback),aiOutput:output,aiActiveMode:mode,aiVersions:versions,finalTwoMinute:reviewElementValueOr('review-q-final-two-'+id,question.finalTwoMinute),finalDetailed:reviewElementValueOr('review-q-final-detail-'+id,question.finalDetailed),updatedAt:Date.now()});
 }
 function collectReviewWorkspace() {
   var target = getReviewTarget(); if (!target) return null;
-  var current = ensureReviewObject(target), prep = current.preparation || {}, performance = current.performance || {}, analysis = current.analysis || {};
-  var questions = (current.questions || []).map(reviewQuestionFromInputs);
-  var materialData=getReviewMaterials(current), notes=(materialData.notes||[]).map(function(n){return Object.assign({},n,{title:reviewElementValue('review-note-title-'+n.id),content:reviewElementValue('review-note-content-'+n.id),updatedAt:Date.now()});});
-  return Object.assign({}, current, { preparation:{ intro:reviewElementValue('review-prep-intro'), internship:reviewElementValue('review-prep-internship'), precautions:reviewElementValue('review-prep-precautions'), resources:materialData.resources||[], notes:notes }, questions:questions, performance:{ rating:reviewElementValue('review-performance-rating'), strengths:reviewElementValue('review-performance-strengths'), gaps:reviewElementValue('review-performance-gaps'), dimensions:{ expression:reviewElementValue('review-dimension-expression'), professional:reviewElementValue('review-dimension-professional'), logic:reviewElementValue('review-dimension-logic'), project:reviewElementValue('review-dimension-project'), response:reviewElementValue('review-dimension-response') } }, analysis:{ reason:reviewElementValue('review-analysis-reason'), improvement:reviewElementValue('review-analysis-improvement'), tags:Array.isArray(analysis.tags) ? analysis.tags : [] }, summary:reviewElementValue('review-summary'), updatedAt:Date.now() });
+  var current=target.interview.review||createReviewDraft(target.interview), performance=current.performance||{}, analysis=current.analysis||{};
+  return Object.assign({},current,{preparation:current.preparation||{},questions:(current.questions||[]).map(reviewQuestionFromInputs),performance:Object.assign({},performance,{strengths:reviewElementValue('review-performance-strengths')}),analysis:Object.assign({},analysis,{improvement:reviewElementValue('review-analysis-improvement')}),summary:reviewElementValue('review-summary'),updatedAt:Date.now()});
 }
 function setReviewSaveState(text, color) { ['review-save-state','review-save-state-bottom'].forEach(function(id) { var el=document.getElementById(id); if (el) { el.textContent=text; el.style.color=color || '#9ca3af'; } }); }
-function markReviewDirty() { reviewWorkspaceDirty = true; setReviewSaveState('未保存修改', '#d4a830'); clearTimeout(reviewWorkspaceTimer); reviewWorkspaceTimer = setTimeout(function(){ saveReviewWorkspace(true, false); }, 1000); }
+function markReviewDirty() { reviewWorkspaceDirty = true; setReviewSaveState('未保存修改', '#d4a830'); }
 function saveReviewWorkspace(silent, complete) {
   clearTimeout(reviewWorkspaceTimer);
   var target = getReviewTarget(); if (!target || (target.interview.review && target.interview.review.deletedAt)) return false;
   var review = collectReviewWorkspace(); if (!review) return false;
-  review.status = complete ? 'completed' : 'draft'; review.updatedAt = Date.now(); review.createdAt = review.createdAt || Date.now();
+  review.status = normalizeReviewStatus(review, complete); review.updatedAt = Date.now(); review.createdAt = review.createdAt || Date.now();
   target.interview.review = review; target.job.updatedAt = Date.now(); saveJobs(jobEntries); reviewWorkspaceDirty = false;
-  setReviewSaveState(complete ? '已保存 · 已复盘' : '已自动保存 · 复盘中', complete ? '#5ba88c' : '#6ba8d8');
-  if (!silent) { renderJobAll(); renderReviewWorkspace(); showJobToast(complete ? '复盘已保存' : '复盘草稿已保存'); }
+  var state=getInterviewReviewState(target.interview);
+  setReviewSaveState(complete ? '已保存 · 已复盘' : (state === 'completed' ? '已保存 · 已复盘' : state === 'draft' ? '已保存 · 复盘中' : '尚无已保存内容'), reviewStateStyle(state));
+  if (!silent) { renderJobAll(); renderReviewWorkspace(); showJobToast(complete ? '已标记为已复盘' : (state === 'draft' ? '复盘草稿已保存' : '暂未填写复盘内容')); }
   return true;
 }
+function markReviewCompleted() { if (!confirm('确认将这场面试标记为「已复盘」吗？之后仍可继续编辑。')) return; saveReviewWorkspace(false, true); }
+function reopenReviewWorkspace() { if (!confirm('确认重新打开复盘吗？状态会恢复为「复盘中」。')) return; var target=getReviewTarget(); if(!target) return; var review=collectReviewWorkspace() || createReviewDraft(target.interview); review.status='draft'; review.updatedAt=Date.now(); review.createdAt=review.createdAt||Date.now(); target.interview.review=review; target.job.updatedAt=Date.now(); saveJobs(jobEntries); reviewWorkspaceDirty=false; renderJobAll(); renderReviewWorkspace(); showJobToast('复盘已重新打开'); }
 function addReviewQuestion() { saveReviewWorkspace(true, false); var target=getReviewTarget(); if (!target) return; var review=ensureReviewObject(target); review.questions = review.questions || []; review.questions.push({ id:'q'+Date.now()+Math.floor(Math.random()*1000), title:'', tag:'其他', originalQuestion:'', answer:'', aiOutput:'', aiFeedback:'', finalTwoMinute:'', finalDetailed:'', aiVersions:{}, sourceApplicationId:target.job.id, sourceInterviewId:target.interview.id, createdAt:Date.now(), updatedAt:Date.now() }); saveJobs(jobEntries); renderReviewWorkspace(); }
 function moveReviewQuestion(id, delta) { saveReviewWorkspace(true, false); var target=getReviewTarget(), questions=target && target.interview.review && target.interview.review.questions || [], index=questions.findIndex(function(q){return String(q.id)===String(id);}), next=index+delta; if(index<0 || next<0 || next>=questions.length) return; var item=questions.splice(index,1)[0]; questions.splice(next,0,item); saveJobs(jobEntries); renderReviewWorkspace(); }
 function removeReviewQuestion(id) { if (!confirm('确定删除这道题的复盘吗？')) return; saveReviewWorkspace(true, false); var target=getReviewTarget(); if (!target) return; target.interview.review.questions=(target.interview.review.questions||[]).filter(function(q){return String(q.id)!==String(id);}); saveJobs(jobEntries); renderReviewWorkspace(); }
@@ -7364,14 +7599,56 @@ function renameReviewResource(id) { var found=findReviewResource(id);if(!found)r
 function replaceReviewResource(id,file) { if(!file)return;var found=findReviewResource(id);if(!found)return;if(!/pdf$/i.test(file.name||'')&&file.type!=='application/pdf'){showJobToast('目前请导入 PDF 格式文件');return;}if(file.size>5*1024*1024){showJobToast('单个 PDF 请控制在 5MB 以内');return;}var reader=new FileReader();reader.onload=function(){Object.assign(found.resource,{name:file.name,type:file.type||'application/pdf',size:file.size,data:reader.result,updatedAt:Date.now()});found.target.interview.review.preparation=Object.assign({},found.target.interview.review.preparation,{resources:found.materials.resources,notes:found.materials.notes});saveJobs(jobEntries);renderReviewWorkspace();showJobToast('材料已替换');};reader.readAsDataURL(file); }
 function removeReviewResource(id) { if(!confirm('确定移除这份材料吗？不会影响原始投递和面试。'))return;var found=findReviewResource(id);if(!found)return;found.materials.resources=found.materials.resources.filter(function(r){return String(r.id)!==String(id);});found.target.interview.review.preparation=Object.assign({},found.target.interview.review.preparation,{resources:found.materials.resources,notes:found.materials.notes});saveJobs(jobEntries);renderReviewWorkspace(); }
 function handleReviewResumeFile(file) { handleReviewResourceFile(file); }
-function trashReviewWorkspace() { if (!confirm('删除复盘会移入废纸篓保留 30 天，不会影响投递、面试安排或日历。确定继续吗？')) return; saveReviewWorkspace(true, false); var target=getReviewTarget(); if(!target) return; target.interview.review.deletedAt=Date.now(); target.interview.review.deletedFromStatus=target.interview.review.status; saveJobs(jobEntries); reviewWorkspaceFilter='trash'; renderReviewWorkspace(); showJobToast('复盘已移入废纸篓'); }
-function restoreReviewWorkspace() { var target=getReviewTarget(); if(!target || !target.interview.review) return; delete target.interview.review.deletedAt; target.interview.review.status=target.interview.review.deletedFromStatus || 'draft'; delete target.interview.review.deletedFromStatus; target.interview.review.updatedAt=Date.now(); saveJobs(jobEntries); reviewWorkspaceFilter='all'; renderReviewWorkspace(); showJobToast('复盘已恢复'); }
+function trashReviewWorkspace() { var target=getReviewTarget(); if(!target || !target.interview.review || !hasReviewContent(target.interview.review)) { showJobToast('当前没有已保存的复盘内容可删除'); return; } if (!confirm('删除复盘会移入废纸篓保留 30 天，不会影响投递、面试安排或日历。确定继续吗？')) return; saveReviewIfDirty(); target=getReviewTarget(); if(!target || !target.interview.review) return; target.interview.review.deletedAt=Date.now(); target.interview.review.deletedFromStatus=target.interview.review.status; saveJobs(jobEntries); workbenchInterviewFilter='trash'; renderJobAll(); renderReviewWorkspace(); showJobToast('复盘已移入废纸篓'); }
+function restoreReviewWorkspace() { var target=getReviewTarget(); if(!target || !target.interview.review) return; delete target.interview.review.deletedAt; target.interview.review.status=target.interview.review.deletedFromStatus || normalizeReviewStatus(target.interview.review, false); delete target.interview.review.deletedFromStatus; target.interview.review.updatedAt=Date.now(); saveJobs(jobEntries); workbenchInterviewFilter='all'; renderJobAll(); renderReviewWorkspace(); showJobToast('复盘已恢复'); }
 function purgeReviewWorkspace() { if(!confirm('彻底删除后无法恢复，但不会影响投递与面试记录。确定删除吗？')) return; var target=getReviewTarget(); if(!target) return; delete target.interview.review; saveJobs(jobEntries); reviewWorkspaceKey=''; renderReviewWorkspace(); showJobToast('复盘已彻底删除'); }
-function generateReviewAnswer(id) {
-  saveReviewWorkspace(true, false); var target=getReviewTarget(); if(!target) return; var question=(target.interview.review.questions||[]).find(function(q){return String(q.id)===String(id);}); if(!question) return; var mode=document.getElementById('review-q-ai-mode-'+id).value, button=document.getElementById('review-q-ai-btn-'+id); if(button){button.disabled=true;button.textContent='生成中…';}
-  fetch('/api/generate-interview-answer',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({job:{company:target.job.company,position:target.job.position,jdContent:target.job.jdContent||''},interview:{name:target.interview.name,mode:target.interview.mode,status:target.interview.status},preparation:target.interview.review.preparation,question:{title:question.title,tag:question.tag,originalQuestion:question.originalQuestion,answer:question.answer,feedback:question.aiFeedback},mode:mode})}).then(function(res){return res.json().then(function(data){if(!res.ok) throw new Error(data.error||'AI 生成失败');return data;});}).then(function(payload){var fresh=getReviewTarget(), item=fresh && (fresh.interview.review.questions||[]).find(function(q){return String(q.id)===String(id);}); if(!item) return; item.aiOutput=payload.data.answer || ''; item.aiVersions=item.aiVersions||{}; if(mode==='twoMinute') item.aiVersions.twoMinute=item.aiOutput; else item.aiVersions.detailed=item.aiOutput; item.aiMissingInfo=payload.data.missingInfo||[]; item.updatedAt=Date.now(); saveJobs(jobEntries); var output=document.getElementById('review-q-ai-output-'+id); if(output) output.value=item.aiOutput; markReviewDirty(); showJobToast((payload.data.missingInfo||[]).length ? '已生成带待补充占位符的草稿' : 'AI 回答已生成，可编辑后填入最终答案');}).catch(function(error){showJobToast(error.message||'AI 生成暂时不可用');}).finally(function(){var b=document.getElementById('review-q-ai-btn-'+id);if(b){b.disabled=false;b.textContent='重新生成';}});
+function reviewAiMissingHtml(items) { return items&&items.length?'<p class="text-[10px] font-bold text-amber-700">生成完整回答前建议补充</p><p class="text-[10px] text-amber-700/80 mt-1">'+items.map(escHtml).join('；')+'</p><p class="text-[9px] text-amber-600 mt-1">当前草稿使用了占位符，不会替你编造经历。</p>':''; }
+function getReviewAiResources(target) {
+  var prep=getInterviewPreparation(target.interview), reviewMaterials=getReviewMaterials((target.interview.review||{})), combined=(prep.resources||[]).concat(reviewMaterials.resources||[]), seen={};
+  return combined.filter(function(resource){var key=String(resource.id||resource.name||resource.url||'');if(!key||seen[key])return false;seen[key]=true;return true;});
 }
-function applyReviewAiOutput(id, version) { var output=reviewElementValue('review-q-ai-output-'+id), targetId='review-q-final-'+(version==='two'?'two':'detail')+'-'+id, target=document.getElementById(targetId); if(!output){showJobToast('请先生成或填写 AI 优化回答');return;} if(target){target.value=output;markReviewDirty();} }
+function readReviewAiPdfResource(resource) {
+  if(!resource||resource.kind==='link'||!resource.data||!window.pdfjsLib)return Promise.resolve({name:resource&&resource.name||'材料',text:'',note:'未读取正文'});
+  return fetch(resource.data).then(function(response){return response.blob();}).then(importPdfText).then(function(content){return {name:resource.name||'PDF 材料',text:String(content||'').slice(0,12000)};}).catch(function(){return {name:resource.name||'PDF 材料',text:'',note:'PDF 正文解析失败，仅使用材料名称'};});
+}
+function buildReviewAiContext(target) {
+  var prep=getInterviewPreparation(target.interview), review=target.interview.review||{}, materials=getReviewMaterials(review), resources=getReviewAiResources(target), files=resources.filter(function(resource){return resource.kind!=='link'&&resource.data;}).slice(0,5);
+  return Promise.all(files.map(readReviewAiPdfResource)).then(function(extracted){return {
+    notes:prep.notes||'', intro:(review.preparation||{}).intro||'', internship:(review.preparation||{}).internship||'', precautions:(review.preparation||{}).precautions||'',
+    checklist:(prep.checklist||[]).map(function(item){return (item.done?'已完成：':'待确认：')+(item.text||'');}),
+    resourceNotes:(materials.notes||[]).map(function(note){return {title:note.title||'备注',content:note.content||''};}),
+    extractedMaterials:extracted,
+    resourceLinks:resources.filter(function(resource){return resource.kind==='link';}).map(function(resource){return {name:resource.name||'在线材料',url:resource.url||''};})
+  };});
+}
+function switchReviewAiMode(id, mode) {
+  var target=getReviewTarget(), question=target&&target.interview.review&&(target.interview.review.questions||[]).find(function(item){return String(item.id)===String(id);});if(!question)return;
+  var previous=question.aiActiveMode||'twoMinute', output=document.getElementById('review-q-ai-output-'+id), current=output?output.value.trim():'';question.aiVersions=question.aiVersions||{};if(current)question.aiVersions[previous]=current;question.aiActiveMode=mode;question.aiOutput=question.aiVersions[mode]||'';question.aiMissingInfo=(question.aiMissingInfoByMode||{})[mode]||[];question.updatedAt=Date.now();saveJobs(jobEntries);
+  if(output)output.value=question.aiOutput;var status=document.getElementById('review-q-ai-status-'+id);if(status){status.textContent=question.aiOutput?'AI 内容已保存，可继续编辑':'当前版本尚未生成';status.className='text-[9px] mt-1 text-gray-400';}
+  var missing=document.getElementById('review-q-ai-missing-'+id);if(missing){missing.className=question.aiMissingInfo.length?'mt-2 rounded-xl border border-amber-100 bg-amber-50/70 p-2.5':'';missing.innerHTML=reviewAiMissingHtml(question.aiMissingInfo);}
+  var button=document.getElementById('review-q-ai-btn-'+id);if(button)button.textContent=question.aiOutput?'重新生成':'AI 生成回答';var finalButton=document.getElementById('review-q-ai-final-btn-'+id);if(finalButton)finalButton.textContent=mode==='twoMinute'?'设为最终答案':'保存为详细准备版';
+  var two=document.getElementById('review-q-final-two-wrap-'+id), detail=document.getElementById('review-q-final-detail-wrap-'+id);if(two)two.classList.toggle('hidden',mode!=='twoMinute');if(detail)detail.classList.toggle('hidden',mode!=='detailed');
+}
+function markReviewAiOutputDirty(id) { markReviewDirty();var status=document.getElementById('review-q-ai-status-'+id);if(status){status.textContent='AI 内容有未保存修改';status.className='text-[9px] mt-1 text-amber-500';} }
+function generateReviewAnswer(id) {
+  saveReviewWorkspace(true,false);var target=getReviewTarget();if(!target||!target.interview.review)return;var question=(target.interview.review.questions||[]).find(function(item){return String(item.id)===String(id);});if(!question)return;
+  var mode=reviewElementValueOr('review-q-ai-mode-'+id,question.aiActiveMode||'twoMinute'), existing=(question.aiVersions||{})[mode];if(existing&&!confirm('重新生成会替换当前「'+(mode==='twoMinute'?'2 分钟面试版':'详细准备版')+'」AI 内容，但不会覆盖你的最终答案。确定继续吗？'))return;
+  var button=document.getElementById('review-q-ai-btn-'+id), status=document.getElementById('review-q-ai-status-'+id);if(button){button.disabled=true;button.textContent='生成中…';}if(status){status.textContent='正在读取已授权材料并生成回答…';status.className='text-[9px] mt-1 text-[var(--accent-600)]';}
+  if(reviewAiRequests[id])reviewAiRequests[id].abort();var controller=new AbortController(), timeout=setTimeout(function(){controller.abort();},32000);reviewAiRequests[id]=controller;
+  buildReviewAiContext(target).then(function(preparation){
+    var freshQuestion=reviewQuestionFromInputs(question);
+    return fetch('/api/generate-interview-answer',{method:'POST',headers:{'Content-Type':'application/json'},signal:controller.signal,body:JSON.stringify({job:{company:target.job.company,position:target.job.position,jdContent:target.job.jdContent||target.job.jdUrl||'',notes:target.job.notes||'',projects:target.job.projects||[],skills:target.job.skills||[],resumeContext:target.job.resumeContext||''},interview:{name:target.interview.name,type:target.interview.type||target.interview.name,mode:target.interview.mode,status:target.interview.status,contact:target.interview.contact||''},preparation:preparation,question:{title:freshQuestion.title,tag:freshQuestion.tag,originalQuestion:freshQuestion.originalQuestion,answer:freshQuestion.answer,supplement:freshQuestion.supplement||'',feedback:freshQuestion.aiFeedback},mode:mode})});
+  }).then(function(response){return response.json().catch(function(){return {};}).then(function(payload){if(!response.ok)throw new Error(payload.error||('AI 生成失败（'+response.status+'）'));return payload;});}).then(function(payload){
+    var fresh=getReviewTarget(), item=fresh&&fresh.interview.review&&(fresh.interview.review.questions||[]).find(function(entry){return String(entry.id)===String(id);});if(!item)return;var answer=payload.data&&payload.data.answer||'', missing=payload.data&&payload.data.missingInfo||[];item.aiVersions=item.aiVersions||{};item.aiVersions[mode]=answer;item.aiActiveMode=mode;item.aiOutput=answer;item.aiMissingInfoByMode=item.aiMissingInfoByMode||{};item.aiMissingInfoByMode[mode]=missing;item.aiMissingInfo=missing;item.aiGeneration={status:'generated',mode:mode,generatedAt:Date.now(),error:''};item.updatedAt=Date.now();if(fresh.interview.review.status!=='completed')fresh.interview.review.status='draft';fresh.interview.review.updatedAt=Date.now();saveJobs(jobEntries);reviewWorkspaceDirty=false;
+    var output=document.getElementById('review-q-ai-output-'+id);if(output)output.value=answer;var missingBox=document.getElementById('review-q-ai-missing-'+id);if(missingBox){missingBox.className=missing.length?'mt-2 rounded-xl border border-amber-100 bg-amber-50/70 p-2.5':'';missingBox.innerHTML=reviewAiMissingHtml(missing);}if(status){status.textContent=missing.length?'已生成含占位符的安全草稿':'生成完毕 · AI 内容已保存';status.className='text-[9px] mt-1 text-emerald-600';}setReviewSaveState(fresh.interview.review.status==='completed'?'已保存 · 已复盘':'已保存 · 复盘中',reviewStateStyle(fresh.interview.review.status==='completed'?'completed':'draft'));showJobToast(missing.length?'信息不足，已生成含占位符的草稿':'AI 回答已生成并保存');
+  }).catch(function(error){
+    var fresh=getReviewTarget(), item=fresh&&fresh.interview.review&&(fresh.interview.review.questions||[]).find(function(entry){return String(entry.id)===String(id);});if(item){item.aiGeneration={status:'error',mode:mode,error:error.name==='AbortError'?'生成超时，请重试':(error.message||'AI 生成失败'),updatedAt:Date.now()};saveJobs(jobEntries);}if(status){status.textContent=error.name==='AbortError'?'生成超时，请重试':(error.message||'AI 生成失败，请重试');status.className='text-[9px] mt-1 text-red-400';}showJobToast(error.name==='AbortError'?'AI 生成超时，请重试':(error.message||'AI 生成暂时不可用'));
+  }).finally(function(){clearTimeout(timeout);delete reviewAiRequests[id];var current=document.getElementById('review-q-ai-btn-'+id);if(current){current.disabled=false;current.textContent='重新生成';}});
+}
+function applyReviewAiOutput(id, destination) {
+  var output=reviewElementValue('review-q-ai-output-'+id);if(!output){showJobToast('请先生成或填写 AI 优化回答');return;}var mode=reviewElementValueOr('review-q-ai-mode-'+id,'twoMinute'), targetId=destination==='answer'?'review-q-answer-'+id:(mode==='twoMinute'?'review-q-final-two-'+id:'review-q-final-detail-'+id), target=document.getElementById(targetId);if(!target)return;
+  if(target.value.trim()&&target.value.trim()!==output&&!confirm('目标输入框已有内容，确定用当前 AI 内容替换吗？'))return;target.value=output;markReviewDirty();if(destination==='answer'){showJobToast('已填入“我当时的回答”，请确认后保存复盘');return;}saveReviewWorkspace(true,false);var reviewTarget=getReviewTarget(), state=reviewTarget?getInterviewReviewState(reviewTarget.interview):'draft';setReviewSaveState('最终答案已保存',reviewStateStyle(state));showJobToast(mode==='twoMinute'?'已设为该题最终答案':'详细准备版已保存');
+}
 
 // ── Review Panel ────────────────────────────────────────
 function openReviewPanel(id) {
